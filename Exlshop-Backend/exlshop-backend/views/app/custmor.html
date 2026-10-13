@@ -1,0 +1,103 @@
+<%- include("./partials/header.html") %>
+<%- include("./partials/topnav.html") %>
+<%- include("./partials/sidebar.html") %>
+<style>
+    #customer
+    {
+        color: white;
+    }
+    .resetBtn
+    {
+        text-align: right;
+        padding: 10px 10px;
+    
+    }
+</style>
+
+<div class="page">
+    <input type="hidden" id="currentLocation_Id" value="<%= session.user.currentLocation.id %>">
+    <div class="page-content">
+        <ul class="nav nav-tabs nav-tabs-line tabs-line-top mb-10" role="tablist">
+            <h3>Customers</h3>
+        </ul>
+        <div class="panel">            
+            <div class="panel-heading">
+                    
+                <div class="resetBtn">
+                    <i class="fa fa-whatsapp btn btn-success btn-round" style="cursor:pointer;" id="share"></i>
+                    <button class="text-dark mr-10" id="reset-filter-btn">Reset Filter <i class="fa fa-times-circle"></i></button>
+                    <button class="btn btn-primary" id="filter-btn" data-toggle="modal" data-target="#filter">Filter <i class="fa fa-filter"></i></button>
+                </div>  
+            
+            </div>
+            <div class="panel-body">
+                <table class="table table-hover dataTable table-striped w-full" id="custmor-list">
+                    <thead>
+                        <tr>
+                            <th>Id</th>
+                            <th>Total Order</th>
+                            <th>Delivered</th>
+                            <th>Cancelled</th>
+                            <th>Returned</th>
+                            <th>In Process</th>
+                            <th>name</th>
+                            <th>Mo.</th>
+                            <th>email</th>    
+                            <th>Action</th>        
+                        </tr>
+                    </thead>                    
+                    <tbody></tbody>
+                </table>
+            </div>
+        </div>
+               
+    </div>
+</div>
+
+<div class="modal fade" id="filter" aria-hidden="false" aria-labelledby="filter" role="dialog" tabindex="-1">
+    <div class="modal-dialog modal-simple">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">×</span>
+                </button>
+                <h4 class="modal-title">Filters</h4>
+            </div>
+            <div class="modal-body">
+                <div class="row">
+                    <div class="form-group col-xl-6">
+                        <label class="form-control-label">Customer Name</label>
+                        <input class="form-control" id="customer_id" name="customer_name"> 
+                    </div>
+                    <div class="form-group col-xl-6">
+                        <label class="form-control-label">Email-Id</label>
+                        <input class="form-control" id="email_id" name="email_name">
+                    </div>
+                    <div class="form-group col-xl-6">
+                        <label class="form-control-label">Phone Number</label>
+                        <input class="form-control" id="phone_id" name="phone_name">
+                    </div>
+                    <div class="form-group col-xl-6">
+                        <label class="form-control-label">Zip-Code</label>
+                        <input class="form-control" id="zip_code" name="zipCode">
+                    </div>
+                    <!-- <div class="form-group col-xl-6">
+                        <label class="form-control-label">City</label>
+                        <input class="form-control" id="city_id" name="city_name">
+                    </div> -->
+                    <div class="form-group col-xl-12 text-right">
+                        <%- csrf_html %>
+                        <button class="btn btn-primary" id="apply-filter">Apply</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>  
+
+<%- include("./partials/footer.html") %>
+<script type="text/javascript">
+    VIEW_CUSTMOR.init({
+        _csrf: '<%= _csrf %>'
+    })
+</script>

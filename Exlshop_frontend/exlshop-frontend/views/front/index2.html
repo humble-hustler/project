@@ -1,0 +1,353 @@
+<%- include('../partials/header.html') %>
+    <!-- <section class="section-intro">
+    <div class="intro-banner-wrap">
+        <img src="images/banner.jpg" class="w-100 img-fluid">
+    </div>
+</section> -->
+    <!-- <div id="preloder">
+    <div class="loader"></div>
+</div> -->
+<style>
+    .menu-bar {
+        text-align: center;
+    }
+
+    .menu-bar ul {
+        display: inline-flex;
+        list-style: none;
+        /* color: #fff; */
+    }
+
+    .menu-bar ul li {
+        width: 100px;
+        padding: 5px;
+        color: cornflowerblue;
+        /* font-size:20px; */
+
+    }
+
+    .menu-bar ul li a {
+        text-decoration: none;
+        color: #fff;
+    }
+
+    .active,
+    .menu-bar ul li:hover {
+        background: gray;
+        border-radius: 3px;
+
+    }
+
+    .sub-menu-1 {
+        font-size: 15px;
+        display: none;
+        width: 200px;
+        font-weight: bold;
+
+        /* height: 500px; */
+        /* Overflow-x:scroll; */
+        /* Overflow-y:scroll;  */
+        /* overflow:auto */
+    }
+
+    .menu-bar ul li:hover .sub-menu-1 {
+        display: block;
+        position: absolute;
+        background: rgb(9, 87, 48);
+        margin-top: 5px;
+        margin-left: -15px;
+
+    }
+
+    .menu-bar ul li:hover .sub-menu-1 ul {
+        display: block;
+        margin: 0px;
+
+    }
+
+    .menu-bar ul li:hover .sub-menu-1 ul li {
+
+        background: transparent;
+        border-radius: 0;
+        margin: 0px;
+        text-align: left;
+        height: 2px;
+        width: 300px;
+        color: rgb(1, 4, 10);
+    }
+
+    .fa-angle-right {
+        float: right;
+    }
+
+    .sub-menu-2 {
+        display: none;
+        width: 200px;
+        padding-left: 20px;
+        font-weight: bold;
+        font-size: 13px;
+        background: rgb(1, 4, 10);
+    }
+
+
+    .menu-bar ul li:hover .sub-menu-2 ul li {
+        text-align: left;
+        /* margin-left: 5px; */
+        color: rgb(225, 231, 243);
+
+    }
+
+    .hover-me:hover .sub-menu-2 {
+        position: absolute;
+        display: block;
+        margin-top: -40px;
+        margin-left: 50px;
+        background: rgb(1, 22, 12);
+
+    }
+</style>
+    <script type="text/javascript">
+    //     $(function () {
+    //         $("li.subsubcategory").hover(function (e) {
+    //             var slug = $(this).attr('value');
+    //             var cid= $(this).attr('cid');
+    //            alert(cid)
+    //             $.ajax({
+    //                //  url: "/subcategory/${cid}",
+    //                   data: {
+    //                       _csrf: '<%= _csrf %>'
+    //                   },
+    //                   method: 'GET',
+    //                   success: function (data) {
+    //                       alert("successfully")
+    //                      window.location = '/${slug}/${cid}'
+    //                    //  `/super-admin/settings/user/${user_id}`
+    //                   },
+    //                   error: function (data, status, error) {
+    //                       alert("not successfull")
+    //                   }
+    //               });
+    //            // window.location.href = `/${slug}/${cid}`;              
+    //         });/*
+    //         $("li.subsubcategory").hover(function (e) {
+    //               var SId = $(this).attr('value');
+    //               //  alert('<%= _csrf %>')
+    //               $.ajax({
+    //                  //url: "/get-product-list",
+    //                   data: {
+    //                       _csrf: '<%= _csrf %>'
+    //                   },
+    //                   method: 'GET',
+    //                   success: function (data) {
+    //                       alert("successfully")
+    //                       window.location = "/get-product-list";
+    //                   },
+    //                   error: function (data, status, error) {
+    //                       alert("not successfull")
+    //                   }
+    //               });
+    //           });*/
+    //     });
+    // </script>
+    <section class="hero-section">
+        <div class="hero-items owl-carousel">
+            <div class="single-hero-item set-bg" data-setbg="/images/frontpage.jpg">
+                <div class="container">
+                    <div class="row">
+                        <div class="col-lg-12">
+                            <div class="hero-text">
+                                <div class="widget-header icontext">
+                                <div class="menu-bar">
+                                    <% shop_subsubcategories.forEach((s2)=>{ %>
+                                        <ul>
+                                            <h4>
+                                                <%- csrf_html  %>
+                                                <li class="subsubcategory" id="subsubcat"  cid="<%= s2.id %>" value="<%= s2.slug %>">
+                                                    <a href="/categoryslug/<%= s2.slug %>/<%= s2.id %>"><%= s2.name %></a> 
+                                                </li>
+                                            </h4> 
+                                        </ul>
+                                    <% }) %>
+                                </div>
+                               </div>
+                                <h2>Join Us Now</h2>
+                                <h1>World's Biggest Digital Shop</h1>
+                                <a href="#" class="primary-btn">Read More</a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="single-hero-item set-bg" data-setbg="/images/subimage12.jpg">
+                <div class="container">
+                    <div class="row">
+                        <div class="col-lg-12">
+                            <div class="hero-text">
+                                <h2>Join Us Now</h2>
+                                <h1>Get your shop Online Today !</h1>
+                                <a href="#" class="primary-btn">Read More</a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="single-hero-item set-bg" data-setbg="/images/subimage14.jpg">
+                <div class="container">
+                    <div class="row">
+                        <div class="col-lg-12">
+                            <div class="hero-text">
+                                <h2>Join Us Now</h2>
+                                <h1>To start taking orders online</h1>
+                                <a href="#" class="primary-btn">Read More</a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+    <section class="section-name  padding-y-sm">
+        <div class="container">
+            <header class="section-heading">
+                <h3 class="section-title">Popular products</h3>
+            </header>
+            <div class="row">
+                <% products.forEach((p) => { %>
+                <% if(p.product_type == 1) { %>
+                <div class="col-md-3">
+                    <div href="/shop/<%= p.slug %>/<%= p.id %>" class="card card-product-grid">
+                        <a href="/shop/<%= p.slug %>/<%= p.id %>" class="img-wrap">
+                            <% if(p.file_name){ %>
+                            <img src="<%=session.imgURL %><%= p.file_name %>" alt="<%= p.name %>">
+                            <%}else{%>
+                            <img src="<%= coreHostname %>/images/logo.png" alt="<%= p.name %>">
+                            <%}%>
+                        </a>
+                        <figcaption class="info-wrap">                        
+                            <a href="/shop/<%= p.slug %>/<%= p.id %>" class="title" title="<%= p.name %>"><%= p.name %></a>
+                            <span class="price mt-1">
+                                Rs. <%= p.regular_price %>
+                            </span>
+                        </figcaption>
+                    </div>
+                </div>
+                <% } else { %>
+                <div class="col-md-3">
+                    <div href="/shop/<%= p.slug %>/<%= p.id %>" class="card card-product-grid">
+                        <a href="/shop/<%= p.slug %>/<%= p.id %>" class="img-wrap">
+                            <% if(p.file_name){ %>
+                            <img src="<%=session.imgURL %><%= p.file_name %>">
+                            <%}else{%>
+                            <img class="logo" src="/images/logo.png">
+                            <%}%>
+                        </a>
+                        <figcaption class="info-wrap">                        
+                            <a href="/shop/<%= p.slug %>/<%= p.id %>" class="title"><%= p.name %></a>                        
+                            <span class="price mt-1">
+                            </span>
+                        </figcaption>
+                    </div>
+                </div>
+                <% } %>
+                <% }) %>
+            </div>
+        </div>
+    </section>
+    <!-- Feature Section Begin1 -->
+    <section class="feature-section">
+        <div class="container-fluid">
+            <div class="row">
+                <div class="col-md-3">
+                    <div class="feature-item set-bg" data-setbg="/images/subimage16.jpg">
+                        <h3>TRENDING IN WESTERN WEAR</h3>
+                        <p> We beleive to build civilizations.<br />So go for Digitalized World.</p>
+
+                        <a href="#" class="primary-btn f-btn">Read More</a>
+                    </div>
+                </div>
+                <div class="col-md-3">
+                    <div class="feature-item set-bg" data-setbg="/images/subimage17.jpg">
+                        <h3>TRENDING IN INDIAN WEAR</h3>
+                        <p>Once a culture becomes entirely advertising friendly,<br /> it seizes to be a culture at all.
+                        </p>
+
+                        <a href="#" class="primary-btn f-btn">Read More</a>
+                    </div>
+                </div>
+                <div class="col-md-3">
+                    <div class="feature-item set-bg" data-setbg="/images/subimage19.jpg">
+                        <h3>TRENDING IN SPORTS WEAR</h3>
+                        <p>There's nothing better than online shopping<br /> in your Home with a glass of wine with the
+                            kids asleep!</p>
+                        <a href="#" class="primary-btn f-btn">Read More</a>
+                    </div>
+                </div>
+                <div class="col-md-3">
+                    <div class="feature-item set-bg" data-setbg="/images/subimage18.jpg">
+                        <h3>TRENDING IN ACCESSORIES</h3>
+                        <p>A Human Being’s right to life implies his right to<br /> have the free and unrestricted</p>
+                        <a href="#" class="primary-btn f-btn">Read More</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+    <!-- Feature Section End -->
+
+    <section class="section-specials pt-4 pb-4 border-bottom">
+        <div class="container">
+            <div class="row mb-4">
+                <div class="col-md-4">
+                    <figure class="itemside">
+                        <div class="aside">
+                            <span class="icon-sm rounded-circle bg-primary">
+                                <i class="fa fa-money-bill-alt white"></i>
+                            </span>
+                        </div>
+                        <figcaption class="info">
+                            <h6 class="title">Reasonable prices</h6>
+                            <p class="text-muted">Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do
+                                eiusmod
+                                tempor incididunt ut labor </p>
+                        </figcaption>
+                    </figure>
+                </div>
+                <div class="col-md-4">
+                    <figure class="itemside">
+                        <div class="aside">
+                            <span class="icon-sm rounded-circle bg-danger">
+                                <i class="fa fa-comment-dots white"></i>
+                            </span>
+                        </div>
+                        <figcaption class="info">
+                            <h6 class="title">Customer support 24/7 </h6>
+                            <p class="text-muted">Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do
+                                eiusmod
+                                tempor incididunt ut labor </p>
+                        </figcaption>
+                    </figure>
+                </div>
+                <div class="col-md-4">
+                    <figure class="itemside">
+                        <div class="aside">
+                            <span class="icon-sm rounded-circle bg-success">
+                                <i class="fa fa-truck white"></i>
+                            </span>
+                        </div>
+                        <figcaption class="info">
+                            <h6 class="title">Quick delivery</h6>
+                            <p class="text-muted">Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do
+                                eiusmod
+                                tempor incididunt ut labor </p>
+                        </figcaption>
+                    </figure>
+                </div>
+            </div>
+        </div>
+    </section>
+
+
+
+
+
+    <%- include('../partials/footer.html') %>

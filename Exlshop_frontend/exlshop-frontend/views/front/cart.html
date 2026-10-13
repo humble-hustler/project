@@ -1,0 +1,481 @@
+<%- include('../partials/header.html') %>
+<style>
+.anchor{
+    font-size: 20px;
+    font-weight: bolder;
+}
+.cart-details h6{
+        font-size: 18px;
+        line-height: 56px;
+        padding: 0 24px;
+        font-weight: 600;
+        color: #212121;
+}
+.cart-heading{
+    border-bottom: 1px dotted #D1D1D1;
+}
+.cart-details a:nth-child(1){
+    font-size: 16px;
+color: #212121;
+line-height: 1;
+text-decoration: none;
+}
+.cart-details p:nth-child(2)
+{
+    color: #878787;
+    font-size: 14px;
+}
+.cost p:nth-child(1){
+    font-size: 18px;
+font-weight: 600;
+color: #212121;
+}
+.cost del{
+    font-size: 14px;
+margin-right: 10px;
+margin-top: 3px;
+color: #878787;
+}
+.cost p:nth-child(2){
+    font-weight: 500;
+color: #388e3c;
+font-size: 14px;
+margin-right: 10px;
+}
+.cost{
+    width: 54%;
+    padding-left: 22px
+}
+.cart-details{
+    background: #fff;
+}
+.place-order a{
+    color: black;
+}
+.place-order{
+    background: #fcaa2f;
+    font-size: 1rgb(243, 189, 107);
+    display: inline;
+    font-weight: bold;
+    width: 175px;
+    height: 38px;
+} 
+.checkout{
+    background-color:#F7F6F2;
+    cursor: pointer;
+}
+.checkout-body
+{
+    margin-bottom: 40px;
+}
+.item-pic{
+    margin-left: 44px;
+}
+.item-pic img{
+    width: 95px;
+    height: 167px;
+}
+.cart-details div:nth-child(2){
+    padding-bottom: 9px;
+}
+.product-details{
+    padding-left: 9px;
+    background-color:#fff ;
+}
+.price-details{
+    background-color:#fff ;  
+}
+.price-details h6{
+    text-transform: uppercase;
+padding: 20px 24px;
+color: #717478;
+font-weight: 700;
+}
+.price-details p{
+    color: #212121;
+    font-size: 16px;
+}
+.a{
+    width: 30%;
+}
+.amt{
+    border-top:1px dotted #AAAAAA;
+}
+.amt h6{
+    font-size: 18px;
+line-height: 56px;
+padding: 0 24px;
+font-weight: 600;
+color: #212121;
+}
+.checkout-body{
+    box-shadow: 2px 2px 14px 0 rgba(0,0,0,.2);
+}
+.plus{
+    width: 28px;
+height: 28px;
+background: linear-gradient(#fff,#f9f9f9);
+display: inline-block;
+border: 1px solid #c2c2c2;
+cursor: pointer;
+font-size: 16px;
+border-radius: 50%;
+padding-top: 1px;
+color: #212121;
+display: inline-block;
+}
+.plus p{
+  text-align: center;
+}
+.minus{
+    width: 28px;
+    height: 28px;
+    background: linear-gradient(#fff,#f9f9f9);
+    display: inline-block;
+    border: 1px solid #c2c2c2;
+    cursor: pointer;
+    font-size: 16px;
+    border-radius: 50%;
+    padding-top: 1px;
+    color: #212121;
+    display: inline-block;
+}
+.minus p{
+    text-align: center;
+}
+.increase{
+    padding: 3px 6px;
+    width: 46px;
+    height: 28px;
+    border-radius: 2px;
+    background-color: #fff;
+    border: 1px solid #c2c2c2;
+    color: #212121;
+    font-size: 14px;
+    font-weight: 500;
+    text-align: center;
+}
+.number{
+    text-align: center;
+    border: 1px solid #c2c2c2;
+}
+.mymarginfromtop{
+    margin-top:90px;
+}
+.amt{
+    padding-left: 20px;
+}
+.formofselect{
+    padding-top: 7px;
+}
+.n,.aside img{
+    height: 143px;
+    width: 150px;
+}
+.in{
+    width: 99%;
+}
+#shopnow{
+    display: inline-block;
+    width: 150px;
+    height: 38px;
+    background-color: #FBA11B;
+    border-radius: 2px;
+    color: black;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    font-size: 18px;
+    font-weight: bold;
+}
+</style>
+
+<% if(cart) { %>
+    <div class="container pt-3">
+        <div class="row">
+            <div class="col-9 pr-1">
+                    <div class="bg-white">
+                            <h3 class="pt-3 ps-3">Shopping cart</h3>
+                            <hr>
+                            <table class="table table-borderless table-shopping-cart">
+                                <tbody class="" id="cartItem">
+                                    <% products.forEach((p) => { %>
+                                        <%if(p.save_for_later==0){ %>
+                                        <tr product_id="<%= p.product_id %>" variation_id="<%= p.variation_id %>" class="mb-5">
+                                        <td>
+                                            <div class="d-flex align-items-center">
+                                            <div class="itemside w-25 justify-content-center">
+                                                <div class="aside">
+                                                    <a href="/shop/<%= p.slug %>/<%= p.productId %>" alt="<%= p.product_name %>" class="title text-dark">
+                                                        <% if(p.file_name){%>
+                                                            <img src="<%=session.imgURL %><%= p.file_name %>" alt="<%= p.name %>" class="img-sm mb-5">
+                                                        <%}else{%>
+                                                        <img src="<%= coreHostname %>/images/logo.png" class="img-sm">
+                                                        <%}%>
+                                                    </a>
+                                                </div>
+                                            </div>
+                                            <div class="info w-75 ps-4 mt-n4">
+                                                <a href="/shop/<%= p.slug %>/<%= p.productId %>" title="<%= p.product_name %>" class="title text-dark"><%= p.product_name %></a>
+                                                <p class="text-muted text-uppercase small mb-0"><%= p.slug %></p>
+                                                <p class="location_name text-muted small mb-0"><%= p.location_name %></p>
+                                                <% if(p.product_type == 2) { %>
+                                                <p class="text-muted small"><%= p.variation_name %></p>
+                                                <% } %>
+                                                <div class="price-wrap"> 
+                                                    <small class="text-muted single-price" delChr="<%= deliveryCharge %>" single-item-discount-price="<%= p.product_type == 2 ? p.variation_regular_price-p.product_discount_price : p.product_regular_price-p.product_discount_price  %>" single-item-price="<%= p.product_type == 2 ? p.variation_regular_price : p.product_regular_price %>" single-item-discount="<%= p.product_discount_price  %>"> &#x20b9; <%= p.product_type == 2 ? p.variation_regular_price : p.product_regular_price %> Each</small> 
+                                                   <div class="d-flex align-items-center">
+                                                     <span class="price mt-1 my-2">
+                                                        <span class="fw-bold sixteen">&#x20b9; <%= (p.product_regular_price-p.product_discount_price)*p.quantity %></span>
+                                                     </span>
+                                                     <del class="ps-5 information fourteen">&#x20b9; <%= p.product_regular_price %></del>
+                                                     <span class="text-success ps-5 fourteen"><%=Math.round(p.product_discount_price*100 /p.product_regular_price) %>% off</span>
+                                                    </div>
+                                             </div>
+                                                <div class="d-flex align-items-center py-2">
+                                                    <div class="input-group input-spinner a">
+                                                        <div class="input-group-append">
+                                                            <button class="btn btn-light button-minus" type="button"> − </button>
+                                                        </div>
+                                                        <input type="text" id="quantity"class="form-control quantity" value="<%= p.quantity %>">
+                                                        <div class="input-group-prepend">
+                                                            <button class="btn btn-light button-plus" type="button"> + </button>
+                                                        </div>
+                                                    </div>
+                                                    <div>
+                                                        <a href="#" class="remove-item fourteen text-dark mx-5" data-line-id="<%= p.lineId %>"> <i class="fa fa-times"></i> REMOVE</a>
+                                                        <a href="#" class="fourteen text-dark saveforlater" id="m" value="<%= p.product_id %>" value1="<%= p.quantity %>" onclick="fun(this)">SAVE FOR LATER</a>
+                                                    </div>
+                                                </div>
+                                            </div>         
+                                        </div>    
+                                    </td>
+                                        <td class="text-right w-25 fourteens" style="padding-top: 5px;"> 
+                                           Delivered by 3-6 working days
+                                        </td>
+                                         </tr>
+                                         <%}%>
+                                    <% }) %>
+                                        </tbody>
+                                </table>
+                                 <hr>
+                                        <div class="text-end me-2">
+                                            <%  var count=0; %>
+                                            <%  session.cart.line.forEach((l)=>{
+                                                  
+                                                   if(l.save_for_later ==0){
+                                                    count++
+                                                   }
+                                              }) %>
+
+                                            <%  if(!count ==0 ) { %>
+                                            <input type="hidden" id="minimum-order-amount" value="<%= products[0].minimum_order_amount%>">
+                                            <button class="border-0 place-order text-center ms-5 mb-3 me-3" id="proceed-to-buy"><a href="/my-account/paymentmode">proceed to buy</a></button>
+                                                <% }%>
+                                        </div>
+                    </div>
+                    <div class="saveditem mt-3 bg-white">
+                        <h3 class="twenty pt-3 ps-3">Saved Item</h3>
+                        <hr>
+                        <div class="container ">
+                            <div class="row">
+                                <table class="table table-borderless table-shopping-cart">
+                                    <tbody class="" id="cartItem">
+                                        <% products.forEach((p) => { %>
+                                            <%if(p.save_for_later==1){ %> 
+                                        <tr product_id="<%= p.product_id %>" variation_id="<%= p.variation_id %>" class="mb-5">
+                                            <td>
+                                                <div class="d-flex align-items-center">
+                                                <div class="itemside w-25 justify-content-center">
+                                                    <div class="aside">
+                                                        <a href="/shop/<%= p.slug %>/<%= p.productId %>" alt="<%= p.product_name %>" class="title text-dark">
+                                                            <% if(p.file_name){%>
+                                                                <img src="<%=session.imgURL %><%= p.file_name %>" alt="<%= p.name %>" class="img-sm mb-5">
+                                                            <%}else{%>
+                                                            <img src="<%= coreHostname %>/images/logo.png" class="img-sm">
+                                                            <%}%>
+                                                        </a>
+                                                    </div>
+                                                </div>
+                                                <div class="info w-75 ps-4 mt-n4">
+                                                    <a href="/shop/<%= p.slug %>/<%= p.productId %>" title="<%= p.product_name %>" class="title text-dark"><%= p.product_name %></a>
+                                                    <p class="text-muted text-uppercase small mb-0"><%= p.slug %></p>
+                                                    <p class="location_name text-muted small mb-0"><%= p.location_name %></p>
+                                                    <% if(p.product_type == 2) { %>
+                                                    <p class="text-muted small"><%= p.variation_name %></p>
+                                                    <% } %>
+                                                    <div class="price-wrap"> 
+                                                        <small class="text-muted single-price" delChr="<%= deliveryCharge %>" single-item-discount-price="<%= p.product_type == 2 ? p.variation_regular_price-p.product_discount_price : p.product_regular_price-p.product_discount_price  %>" single-item-price="<%= p.product_type == 2 ? p.variation_regular_price : p.product_regular_price %>" single-item-discount="<%= p.product_discount_price  %>"> &#x20b9; <%= p.product_type == 2 ? p.variation_regular_price : p.product_regular_price %> Each</small> 
+                                                       <div class="d-flex align-items-center">
+                                                         <span class="price mt-1 my-2">
+                                                            <span class="fw-bold sixteen">&#x20b9; <%= (p.product_regular_price-p.product_discount_price)*p.quantity %></span>
+                                                         </span>
+                                                         <del class="ps-5 information fourteen">&#x20b9; <%= p.product_regular_price %></del>
+                                                         <span class="text-success ps-5 fourteen"><%=Math.round(p.product_discount_price*100 /p.product_regular_price) %>% off</span>
+                                                        </div>
+                                                 </div>
+                                                    <div class="d-flex align-items-center py-2">
+                                                        <div><h5>Quantity:<%= p.quantity %>
+                                                         </h5></div>
+                                                        <div><a href="#" class="remove-item fourteen text-dark mx-5" data-line-id="<%= p.lineId %>"> <i class="fa fa-times"></i> REMOVE</a>
+                                                            <a href="#" class="fourteen text-dark saveforlater" id="m" value="<%= p.product_id %>" value2="<%= p.quantity%>"onclick="fun2(this)">ADD TO CART</a>
+                                                </div></div>
+                                                </div>
+                                            </div>
+                                        </td>
+                                        </tr>
+                                            <%}%>
+                                            <% }) %>                                  
+                                    </tbody>
+                                    </table>
+                            </div>
+                        </div>
+                    </div>
+            </div>
+            <!-------------------------------saved items----------------------------------->
+            <div class="col-3 pr-0">
+                <div class="i bg-white mx-auto in">
+                    <h3 class="pt-3 ps-2">Price Details</h3>
+                    <hr>
+                    
+                    <div id = "bill" class="pt-.3 ps-2 pe-2">
+                        <div class="d-flex justify-content-between">
+                            <p class="text-dark" id="items-count">Price (<%= 0 %> item)</p>
+                            <% var total=0 %>
+                            <% var disc=0 %>
+                            <% var finaltotal=0 %>
+                            <% products.forEach((p) => { %>
+                                <%if(p.save_for_later==0){  %> 
+                                   <% total=total+(p.quantity*p.product_regular_price) %>
+                                   <% disc=disc+(p.quantity*p.product_discount_price) %>
+                                <% } %>
+                            <%})%>
+                            <p class="text-dark" id="regular-price">&#x20b9; <%= total %> </p>
+                        </div>
+                        <div class="d-flex justify-content-between">
+                            <p class="text-dark">Discounts</p>
+                            <p class="text-success" id="discPrice">- &#x20b9; <%= disc %></p>
+                        </div>
+                        <div class="d-flex justify-content-between">
+                        <p class="text-dark">Delivery Charges</p>
+                        <p class="text-dark" style="padding-left:20px;">&#x20b9; <%= deliveryCharge %></p>
+                    </div>
+                    </div>
+                    <div class="amt d-flex justify-content-between py-3">
+                        <h3 class="fw-bolder">Total amount:</h3>
+                        <h3  id="total-amount" style="white-space: nowrap;"><strong>&#x20b9; <span id="order-total"> <%= total - disc +  deliveryCharge %> </span></strong></h3><br>
+                </div>
+            </div> 
+        </div>
+    </div>
+
+<% } else { %>
+    <section class="section-content padding-y-sm">
+        <div class="container">
+            <div class="row">
+                <main class="col-md-12">
+                    <div class="card text-center padding-y-sm">
+                        <img src="/images/empty-cart.svg" class="empty-cart-image" alt="Empty Cart" />
+                        <h4 class="fw-bolder">Your cart is empty!</h4>
+                        <p>Let's add some items to it.</p>
+                        <a href="/" class="mx-auto" id="shopnow">SHOP NOW</a>
+                    </div>
+                </main>
+            </div>
+        </div>
+    </section>
+    <% } %>
+</div>
+<%- include('../partials/footer.html') %>
+<script src="/js/page-level/cart.js" type="text/javascript"></script>
+<script type="text/javascript">
+    CART.init({ _csrf: '<%= _csrf %>'})
+</script>
+<script>
+
+    var location_budget =  parseInt($("#minimum-order-amount").val());
+    var order_total = parseInt($("#total-amount").find("#order-total").text())
+    if(location_budget >= order_total){
+        $("#proceed-to-buy a").attr("href", "#")
+        $(".place-order").css("background-color", "#fdc167")
+        $(".place-order a").css("color", "rgb(109, 108, 108)")
+        toastr.error('Total order amount must be greater than' + " "+location_budget)
+    }
+
+    var count = document.getElementById('cartItem').childElementCount;
+    $('#items-count').text('Price ('+count+' items)');
+      function fun(x) {
+                var productId = $(x).attr("value");
+                var quantity = $(x).attr("value1");
+                $.ajax({
+                    url: "/my-account/savelater_items",
+                    data: {
+                        productId,
+                        quantity:quantity,
+                        _csrf: '<%= _csrf %>'
+                    },
+                    method: 'POST',
+                    success: function (data) {
+                        window.location.reload();
+                    },
+                    error: function (data, status, error) {
+                         alert("not able to add to save later")
+                    }
+                });
+            };	
+    
+    function fun2(x) {
+                var productId = $(x).attr("value");
+                var quantity=$(x).attr("value2");
+                $.ajax({
+                    url: "/my-account/remove_savelater_items",
+                    data: {
+                        productId,
+                        quantity:quantity,
+                        _csrf: '<%= _csrf %>'
+                    },
+                    method: 'POST',
+                    success: function (data) {
+                        window.location.reload();
+                    },
+                    error: function (data, status, error) {
+                    }
+                });
+            };     
+        
+            $(function(){	
+            $("#saveadd").on('click', function (e) {
+                e.preventDefault();
+                var label = $("#label").val();
+                var label1 = $("#label1").val();
+                var name = $("#name").val();
+                var phone = $("#phone").val();
+                var addressLine1 = $("#address_line_1").val();
+                var addressLine2 = $("#address_line_2").val();
+                var stateId = $("#sid").val();
+                var cityId = $("#shipping-city").val();
+                var zip = $("#zip").val();
+
+                $.ajax({
+                    url: "/my-account/add-new-address",
+                    data: {
+                        label: label,
+                        name: name,
+                        phone: phone,
+                        addressLine1: addressLine1,
+                        addressLine2: addressLine2,
+                        stateId: stateId,
+                        cityId: cityId,
+                        zip: zip,
+                        _csrf: '<%= _csrf %>'
+                    },
+                    method: 'POST',
+                    success: function (data) {
+                        window.location.reload();
+                    },
+                    error: function (data, status, error) {
+                    }
+                });
+            });				
+              });
+</script>

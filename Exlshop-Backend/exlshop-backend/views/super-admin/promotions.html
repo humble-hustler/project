@@ -1,0 +1,207 @@
+<%- include("./partials/header.html") %>
+<%- include("./partials/topnav.html") %>
+<%- include("./partials/sidebar.html") %>
+<style>
+    .panel-actions{
+        position: static;
+        display: flex;
+        padding-top:30px ;
+    }
+    .panel{
+    background-color: white;
+    padding: 20px 10px;
+    border-radius: 3px;
+   }
+   .page-number{
+      text-align: center;
+      user-select: none;
+    }
+    .page-number li {
+      display: inline-block;
+      margin: 5px;
+      padding: 0;
+    }
+    .page-number li a{
+      text-decoration: none;
+      font-size: 13px;
+      line-height: 20px;
+    }
+    .page-link{
+        padding: 6px 13px;
+    }
+    .page-number li:not(.acti) a{
+        color: black;
+    }
+    .previous-page, .next-page{
+      cursor: pointer;
+    }
+    .pagination{
+      text-align: center;
+      margin: 30px 30px 60px;
+      user-select: none;
+    }
+    .pagination li {
+      display: inline-block;
+      margin: 5px;
+    }
+    .pagination li a{
+      text-decoration: none;
+      font-size: 13px;
+      line-height: 25px;
+    }
+    .acti a{
+        background-color: rgb(161, 159, 159);
+        color: black;
+    }
+    .pagination li:not(.acti) a{
+        color: black;
+    }
+    .current-page, .dots{
+      background: #ccc;
+      cursor: pointer;
+    }
+</style>
+
+<div class="page">
+    <div class="page-content">
+        <ul class="nav nav-tabs nav-tabs-line tabs-line-top mb-10" role="tablist">
+            <h3>Promotions Management</h3>
+        </ul>
+        <div class="panel">            
+            <div class="panel-heading">
+                <div class="row">
+                    <div class="col-md-6">
+                        <form action="/super-admin/promotions" method="post" enctype="multipart/form-data">
+                            <input type="hidden" name="_csrf" value="<%= _csrf %>">
+                            <input type="file" id="files" name="files" multiple> <br>
+                            <button type="submit" class="btn btn-primary mt-4"> Submit</button>
+                        </form>
+                    </div>
+                </div>
+
+                <div class="row" id="image-parent" style="display: none;">
+                    <% for (var i = 0; i < images.length; i++){ %>
+                    <div class="col-md-3 image-div" style="padding-top: 15px; position: relative;">
+                        <div class="promotion-img">
+                            <img src="<%= images[i].file_name %>" style="width: 230px; height: 200px;">
+                        </div>
+                        <div class="remove-btn" style="text-align: center; position: absolute; top: 15px; left: 165px; display: none;" imageid="<%= images[i].id %>">
+                            <button type="button" class="btn btn-dark" >Remove</button>
+                        </div>
+                    </div>
+                    <% } %>
+                </div>
+
+                <div class="fl" style="padding-top: 10px; display: flex; justify-content: space-between;">
+                    <div style="padding-left: 30px; margin-top: 15px;" class="append-para">
+                        <p>Showing <span class="numRecord"></span> Records of <span class="totalRecord"></span></p>
+                    </div>
+                    <div class="page-number" style="margin-right: 20px;"></div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>  
+  
+<%- include("./partials/footer.html") %>
+<script>
+    function getPageList(totalPages, page, maxLength){
+        function range(start, end){
+            return Array.from(Array(end - start + 1), (_, i) => i + start);
+        }
+        var sideWidth = maxLength < 9 ? 1 : 2;
+        var leftWidth = (maxLength - sideWidth * 2 - 3) >> 1;
+        var rightWidth = (maxLength - sideWidth * 2 - 3) >> 1;
+    
+        if(totalPages <= maxLength){
+            return range(1, totalPages);
+        }
+        if(page <= maxLength - sideWidth - 1 - rightWidth){
+            return range(1, maxLength - sideWidth - 1).concat(0, range(totalPages - sideWidth + 1, totalPages));
+        }
+        if(page >= totalPages - sideWidth - 1 - rightWidth){
+            return range(1, sideWidth).concat(0, range(totalPages - sideWidth - 1 - rightWidth - leftWidth, totalPages));
+        }
+        return range(1, sideWidth).concat(0, range(page - leftWidth, page + rightWidth), 0, range(totalPages - sideWidth + 1, totalPages));
+    }
+
+    $(document).ready(function(){
+        $(function(){
+            var numberOfItems = $("#image-parent .image-div").length;
+            var limitPerPage = 12;
+            var totalPages = Math.ceil(numberOfItems / limitPerPage)
+            var paginationSize = 7;
+            var currentPage;
+        
+            function showPage(whichPage){
+                if(whichPage < 1 || whichPage > totalPages) return false;
+        
+                currentPage = whichPage;
+                $("#image-parent .image-div").hide().removeClass("xxx").slice((currentPage - 1) *  limitPerPage, currentPage * limitPerPage).show().addClass("xxx");
+                var numItems = $("#image-parent .xxx").length
+                $(".numRecord").text(numItems)
+                $(".totalRecord").text(numberOfItems)
+            
+                $(".page-number li").slice(1, -1).remove();
+        
+                getPageList(totalPages, currentPage, paginationSize).forEach(item =>{
+                    $("<li>").addClass("page-item").addClass(item ? "current-page" : "dots").toggleClass("acti", item === currentPage).append($("<a>").addClass("page-link").attr({href: "javascript:void(0"}).text(item || "...")).insertBefore(".next-page");
+                });
+        
+                $(".previous-page").toggleClass("disabled", currentPage === 1);
+                $(".next-page").toggleClass("disabled", currentPage === totalPages)
+                return true;
+            }
+            $(".page-number").append(
+                $("<li>").addClass("page-item").addClass("previous-page").append($("<a>").addClass("page-link").attr({href: "javascript:void(0)"}).text("Prev")),
+                $("<li>").addClass("page-item").addClass("next-page").append($("<a>").addClass("page-link").attr({href: "javascript:void(0)"}).text("Next"))
+            );
+    
+            $("#image-parent").show();
+            showPage(1);
+                    
+            $(document).on("click", ".page-number li.current-page:not(.acti)", function(){
+                return showPage(+$(this).text());
+            });
+            $(".next-page").on("click", function(){
+                return showPage(currentPage + 1);
+            })
+            $(".previous-page").on("click", function(){
+                return showPage(currentPage - 1);
+            })
+        })
+    })
+
+    $("#image-parent .image-div").each(function (){
+        $(this).mouseenter(function (){
+            $(this).find(".remove-btn").css("display", "block")
+        })
+        $(this).mouseleave(function (){
+            $(this).find(".remove-btn").css("display", "none")
+        })
+    })
+
+    $(".remove-btn").click(function (){
+        var promotionId = $(this).attr("imageid")
+        $.ajax({
+            url: `/super-admin/promotions/delete-image`,
+            method: "POST",
+            data:{
+                    _csrf: '<%= _csrf %>',
+                    promotionId
+                },
+            success:function (data) {
+                if(data.success) {
+                    location.reload(true);
+                }else{
+                    alert("Image does not deleted")
+                }
+            }
+        })
+    })
+</script>
+<script type="text/javascript">
+PROMOTIONS.init({
+    _csrf:'<%= _csrf %>',
+})
+</script>

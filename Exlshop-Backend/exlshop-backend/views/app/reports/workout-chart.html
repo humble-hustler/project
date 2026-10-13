@@ -1,0 +1,40 @@
+<%- include("../partials/header.html") %>
+<%- include("../partials/topnav.html") %>
+<%- include("../partials/sidebar.html") %>
+<div class="page">
+    <div class="page-content">        
+        <div class="panel">
+            <div class="panel-heading">
+                <h3 class="panel-title">Workout Chart</h3>
+                <div class="panel-actions text-white">
+                   
+                    <div class="panel-actions text-white">
+                        <button class="btn  btn-primary" id="export"><i class="fa fa-download" aria-hidden="true"></i> Export</button>
+                    </div>
+                </div>
+            </div>
+            <div class="panel-body">
+                <table class="table table-hover dataTable table-striped w-full" id="workou-chart-report-table">
+                    <thead>
+                        <tr>
+                            <th>Member Name</th>
+                            <th>Mobile </th>
+                            <th>Fitness Goal</th>
+                            <th>Workout Status</th>
+                            <th>Workout Chart Name</th>
+                            <th>Assigned By</th>
+                            <th>Chat Assigning Date</th>
+                        </tr>
+                    </thead>                    
+                    <tbody></tbody>
+                </table>
+            </div>
+        </div>       
+    </div>
+</div>
+<%- include("../partials/footer.html") %>
+<script type="text/javascript">
+    WORKOUT_CHART.init({
+        _csrf: '<%= _csrf %>'
+    })
+</script>

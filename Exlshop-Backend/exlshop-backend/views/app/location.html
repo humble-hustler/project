@@ -1,0 +1,69 @@
+<%- include("./partials/header.html") %>
+<%- include("./partials/topnav.html") %>
+<%- include("./partials/sidebar.html") %>
+<style>
+   
+
+.tab-btn{
+    display: flex;
+    padding-bottom: 40px;
+    margin-left: 20px;
+}
+.second-fifteen{
+    margin-left: 40px;
+    color: black;
+    border: 1px solid black;
+    border-radius: 5px;
+}
+.first-fifteen{
+    color: black;
+    border: 1px solid black;
+    border-radius: 5px;
+}
+.active{
+    background-color: black;
+    color: white;
+}
+.aaa{
+    margin-left: 10px;
+}
+.panel-title{
+    font-size: 22px;
+}
+
+</style>
+<body>
+<div class="page">
+    <div class="page-content">
+        <div class="panel-heading">
+            <h1 class="panel-title">Settlement</h1>
+        </div>
+        <div class="panel">  
+            
+            <div class="panel-body">
+        
+                <table class="table table-hover dataTable table-striped w-full" id="vendor-list">
+                    <thead>
+                        <tr>
+                           <th>Period</th>
+                           <th>Location</th>
+                            <th>Order count</th>
+                            <th>Amount</th> 
+                        </tr>
+                    </thead>                    
+                    <tbody id="tbody"></tbody>
+                </table>
+            </div>
+        </div>       
+    </div>
+</div>
+
+
+</body>
+<%- include("./partials/footer.html") %>
+<script type="text/javascript">
+
+    LOCATION.init({
+        _csrf: '<%= _csrf %>'
+    })
+</script>

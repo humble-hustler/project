@@ -1,0 +1,22 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <title><%=title %> </title>
+    </head>
+    <div class="container">
+        <div class="row">
+            <% shop_products.forEach((p) =>{ %>
+                <tr product_id="<%= p.p_id %>" variation_id="<%= p.variation_id %>" ></tr>
+                <div class="abc">
+                    <a href="/shop/<%= p.slug %> / <%=p.p_id %>" alt="<%=p.name %>" class="text-dark">
+                        <% if(p.file_name) { %>
+                            <img src="<%=session.imgURL %><%= p.file_name %>" alt="p.name" class="img-sm">
+                            <%} else{%>
+                            <img src="<%= coreHostname %>/images/logo.png" class="img-sm">
+                       <% } %>
+                    </a>
+                </div>
+           <% }) %>
+        </div>
+    </div>
+</html>

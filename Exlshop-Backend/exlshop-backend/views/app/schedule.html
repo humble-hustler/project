@@ -1,0 +1,54 @@
+<%- include("./partials/header.html") %>
+<%- include("./partials/topnav.html") %>
+<%- include("./partials/sidebar.html") %>
+<div class="page">
+    <div class="page-main">
+        <div class="row calendar-pt-header">
+            <div class="col-lg-4">
+                <select class="form-control" id="trainers" Placeholder="Select PT">
+                    <option>--Select PT--</option>
+                    <% trainers.forEach(function(t){ %>
+                    <option value='<%= t.id %>'><%= t.fname %> <%= t.lname%></option>
+                    <% }) %>
+                </select>
+            </div>
+        </div>
+        
+        <div class="calendar-container">
+            <div id="calendar"></div>            
+        </div>    
+    </div>
+</div>
+<div class="modal fade" id="event-details" aria-hidden="false" aria-labelledby="event-details" role="dialog" tabindex="-1">
+    <div class="modal-dialog modal-simple">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">×</span>
+                </button>
+                <h4 class="modal-title">Personal Training Details</h4>
+            </div>
+            <div class="modal-body">
+                <table class="table table-hover dataTable table-striped w-full" id="event-details-table">
+                    <thead>
+                        <tr>
+                            <th>Trainer Name</th>
+                            <th>Member Name</th>
+                            <th>Start Date</th>
+                            <th>End Date</th>
+                        </tr>
+                    </thead>
+                    <tbody></tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+</div>
+<%- include("./partials/footer.html") %>
+<script type="text/javascript">
+    SCHEDULE.init({
+        _csrf: `<%= _csrf %>`,
+        schedule: `<%- JSON.stringify(schedule) %>`,
+        locationInfo : `<%- JSON.stringify(location) %>`
+    })
+</script>

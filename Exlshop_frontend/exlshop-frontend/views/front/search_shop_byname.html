@@ -1,0 +1,582 @@
+<%- include('../partials/header.html') %>
+<!DOCTYPE html>
+<html>
+<head>
+<meta name="viewport" content="width=device-width, initial-scale=1">
+        <style>
+            * {box-sizing: border-box}
+
+            /* Set height of body and the document to 100% */
+            body, html {
+            height: 100%;
+            margin: 0;
+
+            }
+
+            /* Style tab links */
+            .tablink {
+            background-color: #555;
+            color: white;
+            float: left;
+            border: none;
+            outline: none;
+            cursor: pointer;
+            padding: 14px 16px;
+            font-size: 17px;
+            width: 25%;
+            }
+
+            .tablink:hover {
+            background-color: #777;
+            }
+
+            /* Style the tab content (and add height:100% for full page content) */
+        
+            #add-to-wishlist-shop
+            {
+                text-align: right;
+                font-size: 20px;
+            }
+            .heart
+            {
+                font-size: 30px;
+                color: #555;
+            }
+            .products-right
+            {
+                width: 82%;
+                margin-left: 27px;
+            }
+            .nisix
+            {
+                width: 20%;
+               
+            }
+            #shop-image{
+                height: 200px;
+            }
+            #innersearch
+            {
+                position: absolute;
+                right: 15px;
+                top: 17px;
+            }
+            .card-product-grid{
+               
+                 border-radius: 10px 10px 0px 0px;
+                 
+            }
+            #bookmark
+        {
+            color: #FFB84E;
+            font-size: 24px;
+            cursor: pointer;
+           
+        }
+        
+.card-product-grid .info-wrap{
+padding: 8px 20px;
+}
+
+.tt {
+  position: relative;
+  display: inline-block;
+ 
+}
+
+ .ttext {
+  visibility: hidden;
+  width: 150px;
+  background-color: rgb(44, 43, 43);
+  color: rgb(240, 238, 238);
+  text-align: center;
+  border-radius: 6px;
+  padding: 2px 0;
+  font-size: 13px;
+  font-weight: 500;
+  /* Position the tooltip */
+  position: absolute;
+  z-index: 1;
+  top: -5px;
+  left: 105%;
+}
+
+.tt:hover .ttext {
+  visibility: visible;
+}
+.bread {
+            margin-left: 23%;
+            margin-bottom: 0px;
+        }
+
+        .breadspace {
+            --bs-breadcrumb-divider: '>';
+        }
+
+        .page-number{
+      text-align: center;
+      /* margin: 30px 30px 60px; */
+      user-select: none;
+    }
+    .page-number li {
+      display: inline-block;
+      margin: 5px;
+      
+    }
+    .page-number li a{
+   
+      text-decoration: none;
+      font-size: 15px;
+      line-height: 25px;
+    }
+    .page-number li:not(.acti) a{
+        color: black;
+    }
+    .previous-page, .next-page{
+      background-color: rgb(11, 175, 240);
+      cursor: pointer;
+      /* width: 30px; */
+      
+     
+    }
+    .pagination{
+      text-align: center;
+      margin: 30px 30px 60px;
+      user-select: none;
+    }
+    .pagination li {
+      display: inline-block;
+      margin: 5px;
+      
+    }
+    .pagination li a{
+   
+      text-decoration: none;
+      font-size: 15px;
+      line-height: 25px;
+    }
+    .acti a{
+        background-color: rgb(161, 159, 159);
+        color: black;
+    }
+    .pagination li:not(.acti) a{
+        color: black;
+
+    }
+   
+    .current-page, .dots{
+      background: #ccc;
+      /* width: 30px; */
+      cursor: pointer;
+    }
+    .ttt {
+  position: relative;
+  display: inline-block;
+ 
+}
+
+ .tttext {
+  visibility: hidden;
+  width: 80px;
+  background-color: rgb(32, 31, 31);
+  color: rgb(245, 242, 242);
+  text-align: center;
+  border-radius: 6px;
+  padding: 2px 0;
+  font-size: 13px;
+  font-weight: 500;
+  /* Position the tooltip */
+  position: absolute;
+  z-index: 1;
+  bottom: 100%;
+  left: 60%;
+  margin-left: -40px;
+}
+
+.ttt:hover .tttext {
+  visibility: visible;
+}
+.tablink1:hover i{
+  color: rgb(8, 8, 8);
+}
+#list{display: none;}
+.page-number1{
+      text-align: center;
+      user-select: none;
+    }
+    .page-number1 li {
+      display: inline-block;
+      margin: 5px;
+    }
+    .page-number1 li a{
+      text-decoration: none;
+      font-size: 15px;
+      line-height: 25px;
+    }
+    .page-number1 li:not(.acti) a{
+        color: black;
+    }
+    .previous-page1, .next-page1{
+      background-color: rgb(11, 175, 240);
+      cursor: pointer;
+    }
+    .row-parent{
+    display: flex;
+    padding-top: 10px;
+}
+
+.shop-image{
+  width: 200px;
+  height: 200px;
+}
+</style>
+</head>
+    <body>
+        <input type="hidden" name="_csrf" value="<%= _csrf %>" />
+       <div class="container mt-3">
+        <div class="d-flex">
+            <div class="nisix">
+                <div class="a allcontainer" id="filters">
+                    <h2 class="py-1 ps-3 pt-2">Filters</h2>
+                 
+                    <hr>
+                    <i class="icon-control fa fa-chevron-up text-dark pe-3" id="showhidemainlist1"></i>
+                    <h6 class="ps-3 mb-2">CUSTOMER RATINGS</h6>
+                    <div class="ps-3" id="ratingcollapse" >
+                        <input type="checkbox" class="starrating" value="1">
+                        <label for="1star" class="ps-2 starrating">1<i class="bi bi-star-fill  pe-1"></i>& above</label><br>
+                        <input type="checkbox" class="starrating" value="2">
+                        <label for="2star" class="ps-2 starrating">2<i class="bi bi-star-fill  pe-1"></i>& above</label><br>
+                        <input type="checkbox" class="starrating" value="3">
+                        <label for="1star" class="ps-2 starrating">3<i class="bi bi-star-fill  pe-1"></i>& above</label><br>
+                        <input type="checkbox" class="starrating" value="4">
+                        <label for="1star" class="ps-2 starrating">4<i class="bi bi-star-fill  pe-1"></i>& above</label><br>
+                    </form>
+                </div>    <!--end of rating-->
+                <hr>
+                <i class="icon-control fa fa-chevron-up text-dark pe-3" id="showhidemainlist2"></i>
+                <h6 class="ps-3 mb-2">DISTANCE</h6>
+                <div class="ps-3" id="collapse_3" >
+                    <input type="checkbox" class="shopdistance" value="1">
+                        <label class="ps-2 shopdistance">Less than 1 km</label><br>
+                        <input type="checkbox" class="shopdistance" value="3">
+                        <label class="ps-2 shopdistance">Less than 3 km</label><br>
+                        <input type="checkbox" class="shopdistance" value="5">
+                        <label class="ps-2 shopdistance">Less than 5 km</label><br>
+                        <input type="checkbox" class="shopdistance" value="10">
+                        <label class="ps-2 shopdistance">Less than 10 km</label><br>
+                </div>
+                <hr>
+                <i class="icon-control fa fa-chevron-up text-dark pe-3" id="showhidemainlist3"></i>
+                <h6 class="ps-3 mb-2">TIMING</h6>
+                <div class="ps-3" id="collapsediscount" >
+                    <input type="checkbox" class="shoptiming" value="1">
+                    <label class="ps-2">Open Now</label><br>
+                    <input type="checkbox" class="shoptiming" value="2">
+                    <label class="ps-2">Open till 6 pm</label><br>
+                    <input type="checkbox" class="shoptiming" value="3">
+                    <label class="ps-2">Open till 10 pm</label><br>
+                    <input type="checkbox" class="shoptiming" value="4">
+                    <label class="ps-2">Open till midnight</label><br>
+                    <input type="checkbox" class="shoptiming" value="5">
+                    <label class="ps-2">Open 24/7</label><br>
+                    
+ 
+                </div>   
+                <hr>
+              
+                </div>
+            </div>
+       
+            <main class=" products-right allcontainer "> 
+
+                <nav class="breadspace">
+                    <ol class="breadcrumb ms-2 mb-0 py-2">
+                        <li class="breadcrumb-item">
+                            <a href="/" class="twelve breadclr">Home</a>
+                        </li>
+                        <li class="breadcrumb-item" aria-current="page"><a class="twelve breadclr" id="bread"><%= search_data %></a></li>
+                    
+                    </ol>
+                </nav>
+                
+              <h2 class="py-3 ps-3"><%= search_data %></h2>
+              <span class="text-start d-inline ms-5">Sort By</span>
+              <span class="sortfilter ps-3" value="1" id="sort1">Popularity</span>
+              <span class="sortfilter ps-3" value="2" id="sort2">Distance-Low to High</span>
+              <span class="sortfilter ps-3" value="3" id="sort3">Distance-High to Low</span><span>sss</span>
+              <span class="tablink1 ttt" style="margin-left: 320px; color: rgb(108, 108, 110); font-size: 22px;" onclick="openPage('grid', this, 'red')" id="defaultOpen"><i class="fa fa-th"></i><span class="tttext">Grid view</span></span>
+              <span class="tablink1 ttt" style="margin-left: 10px; color: rgb(108, 108, 110); font-size: 22px;" onclick="openPage('list', this, 'yellow')" ><i class="fa fa-th-list"></i><span class="tttext">List view</span></span>
+              <hr>
+
+              <main id="shop-list">
+                    <% if(shops.length == 0){%>
+                        <center><h4>No Shop Availble </h4></center>
+                        <% } %>
+                        <div class="panelContainer">
+                          <div id="grid" class="tabcontent mt-4">
+                              <div class="row" style="padding-left: 30px; display: none;" id="main-row">
+                              <% shops.forEach((p) => { %>
+                                
+                                  <div class="column card-group p-2 shopdiv" style="width:25%; margin-left: 3px">
+                                      <div  class="card card-product-grid" style=" border-radius: 10px 10px 0px 0px"> 
+                                          <div class="shop-image">
+                                            <a href="/shop_product/<%= p.brands_id %>/<%=p.location_id %>">
+                                            <img   src= <%= p.brand_logo ?  p.brand_logo  : `${coreHostname}/images/logo1.png` %> class="m-auto bg-primary" id="shop-image" \style=" border-radius: 10px 10px 0px 0px"></a>
+                                          </div>
+                                          <figcaption class="info-wrap">  
+                                            <% if(p.wishlist == 1) { %>
+                                                  <div>
+                                                      <span class="tt">
+                                                      <i  class="fa fa-bookmark" id="bookmark"></i>
+                                                      <span class="ttext">Remove from wishlst</span>
+                                                      </span>
+                                                  </div>
+                                                <% } %>
+                                                <% if(p.wishlist == 0) { %>
+                                                      <div><span class="tt"><i class="bi bi-bookmark" id="bookmark"></i>
+                                                          <span class="ttext">Add to wishlst</span>
+                                                      </span></div>
+                                                <% } %>
+
+                                                  <a  href="/shop_product/<%= p.brands_id %>/<%=p.location_id %>">
+                                                  <span class="price mt-1" id="brand-name"><i class="fa fa-store"></i> <%= p.brands_name %></span></a>     
+                                                  <span class="myrate green" id="myrate" style="float: right; margin: 5px -10px 0px 0px"><%= p.stars %>&nbsp;<i class="bi bi-star-fill ten"></i></span><br>                   
+                                                  <span class="price mt-1 fw-normal" style="color: rgb(104, 104, 207);" ><i class="fa fa-map-marker-alt" aria-hidden="true"></i> <%= p.location_name %></span><br>
+                                                  <span class="price mt-1 fw-bold"> <i class="fa fa-location-arrow" aria-hidden="true"></i> <span class="price mt-1 fw-normal"> <%= p.address %> </span> </span><br>
+                                                  <span class="price mt-1 fw-bold" style="display: none;">Brand-id :-</span> <span class="price mt-1 fw-normal"  id ="brand_id" value="" style="display: none;"> <%=p.brands_id %></span>
+                                                  <span class="price mt-1 fw-bold" style="display: none;">Brand-location :-</span> <span class="price mt-1 fw-normal"   id ="brand_location_id" value="" style="display: none;"> <%=p.location_id %></span>
+                                          </figcaption>
+                                      </div>
+                                  </div>
+                              <% }) %>
+                              </div>
+                        
+                              <div class="fl" style="padding-top: 10px; display: flex; justify-content: space-between;">
+                                  <div style="padding-left: 30px; margin-top: 15px;" class="append-para">
+                                      <p>Showing <span class="numRecord"></span> Records of <span class="totalRecord"></span></p>
+                                  </div>
+                                  <div class="page-number" style="margin-right: 20px;"> </div>
+                              </div>
+                          </div>
+
+                          <div id="list" class="tabcontent">
+                            <div class="row mr-5" id="main-row1" style="display: none;">
+                            <% shops.forEach((p) => { %>
+                              
+                                <div class="row-parent shopdiv" style="border: 1px solid rgb(189, 186, 186); margin-left: 30px; margin-right: 40px;" id="row-parent1">
+                                   
+                                      <div class="img-div" >
+                                            <a href="/shop_product/<%= p.brands_id %>/<%=p.location_id %>">
+                                              <% if(p.file_name){ %>
+                                              <img   src= "<%= p.brand_logo  %>" class="m-auto bg-primary" id="shop-image"  style=" border-radius: 10px 10px 0px 0px">
+                                              <%}else{%>
+                                                <img src="/images/logo.png"  class="p-2" style=" width: 100px; height: 100px;">
+                                                <%}%>
+                                            </a>
+                                        </div>
+
+                                        <div class="info-wrap" style="margin-left: 50px;">                        
+                                          <% if(p.wishlist == 1) { %>
+                                            <div style="margin-left: 650px;">
+                                                <span class="tt"><i  class="fa fa-bookmark" id="bookmark"></i>
+                                                <span class="ttext">Remove from wishlst</span>
+                                            </span>
+                                            </div>
+                                          
+                                          <% } %>
+                                          <% if(p.wishlist == 0) { %>
+                                                <div style="margin-left: 650px;">
+                                                  <span class="tt"><i class="bi bi-bookmark" id="bookmark"></i>
+                                                    <span class="ttext">Add to wishlst</span>
+                                                </span></div>
+                                                <% } %>
+
+                                                <div style="display: flex; margin-top: -25px;"> 
+                                                  <a  href="/shop_product/<%= p.brands_id %>/<%=p.location_id %>"><span class="price mt-1" id="brand-name"><i class="fa fa-store"></i> <%= p.brands_name %></span></a>     
+                                                  <span class="myrate green" style="margin-left: 10px; cursor: context-menu; margin-top: 6px; height: 17px; font-size: 13px;" id="myrate"><%= p.stars %>&nbsp;<i class="bi bi-star-fill ten"></i></span><br>   
+                                              </div>
+                                                  <span class="price mt-1 fw-normal" style="color: rgb(102, 102, 201);"><i class="fa fa-map-marker-alt" aria-hidden="true"></i> <%= p.location_name %></span><br>
+                                                  <span class="price mt-1 fw-bold"> <i class="fa fa-location-arrow" aria-hidden="true"></i><span class="price mt-1 fw-normal"> <%= p.address %> </span> </span><br>
+                                                <span class="price mt-1 fw-bold" style="display: none;">Brand-id :-</span> <span class="price mt-1 fw-normal"  id ="brand_id" value="" style="display: none;"> <%=p.brands_id %></span>
+                                                <span class="price mt-1 fw-bold" style="display: none;">Brand-location :-</span> <span class="price mt-1 fw-normal" id ="brand_location_id" value="" style="display: none;"> <%=p.location_id %></span>
+                                        </div>
+                                </div>
+                                <% }) %>
+                                
+                            </div>
+                
+                             <div class="pl" style="padding-top: 10px; display: flex; justify-content: space-between;">
+                                <div style="padding-left: 30px; margin-top: 15px;" class="append-para1">
+                                    <p>Showing <span class="numRecord1"></span> Records of <span class="totalRecord1"></span></p>
+                                </div>
+                                <div class="page-number1" style="margin-right: 20px;"></div>
+                            </div>
+                        </div> 
+                        </div>
+            </main>
+            </main>
+        </div>
+    
+</div>
+<%- include('../partials/footer.html') %>
+
+
+<script type="text/javascript">
+           function openPage(pageName,elmnt) {
+  var i, tabcontent, tablinks;
+  tabcontent = document.getElementsByClassName("tabcontent");
+  for (i = 0; i < tabcontent.length; i++) {
+    tabcontent[i].style.display = "none";
+  }
+  tablinks = document.getElementsByClassName("tablink");
+  for (i = 0; i < tablinks.length; i++) {
+    tablinks[i].style.backgroundColor = "";
+  }
+  document.getElementById(pageName).style.display = "block";
+//   elmnt.style.backgroundColor = color;
+}
+      
+function getPageList(totalPages, page, maxLength){
+                        function range(start, end){
+                          return Array.from(Array(end - start + 1), (_, i) => i + start);
+                        }
+                        var sideWidth = maxLength < 9 ? 1 : 2;
+                        var leftWidth = (maxLength - sideWidth * 2 - 3) >> 1;
+                        var rightWidth = (maxLength - sideWidth * 2 - 3) >> 1;
+                  
+                        if(totalPages <= maxLength){
+                          return range(1, totalPages);
+                        }
+                  
+                        if(page <= maxLength - sideWidth - 1 - rightWidth){
+                          return range(1, maxLength - sideWidth - 1).concat(0, range(totalPages - sideWidth + 1, totalPages));
+                        }
+                  
+                        if(page >= totalPages - sideWidth - 1 - rightWidth){
+                          return range(1, sideWidth).concat(0, range(totalPages - sideWidth - 1 - rightWidth - leftWidth, totalPages));
+                        }
+                  
+                        return range(1, sideWidth).concat(0, range(page - leftWidth, page + rightWidth), 0, range(totalPages - sideWidth + 1, totalPages));
+                      }
+
+                      $(document).ready(function(){
+                        $(function(){
+                        var numberOfItems = $("#main-row .shopdiv").length;
+                        var limitPerPage = 6;
+                        var totalPages = Math.ceil(numberOfItems / limitPerPage)
+                        var paginationSize = 7;
+                        var currentPage;
+                  
+                        function showPage(whichPage){
+                          if(whichPage < 1 || whichPage > totalPages) return false;
+                  
+                          currentPage = whichPage;
+                  
+                          $("#main-row .shopdiv").hide().removeClass("aaa").slice((currentPage - 1) *  limitPerPage, currentPage * limitPerPage).show().addClass("aaa");
+                          var numItems = $("#main-row .aaa").length
+                          $(".numRecord").text(numItems)
+                          $(".totalRecord").text(numberOfItems)
+                        
+                          $(".page-number li").slice(1, -1).remove();
+                  
+                          getPageList(totalPages, currentPage, paginationSize).forEach(item =>{
+                            $("<li>").addClass("page-item").addClass(item ? "current-page" : "dots").toggleClass("acti", item === currentPage).append($("<a>").addClass("page-link").attr({href: "javascript:void(0"}).text(item || "...")).insertBefore(".next-page");
+                          });
+                  
+                          $(".previous-page").toggleClass("disabled", currentPage === 1);
+                          $(".next-page").toggleClass("disabled", currentPage === totalPages)
+                          return true;
+                        }
+                        $(".page-number").append(
+                          $("<li>").addClass("page-item").addClass("previous-page").append($("<a>").addClass("page-link").attr({href: "javascript:void(0)"}).text("Prev")),
+                            $("<li>").addClass("page-item").addClass("next-page").append($("<a>").addClass("page-link").attr({href: "javascript:void(0)"}).text("Next"))
+                          );
+                  
+                          $("#main-row").show();
+                          showPage(1);
+                  
+                          $(document).on("click", ".page-number li.current-page:not(.acti)", function(){
+                            return showPage(+$(this).text());
+                          });
+                  
+                          $(".next-page").on("click", function(){
+                            return showPage(currentPage + 1);
+                          })
+                  
+                          $(".previous-page").on("click", function(){
+                            return showPage(currentPage - 1);
+                          })
+                  
+                      })
+
+                      })
+
+                      $(document).ready(function(){
+                        $(function(){
+                        var numberOfItems = $("#main-row1 #row-parent1").length;
+                        var limitPerPage = 6;
+                        var totalPages = Math.ceil(numberOfItems / limitPerPage)
+                        var paginationSize = 5;
+                        var currentPage;
+                  
+                        function showPage(whichPage){
+                          if(whichPage < 1 || whichPage > totalPages) return false;
+                  
+                          currentPage = whichPage;
+                  
+                          $("#main-row1 #row-parent1").hide().removeClass("yyy").slice((currentPage - 1) *  limitPerPage, currentPage * limitPerPage).show().addClass("yyy");
+                          var numItems = $("#main-row1 .yyy").length
+                          $(".numRecord1").text(numItems)
+                          $(".totalRecord1").text(numberOfItems)
+                        
+                          $(".page-number1 li").slice(1, -1).remove();
+                  
+                          getPageList(totalPages, currentPage, paginationSize).forEach(item =>{
+                            $(" <li>").addClass("page-item").addClass(item ? "current-page" : "dots").toggleClass("acti", item === currentPage).append($("<a>").addClass("page-link").attr({href: "javascript:void(0"}).text(item || "...")).insertBefore(".next-page1");
+                          });
+                  
+                          $(".previous-page1").toggleClass("disabled", currentPage === 1);
+                          $(".next-page1").toggleClass("disabled", currentPage === totalPages)
+                          return true;
+                        }
+                        $(".page-number1").append(
+                          $("<li>").addClass("page-item").addClass("previous-page1").append($("<a>").addClass("page-link").attr({href: "javascript:void(0)"}).text("Prev")),
+                            $("<li>").addClass("page-item").addClass("next-page1").append($("<a>").addClass("page-link").attr({href: "javascript:void(0)"}).text("Next"))
+                          );
+                  
+                          $("#main-row1").show();
+                          showPage(1);
+                  
+                          $(document).on("click", ".page-number1 li.current-page:not(.acti)", function(){
+                            return showPage(+$(this).text());
+                          });
+                  
+                          $(".next-page1").on("click", function(){
+                            return showPage(currentPage + 1);
+                          })
+                  
+                          $(".previous-page1").on("click", function(){
+                            return showPage(currentPage - 1);
+                          })
+                  
+                      })
+
+                      })
+
+                   
+
+  
+SEARCH_SHOP_BYNAME.init({
+         _csrf: '<%= _csrf %>',
+         shops: JSON.stringify('<%- shops %>'),
+         myLocation: '<%= myLocation %>',
+        shopdistances: '<%- shopdistances %>',
+        shopid : '<%= shopid %>',
+    })
+   
+     
+</script>
+
+
+        

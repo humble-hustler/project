@@ -1,0 +1,70 @@
+{
+  "name": "FitBiz",
+  "version": "0.0.1",
+  "private": true,
+  "scripts": {
+    "start:dev": "nodemon app.js -i public -i node_modules",
+    "start:prod": "NODE_ENV=production node app.js",
+    "start:lint": "eslint . --fix",
+    "test": "mocha --exit"
+  },
+  "dependencies": {
+    "async": "^3.1.0",
+    "aws-sdk": "^2.1159.0",
+    "axios": "^0.21.4",
+    "bcrypt": "^5.0.1",
+    "body-parser": "^1.20.0",
+    "compression": "^1.7.4",
+    "cookie-parser": "^1.4.6",
+    "cors": "^2.8.5",
+    "csurf": "^1.11.0",
+    "ejs": "^3.1.8",
+    "exceljs": "^4.3.0",
+    "express": "^4.18.1",
+    "express-fileupload": "^1.4.0",
+    "express-flash": "0.0.2",
+    "express-minify": "^1.0.0",
+    "express-minify-html": "^0.10.0",
+    "express-mysql-session": "^2.1.8",
+    "express-session": "^1.17.3",
+    "fcm-node": "^1.6.1",
+    "geolib": "^3.3.3",
+    "helmet": "^3.23.3",
+    "jsonwebtoken": "^8.5.1",
+    "lodash": "^4.17.21",
+    "log4js": "^6.5.2",
+    "moment-timezone": "^0.5.34",
+    "mysql": "^2.18.1",
+    "node-fetch": "^3.3.0",
+    "node-schedule": "^1.3.3",
+    "nodemailer": "^6.7.2",
+    "otp-generator": "^4.0.0",
+    "rand-token": "^1.0.1",
+    "razorpay": "^2.8.0",
+    "request": "^2.88.2",
+    "serve-favicon": "^2.5.0",
+    "shiprocket-api": "^1.1.4",
+    "socket.io": "^2.4.1",
+    "toastr": "^2.1.4",
+    "uglify-es": "^3.3.9"
+  },
+  "devDependencies": {
+    "chai": "^4.2.0",
+    "eslint": "^6.8.0",
+    "mocha": "^7.2.0",
+    "nodemon": "^2.0.4",
+    "supertest": "^4.0.2"
+  },
+  "main": "app.js",
+  "directories": {
+    "test": "test"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://gitlab.apps.tapsoft.in/shrikant.T/exlshop-backend.git"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "description": ""
+}

@@ -1,0 +1,736 @@
+
+<%- include("./partials/header.html") %>
+<%- include("./partials/topnav.html") %>
+<%- include("./partials/sidebar.html") %>
+<style>
+    .required {
+        position: absolute;
+        margin-top: -50px;
+        color: #FB0000;
+        font-size: 15px;
+    }
+    .tab-content
+    {
+        background-color: #fff;
+        padding: 20px 10px;
+        border-radius: 3px;
+    }
+</style>
+            <div class="page">
+                <div class="page-header">              
+                    <ul class="nav nav-tabs nav-tabs-line tabs-line-top mb-10" role="tablist">
+                        <h3>Products</h3>
+                        <% if(session.user.currentLocation.allowed_products && session.user.currentLocation.no_of_req) { %>
+                            <button class="btn btn-warning mt-10 mb-10 mr-5" id="addedProducts" style="margin: auto"
+                            allowedPro="<%= session.user.currentLocation.allowed_products %>">
+                                <span class="hidden-sm-down" id="remaining-products"></span>
+                            </button>
+                            <button class="btn btn-warning mt-10 mb-10" id="productRequests">
+                                <span class="hidden-sm-down"><%= (session.user.currentLocation.no_of_req-productRequest.length) > 0 ? session.user.currentLocation.no_of_req-productRequest.length : 0 %> Requests Remaining</span>
+                            </button>
+                        <% } %>
+                        <!-- <li class="nav-item" role="presentation"><a class="nav-link " data-toggle="tab"
+                                href="#Category_details" aria-controls="Category-details" role="tab"
+                                title="Category-details">
+                                <h4 aria-hidden="true">Category</h4>
+                            </a></li> -->
+                    </ul>
+                    <div class="tab-content">
+                        <div class="tab-pane active" id="Products" role="tabpanel">
+                            <a style="float:right">
+                                <button class="text-dark mr-10" id="reset-filter-btn">Reset Filter <i class="fa fa-times-circle"></i></button>
+                                <button class="btn btn-primary" id="filter-btn" data-toggle="modal" data-target="#filter">Filter <i class="fa fa-filter"></i></button>
+                            </a>
+                            <button class="btn btn-primary" data-target="#add-existing-product" curr-product=""
+                                data-toggle="modal" id="add-existing-product-btn" disabled>
+                                <i class="icon fa-plus" aria-hidden="true"></i>
+                                <span class="hidden-sm-down">Add Product</span>
+                            </button>
+                            <% if(session.user.currentLocation.add_product_req && session.user.currentLocation.add_product_req == 1) { %>
+                                <button class="btn btn-primary" data-target="#add-new-asset" data-toggle="modal"
+                                    id="add-new-asset-btn">
+                                    <i class="icon fa-plus" aria-hidden="true"></i>
+                                    <span class="hidden-sm-down">Request Add Product</span>
+                                </button>
+                            <% } %>
+                            <button class="btn btn-primary"
+                                data-toggle="modal" id="duplicate-product-btn" disabled>
+                                <i class="icon fa-plus" aria-hidden="true"></i>
+                                <span class="hidden-sm-down">Duplicate Product</span>
+                            </button>
+                            <button class="btn btn-primary" data-target="#import-bulk-products"
+                                data-toggle="modal" id="import-bulk-btn" disabled>
+                                <i class="icon fa-plus" aria-hidden="true"></i>
+                                <span class="hidden-sm-down">Import Bulk Products</span>
+                            </button>
+                            <br><br>
+                            <table class="table table-hover dataTable table-striped w-full" id="products-list">
+                                <thead>
+                                    <tr>
+                                        <th><i class="fa fa-image"></i></th>
+                                        <th>Name</th>
+                                        <th>Category</th>
+                                        <th>Regular Price</th>
+                                        <th>Discount</th>
+                                        <th>Selling Price</th>
+                                        <th>Quantity</th>
+                                        <th>SKU No.</th>
+                                        <th>Action</th>
+                                    </tr>
+                                </thead>
+                                <tbody></tbody>
+                            </table>
+                        </div>
+                        <div class="tab-pane " id="Category_details" role="tabpanel">
+                            <button class="btn btn-primary" data-target="#add-new-category"
+                                data-toggle="modal" id="add-new-category-btn">
+                                <i class="icon fa-plus" aria-hidden="true"></i>
+                                <span class="hidden-sm-down">Add New Category</span>
+                            </button>
+
+                            <button class="btn btn-primary" data-target="#add-new-subcategory"
+                                data-toggle="modal" id="add-new-subcategory-btn">
+                                <i class="icon fa-plus" aria-hidden="true"></i>
+                                <span class="hidden-sm-down">Add New Subcategory</span>
+                            </button>
+                            <button class="btn btn-primary" data-target="#add-new-subsubcategory"
+                                data-toggle="modal" id="add-new-subsubcategory-btn">
+                                <i class="icon fa-plus" aria-hidden="true"></i>
+                                <span class="hidden-sm-down">Add New SubSubcategory</span>
+                            </button>
+                            <br><br>
+                            <table class="table table-hover dataTable table-striped w-full" id="requestCategory-list">
+                                <thead>
+                                    <tr>
+                                        <th>ID</th>
+                                        <th>Category Name</th>
+                                        <th>Sub-Category Name</th>
+                                        <th>Sub Sub-Category Name</th>
+                                    </tr>
+                                </thead>
+                                <tbody></tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <h1 class="page-title">Products</h1>
+            <div class="modal fade" id="filter"  name="filter" aria-hidden="false" aria-labelledby="filter" role="dialog" tabindex="-1">
+                <div class="modal-dialog modal-simple">
+                    <div class="modal-content">
+                        <div class="modal-header">
+                            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                <span aria-hidden="true">×</span>
+                            </button>
+                            <h4 class="modal-title">Filters</h4>
+                        </div>
+                        <div class="modal-body">
+                            <div class="row">
+                            
+                                <div class="form-group col-xl-6">
+                                    <label class="form-control-label">Product Name</label>
+                                    <input class="form-control" id="product_id" name="product_name">
+                                </div>
+                                <div class="form-group col-xl-6">
+                                    <label class="form-control-label">SKU Number</label>
+                                    <input class="form-control" id="sku_id" name="skuname">
+                                </div>
+                                <div class="form-group col-xl-6">
+                                    <label class="form-control-label">Minimum Price</label>
+                                    <input class="form-control" id="minimum_id" name="minimum">
+                                </div>
+                                <div class="form-group col-xl-6">
+                                    <label class="form-control-label">Maximum Price</label>
+                                    <input class="form-control" id="maximum_id" name="maximum">
+                                </div>
+                                
+                                <div class="form-group col-xl-4">
+                                    <label class="form-control-label">Category</label>
+                                    <select class="form-control" id="filter_category_id" name="filter_categoryname">
+                                        <option disabled selected value> -- select an option -- </option>
+                                        <% categories.forEach((c)=>{ %>
+                                            <option value="<%= c.id %>">
+                                                <%= c.name %>
+                                            </option>
+                                            <% }) %>
+                                    </select>
+                                </div>
+                                <div class="form-group col-xl-4">
+                                    <label class="form-control-label">SubCategory</label>
+                                    <select class="form-control" id="filter_subcategory_id" name="filter_subcategoryname">
+                                        <option disabled selected value> -- select an option -- </option>
+                                    </select>
+                                </div>
+                                <div class="form-group col-xl-4">
+                                    <label class="form-control-label">Sub-SubCategory</label>
+                                    <select class="form-control" id="filter_subsubcategory_id" name="filter_subsubcategoryname">
+                                        <option disabled selected value> -- select an option -- </option>
+                                    </select>
+                                </div>
+                                <div class="form-group col-xl-12 text-right">
+                                    <%- csrf_html %>
+                                    <button class="btn btn-primary" id="apply-filter">Apply</button>
+                                </div>
+                            </div>
+                            
+                        </div>  
+                    </div>
+                </div>
+            </div>
+            <div class="modal fade" id="add-new-asset" aria-hidden="false" aria-labelledby="add-new-asset" role="dialog"
+                tabindex="-1">
+                <div class="modal-dialog modal-lg" style=" width:  19.9cm;">
+                    <div class="modal-content"   style="width: 19cm;">
+                        <div class="modal-header" style=" height: 1cm;">
+                            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                <span aria-hidden="true">×</span>
+                            </button>
+                            <h4 class="modal-title" id="add-new-team-asset">Add New Product</h4>
+                        </div>
+                        <div class="modal-body">
+                            <!-- <form method="POST" id="asset-form-add"> -->
+                            <input type="hidden" id="asset-id" name="asset_id">
+                            <div class="row">
+                                <div class="form-group col-xl-6">
+                                    <label class="form-control-label">Select Category</label>
+                                    <select class="form-control cat-btn" id="category" name="category_id" required>
+                                        <option disabled selected value> -- select an option -- </option> 
+                                        <% categories.forEach((c)=>{ %>
+                                            <option value="<%= c.id %>">
+                                                <%= c.name %>
+                                            </option>
+                                            <% }) %>
+                                    </select><br>
+                                </div>
+                                <div class="form-group col-xl-6">
+                                    <label class="form-control-label">Add product image</label>
+                                    <input type="file" class="form-control" id="request-product-image" name="product-image" /><br>
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="form-group col-xl-6">
+                                    <label class="form-control-label" for="subcategory">Select SubCategory</label>
+                                    <select class="form-control" id="subcategory" name="subcategory_id" required>
+                                        <option disabled selected value> -- select an option -- </option>
+                                    </select><br>
+                                </div>
+                                <div class="form-group col-xl-6">
+                                    <label class="form-control-label" for="subcategory">Enter SubCategory</label>
+                                    <input type="text" class="form-control" id="new_subcategory_id" name="new_subcategory_name"
+                                        placeholder="New Subcategory Name" required />
+                                    <br>
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="form-group col-xl-6">
+                                    <label class="form-control-label" for="subsubcategory">Select SubSubCategory</label>
+                                    <select class="form-control" id="subsubcategory" name="sub_subcategory_id" required>
+                                        <option disabled selected value> -- select an option -- </option>
+                                    </select><br>
+                                </div>
+                                <div class="form-group col-xl-6">
+                                    <label class="form-control-label" for="subsubcategory">Enter SubSubCategory</label>
+                                    <input type="text" class="form-control" id="new_subsubcategory_id" name="new_subsubcategory_name"
+                                    placeholder="New Subsubcategory Name" required />
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="form-group col-xl-6">
+                                    <label class="form-control-label">Product Name</label>
+                                    <input type="text" class="form-control" id="product-name" name="product_name"
+                                        placeholder="Product Name" required />
+                                </div>
+                                <div class="form-group col-xl-6">
+                                    <label class="form-control-label">Description</label>
+                                    <input type="text" class="form-control" id="description" name="description"
+                                        placeholder="description" required />
+                                </div>
+                                <!-- <div class="form-group col-xl-4">
+                                <label class="form-control-label">Image</label>
+                                <br>
+                                <div class="form-group">
+                                        <input name="file" type="file" id="featured-image-input123" class="form-control"  onchange="showType(this)"  />
+                                  
+                                </div>
+                                </div> -->
+                            </div>
+                            <div class="row">
+                                <div class="form-group col-xl-12 text-center">
+                                    <%- csrf_html %>
+                                        <button class="btn btn-primary" id="add-asset-btn">Send Product Request</button>
+                                </div>
+                            </div>
+                        </div>
+                        <!-- </form> -->
+                    </div>
+                </div>
+            </div>
+            </div>
+            <!-- <div class="modal fade" id="image-library" aria-hidden="false" aria-labelledby="image-library" role="dialog"
+            tabindex="-1">
+            <div class="modal-dialog modal-simple">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                            <span aria-hidden="true">×</span>
+                        </button>
+                     
+                    </div>
+                    <div class="modal-body">
+                        <div class="form-group" >
+                                <form action="/app/asset-management/add/requested-product-images?_csrf=<%= _csrf %>" method="post" id="product-images" enctype="multipart/form-data">
+                                <input name="file" type="file" id="featured-image-input2" class="form-control"
+                                    multiple />
+                            </form>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div> -->
+            <div class="modal fade" id="add-existing-product" aria-hidden="false" aria-labelledby="add-existing-product"
+                role="dialog" tabindex="-1">
+                <div class="modal-dialog modal-lg" style=" width: 21cm;">
+                    <div class="modal-content">
+                        <div class="modal-header">
+                            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                <span aria-hidden="true">×</span>
+                            </button>
+                            <h4 class="modal-title" id="add-existing-team-asset">Add Existing Product</h4>
+                        </div>
+                        <div class="modal-body">
+                            <!-- <form method="POST" id="asset-form-add"> -->
+                                <div class="row">
+                                    <div class="form-group col-xl-4">
+                                        <label class="form-control-label">Select Category</label>
+                                        <select class="form-control cat-btn" id="category2id" name="category2_id" required>
+                                            <option disabled selected value> -- select an option -- </option>
+                                            <% categories.forEach((c)=>{ %>
+                                                <option value="<%= c.id %>"><%= c.name %></option>
+                                            <% }) %>
+                                        </select>
+                                    </div>
+                                    <div class="form-group col-xl-4">
+                                        <label class="form-control-label" for="subcategory2">Select SubCategory</label>
+                                        <select class="form-control" id="subcategory2" name="subcategory2_id" required>
+                                            <option disabled selected value> -- select an option -- </option>
+                                        </select>
+                                    </div>
+                                    <div class="form-group col-xl-4">
+                                        <label class="form-control-label" for="subsubcategory2">Select SubSubCategory</label>
+                                        <select class="form-control" id="subsubcategory2" name="sub_subcategory2_id" required>
+                                            <option disabled selected value> -- select an option -- </option>
+                                        </select>
+                                    </div>
+                                </div>    
+                                <div class="row">
+                                    <div class="form-group col-xl-4">
+                                        <%- csrf_html %>
+                                        <label class="form-control-label" for="globalproducts">Select ProductName</label>
+                                        <select id="globalProduct_id" name="globalProduct_id" class="form-control edit-data" required>
+                                            <option value></option>
+                                        </select>
+                                    </div>
+                                    <div class="form-group col-xl-4">
+                                        <%- csrf_html %>
+                                        <label class="form-control-label" >Quantity</label>
+                                        <input class="form-control edit-data" required type="number"  name="quantity_name" id="quantity-id">                                 
+                                    </div>
+                                    <div class="form-group col-4">
+                                        <label class="form-control-label">Regular Price</label>
+                                        <input type="number" class="form-control"
+                                            id="regular-price" name="regular_price" required />
+                                    </div>
+    
+                                    <div class="form-group col-4">
+                                        <label class="form-control-label">Discount Amount</label>
+                                        <input type="number" class="form-control"
+                                            id="discount-price" name="discount_price"
+                                            required />
+                                    </div>
+                                    <div class="form-group col-xl-4">
+                                        <%- csrf_html %>
+                                        <label class="form-control-label" >Is Returnable?</label>
+                                        <select id="returnable" name="is-returnable" class="form-control edit-data">
+                                            <option value="0">No</option>
+                                            <option value="1">Yes</option>
+                                        </select>
+                                    </div>
+                                    <div class="form-group col-xl-4">
+                                        <%- csrf_html %>
+                                        <label class="form-control-label" >No. of Days to Return</label>
+                                        <input class="form-control edit-data" type="number"  name="daystoreturn" id="days-toreturn" disabled> 
+                                    </div> 
+                                    <div class="form-group col-xl-4">
+                                        <label class="form-control-label" style="margin-bottom: 0;">Is Variable</label>
+                                        <div class="form-check">
+                                            <input class="form-check-input" type="radio" value="2" name="is_variable" id="flexRadioDefault1">
+                                            <label class="form-check-label" for="flexRadioDefault1">Yes</label>
+                                          </div>
+                                          <div class="form-check">
+                                            <input class="form-check-input" type="radio" value="1" name="is_variable" id="flexRadioDefault2">
+                                            <label class="form-check-label" for="flexRadioDefault2">No</label>
+                                          </div>
+                                    </div>
+                                    <div class="form-group col-xl-4">
+                                        <%- csrf_html %>
+                                        <label class="form-control-label" >Size</label>
+                                        <select id="sizeId" name="size-id" class="form-control edit-data" disabled>
+                                            <option disabled selected value="0"> -- select an option -- </option>
+                                            <% size.forEach((s)=>{ %>
+                                                <option value="<%= s.id %>"><%= s.Name %></option>
+                                            <% }) %>
+                                        </select>                                   
+                                    </div>
+                                    
+                                    <div class="form-group col-xl-4">
+                                        <%- csrf_html %>
+                                        <label class="form-control-label" >Color</label>
+                                        <select id="colorId" name="color-id" class="form-control edit-data" disabled>
+                                            <option disabled selected value="0"> -- select an option -- </option>
+                                            <% color.forEach((c)=>{ %>
+                                                <option value="<%= c.id %>"><%= c.name %></option>
+                                            <% }) %>
+                                        </select>
+                                    </div>
+
+                                    <div class="form-group col-xl-4">
+
+                                    </div>
+                                    <div class="form-group col-xl-4">
+                                        <label class="form-control-label" >Add New Size</label>
+                                        <div class="input-control" style="display: flex;">
+                                            <input type="text" id="size-type" class="form-control" placeholder="Please Enter Size" disabled>
+                                            <div class="input-group-append">
+                                                <button class="btn btn-primary" id="add-size-btn" style="cursor: pointer;" disabled>Add</button>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="form-group col-xl-4">
+                                        <label class="form-control-label" >Add New Color</label>
+                                        <div class="input-control" style="display: flex;">
+                                            <input type="text" id="color-type" class="form-control" placeholder="Please Enter Color" disabled>
+                                            <div class="input-group-append">
+                                                <button class="btn btn-primary" id="add-color-btn" style="cursor: pointer;" disabled>Add</button>
+                                            </div>
+                                            </div>
+                                    </div>
+                                    <div class="form-group col-xl-12" style="text-align: center; margin-top: 20px;">
+                                        <%- csrf_html %>
+                                        <button class="btn btn-primary" id="add-existing-asset-btn">Add Product</button>
+                                    </div>
+                                </div>
+                            <!-- </form> -->
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="modal fade" id="update-product" aria-hidden="false" aria-labelledby="update-product"
+                role="dialog" tabindex="-1">
+                <div class="modal-dialog modal-lg">
+                    <div class="modal-content">
+                        <div class="modal-header" >
+                            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                <span aria-hidden="true">×</span>
+                            </button>
+                            <h4 class="modal-title" id="add-new-category">Update Product</h4>
+                        </div>
+                        <div class="modal-body">
+                            <div class="row m-1">
+                                <div class=" form-group">
+                                    <a href="#" id="image_list" class="btn btn-dark btn-xs" data-toggle="modal"
+                                        data-target="#image-library">Product Images<i class="fa fa-image"></i></a>
+                                </div>
+                            </div>
+                            <div class="row m-1">
+                                <label>Product Name
+                                    <div class="form-group">
+                                        <input type="hidden" name="product-id" id="product-id1"> 
+                                        <input type="text" class="form-control" id="product-name1"
+                                            name="product_name" placeholder="Product Name"
+                                            value="<%= product.name %>" required />
+                                    </div>
+                                </label>
+                            </div>
+                            <div class="row">
+                                <div class="form-group col-md-6">
+                                    <label>Product Discription</label>
+                                    <textarea class="form-control" id="product-description1"
+                                        name="product_description" placeholder="Product Description"
+                                        rows="5"><%= product.description %></textarea>
+                                </div>
+                                <div class="form-group col-md-3">
+                                    <label>Is Returnable?</label>
+                                        <select id="edit-returnable" name="edit-is-returnable" class="form-control edit-data">
+                                            <option value="0">No</option>
+                                            <option value="1">Yes</option>
+                                        </select>
+                                </div>
+                                <div class="form-group col-md-3">
+                                    <label>No. of Days to Return</label>
+                                        <input type="text" class="form-control"
+                                        name="daystoreturn" id="edit-days-toreturn" disabled/>
+                                </div>
+                            </div>
+                            <div class="row" id="simple-settings-wrapper">
+                                <div class="form-group col-md-3">
+                                    <label class="form-control-label">Quantity</label>
+                                    <input type="number" step="0.01" class="form-control"
+                                        id="product-quantity1" name="product_quantity1"
+                                        value="<%= product.quantity ? product.quantity : '' %>"
+                                        required />
+                                </div>
+                                <div class="form-group col-md-3">
+                                    <label class="form-control-label">Regular Price</label>
+                                    <input type="number" step="0.01" class="form-control"
+                                        id="product-regular-price1" name="product_regular_price"
+                                        value="<%= product.regular_price ? product.regular_price : '' %>"
+                                        required />
+                                </div>
+
+                                <div class="form-group col-md-3">
+                                    <label class="form-control-label">Discount Amoubt</label>
+                                    <input type="number" step="0.01" class="form-control"
+                                        id="product-discount-price1" name="product_discount_price"
+                                        value="<%= product.discount_price ? product.discount_price : '' %>"
+                                        required />
+                                </div>
+                                <div class="form-group col-md-3">
+                                    <label class="form-control-label">SKU</label>
+                                    <input type="text" class="form-control" id="product-sku1"
+                                        name="product_sku"  value="<%= product.sku %>" required />
+                                </div>
+                                <div class="form-group col-xl-12">
+                                    <%- csrf_html %>
+                                        <button class="btn btn-primary" id="update-product-btn">Update Product</button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="modal fade" id="image-library" aria-hidden="false" aria-labelledby="image-library" role="dialog" tabindex="-1">
+                <div class="modal-dialog modal-simple">
+                    <div class="modal-content">
+                        <div class="modal-header">
+                            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                <span aria-hidden="true">×</span>
+                            </button>
+                            <h4 class="modal-title" id="add-new-team-product">Image Library</h4>
+                        </div>
+                        <div class="modal-body">
+                            <div id="imglist" class="library-images-wrapper">
+                            
+                            </div>
+                            <div class="form-group">
+                                <form id="product-images"
+                                    enctype="multipart/form-data">
+                                    <input name="file" type="file" id="featured-image-input" class="form-control" multiple />
+                                </form>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="modal fade" id="delete-product" aria-hidden="false" aria-labelledby="delete-product" role="dialog" tabindex="-1">
+                <div class="modal-dialog modal-simple">
+                    <div class="modal-content" >
+                       <div class="modal-header">
+                            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                <span aria-hidden="true">×</span>
+                            </button>
+                            <h4 class="modal-title">Delete Product</h4>
+                        </div>
+                        <div class="modal-body">
+                            <div class="row">
+                                    
+                                <input type="hidden" name="product-id" id="product-id2"> 
+                                <div class="col-lg-12">
+                                    <p>Do you really want to Delete the selected Product ?</p>
+                                
+                                </div>
+                                <div class="form-group col-xl-12">
+                                    <button class="btn btn-round btnSelect" id="delete-product-btn">Delete</button>
+                                </div>
+                            </div>                
+                        </div>            
+                    <!-- </form> -->
+            
+                </div>
+            
+                    </div>
+            
+            </div>
+            <div class="modal fade" id="add-new-category" aria-hidden="false" aria-labelledby="add-new-category"
+            role="dialog" tabindex="-1">
+            <div class="modal-dialog modal-lg">
+                <div class="modal-content">
+                    <div class="modal-header" >
+                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                            <span aria-hidden="true">×</span>
+                        </button>
+                        <h4 class="modal-title" id="add-new-category">Add New Category</h4>
+                    </div>
+                    <div class="modal-body">
+                        <div class="row">
+                            <div class="form-group col-xl-4">
+                                <%- csrf_html %>
+                                    <input required type="text"  name="category_id" id="category-id">
+                            </div>
+                            <div class="form-group col-xl-12">
+                                <%- csrf_html %>
+                                    <button class="btn btn-primary" id="add-category-btn">Send Request
+                                        Category</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+            <div class="modal fade" id="import-bulk-products" aria-hidden="false" aria-labelledby="import-bulk-products"
+                role="dialog" tabindex="-1">
+                <div class="modal-dialog modal-lg">
+                    <div class="modal-content">
+                        <div class="modal-header" >
+                            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                <span aria-hidden="true">×</span>
+                            </button>
+                            <h4 class="modal-title" id="add-new-category">Import-Bulk-Products</h4>
+                        </div>
+                        <div class="modal-body">
+                            <div class="row">
+                                <div class="form-group col-xl-4">
+                                    <%- csrf_html %>
+                                    <input name="file" type="file" id="import_products_id" class="form-control"  accept=".csv" multiple />
+                                </div>
+                                <div class="form-group col-xl-12">
+                                    <%- csrf_html %>
+                                        <button class="btn btn-primary" id="import-products-btn">Import Products</button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="modal fade" id="add-new-subcategory" aria-hidden="false" aria-labelledby="add-new-subcategory"
+                role="dialog" tabindex="-1">
+                <div class="modal-dialog modal-lg">
+                    <div class="modal-content">
+                        <div class="modal-header">
+                            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                <span aria-hidden="true">×</span>
+                            </button>
+                            <h4 class="modal-title" id="add-new-subcategory">Add SubCategory</h4>
+                        </div>
+                        <div class="modal-body">
+                            <div class="row">
+                                <div class="form-group col-xl-3">
+                                    <label class="form-control-label">Select Category</label>
+                                    <select class="form-control cat-btn" id="categoryid" name="category_id" required>
+                                        <option value="">Select Options</option>
+                                        <% categories.forEach((c)=>{ %>
+                                            <option value="<%= c.id %>">
+                                                <%= c.name %>
+                                            </option>
+                                            <% }) %>
+                                    </select>
+                                </div>
+                                <div class="form-group col-xl-12">
+                                    <%- csrf_html %>
+                                        <input type="text" name="subcategory_id" placeholder="subcategory Name"
+                                            id="subcategory-id">
+                                </div>
+                                <div class="form-group col-xl-12">
+                                    <%- csrf_html %>
+                                        <button class="btn btn-primary" id="add-subcategory-btn">Send Request
+                                            SubCategory</button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="modal fade" id="add-new-subsubcategory" aria-hidden="false"
+                aria-labelledby="add-new-subsubcategory" role="dialog" tabindex="-1">
+                <div class="modal-dialog modal-lg">
+                    <div class="modal-content">
+                        <div class="modal-header">
+                            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                <span aria-hidden="true">×</span>
+                            </button>
+                            <h4 class="modal-title" id="add-new-subsubcategory">Add New Subsubcategory</h4>
+                        </div>
+                        <div class="modal-body">
+                            <div class="row">
+                                <div class="form-group col-xl-4">
+                                    <label class="form-control-label">Select Category</label>
+                                    <select class="form-control" id="category1id" name="category_id" required>
+                                        <option value="">Select Options</option>
+                                        <% categories.forEach((c)=>{ %>
+                                            <option value="<%= c.id %>">
+                                                <%= c.name %>
+                                            </option>
+                                            <% }) %>
+                                    </select>
+                                </div>
+                                <div class="form-group col-xl-3">
+                                    <label class="form-control-label" for="subcategory1id">Select SubCategory</label>
+                                    <select class="form-control" id="subcategory1id" name="subcategory1id" required>
+                                        <option value="">Select Options</option>
+                                    </select>
+                                </div>
+
+                                <div class="form-group col-xl-12">
+                                    <%- csrf_html %>
+                                        <input type="text" name="subsubcategory_id" placeholder="subsubcategory Name"
+                                            id="subsubcategory-id">
+                                </div>
+                                <div class="form-group col-xl-12">
+                                    <%- csrf_html %>
+                                        <button class="btn btn-primary" id="add-subsubcategory">Send Request
+                                            Subsubcategory</button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+<%- include("./partials/footer.html") %>
+<script type="text/javascript">
+ 
+function showType(fileInput) {
+
+  var files = fileInput.files;
+  for (var i = 0; i < files.length; i++) {
+    var name = files[i].name;
+    var type = files[i].type;
+    $.ajax({
+                          url: "/app/asset-management/add/requested_product-images",
+                        // url: "/api/v1/appProduct/sendProductRequest",
+                        data: {
+                            // formData,
+                            name:name,
+                            type:type,
+                            _csrf: '<%=_csrf %>'
+                        },
+                        method: 'POST',
+                        success: function (data) {
+                            toastr.success(' Product Request Sent successfully!');
+                            window.location.reload();
+                        },
+                        error: function (data, status, error) {
+                            toastr.error('Some error occurred')
+                        }
+                    });
+  }
+}
+
+
+ASSET_MANAGEMENT.init({
+ _csrf: '<%= _csrf %>',
+  flash: '<%= messages.error %>',
+  currentLocation: '<%- JSON.stringify(session.user.currentLocation) %>',
+  session : '<%- JSON.stringify(session) %>',
+  productRequest : '<%- JSON.stringify(productRequest) %>'
+  })
+</script>

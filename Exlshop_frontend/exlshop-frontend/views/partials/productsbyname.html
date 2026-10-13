@@ -1,0 +1,695 @@
+<style>
+      .page-number{
+      text-align: center;
+      user-select: none;
+    }
+    .page-number li {
+      display: inline-block;
+      margin: 5px;
+    }
+    .page-number li a{
+      text-decoration: none;
+      font-size: 15px;
+      line-height: 25px;
+    }
+    .page-number li:not(.acti) a{
+        color: black;
+    }
+    .previous-page, .next-page{
+      background-color: rgb(11, 175, 240);
+      cursor: pointer;
+    }
+    .pagination{
+      text-align: center;
+      margin: 30px 30px 60px;
+      user-select: none;
+    }
+    .pagination li {
+      display: inline-block;
+      margin: 5px;
+    }
+    .pagination li a{
+      text-decoration: none;
+      font-size: 15px;
+      line-height: 25px;
+    }
+    .acti a{
+        background-color: rgb(161, 159, 159);
+        color: black;
+    }
+    .pagination li:not(.acti) a{
+        color: black;
+    }
+    .current-page, .dots{
+      background: #ccc;
+      cursor: pointer;
+    }
+    
+    .page-number1{
+      text-align: center;
+      user-select: none;
+    }
+    .page-number1 li {
+      display: inline-block;
+      margin: 5px;
+    }
+    .page-number1 li a{
+      text-decoration: none;
+      font-size: 15px;
+      line-height: 25px;
+    }
+    .page-number1 li:not(.acti) a{
+        color: black;
+    }
+    .previous-page1, .next-page1{
+      background-color: rgb(11, 175, 240);
+      cursor: pointer;
+    }
+    .row-parent{
+    display: flex;
+    }
+.img-div img{
+    height: 200px;
+    width: 200px;
+}
+
+
+</style>
+
+<% if(session.user) {%>
+    <% if(session.cart) {%>
+        <% if(session.cart.line.length == 0){ %>
+            <input type="hidden" class="isLocation" value="0">
+        <% } else { %>
+            <input type="hidden" class="isLocation" value="<%=session.cart.line[0].locationId %>">
+    <% } %>
+    <% } else{%>
+        <input type="hidden" class="isLocation" value="0">
+     <% } %>
+<% } %>
+
+<% if(!session.user) { %>
+    <input type="hidden" class="issesion" value="0">
+    <% } %>
+    <% if(session.user) { %>
+        <input type="hidden" class="issesion" value="1">
+        <% } %>
+
+
+<% if(products.length){ %>
+    <header class="border-bottom mb-4 pb-3">
+        <div class="form-inline">
+            <span class="mr-md-auto"><%= products.length %> Items found </span>
+        </div>
+    </header>
+
+    <div class="panelContainer">
+        <div id="grid" class="tabcontent mt-4">
+            <div class="row" id="main-row" style="display: none;">
+                <% products.forEach((p) => { %>
+                <% if(p.product_type == 1) { %>
+                <div class="col-3 p-3 myinnerproduct" id="<%= p.id %>">
+                    <div href="#" class="card card-product-grid">
+                        <a href="/shop/<%= p.slug %>/<%=p.id %>" class="img-wrap" style="height: 190px;">
+                            <% if(p.file_name){ %>
+                            <img src="<%=session.imgURL %><%= p.file_name %>" alt="<%= p.name %>">
+                            <%}else{%>
+                            <img src="images/logo.png" alt="<%= p.name %>">
+                            <%}%>
+                        </a><hr style="margin-top: 0;">
+                        <figcaption class="info-wrap" style="line-height: 23px; margin-top: -20px;">     
+                                
+                            <a href="/shop/<%= p.slug %>/<%= p.id %>" style="color: black; font-weight: 600; font-size: 17px;  text-align: center;" class="title fourteen" title="<%= p.name %>"><%= p.name %></a>
+                            <span ><i class="fa fa-store"></i> <%= p.brand_name %>  <span class="myrate green" style=" cursor: context-menu;  height: 17px; margin-top: -20px; margin-right: 6px; font-size: 13px;"><%= p.avg_rate%><i class="bi bi-star-fill ps-1 ten"></i></span>  </span>
+                            
+                            <span style="color: rgb(104, 104, 241); cursor: context-menu;"><i class="fa fa-map-marker-alt" aria-hidden="true"></i> <%= p.location_name %></span><br>
+
+                            <span class="price mt-1" style="display: flex; justify-content: space-evenly; font-size: 15px;">
+                               <del class="ps-2 pe-1 information" >₹<%= p.regular_price %></del>
+                                        <span class="text-success"><%= p.discount_percentage %>% off</span>
+                            </span>
+                            <span style="display: flex; justify-content: center; font-size: 17px;" class="fw-bold"> ₹ <%= p.regular_price-p.discount_price %></span>
+
+                            <div style="text-align: center; margin-top: 15px;">
+                                <button class="btn btn-warning mb-2 addbtn" id="addbtn" pid="<%= p.id %>" locationId = "<%= p.location_id %>">ADD +</button>
+                                <input type="hidden" id="shopLat" value="<%= p.lat%>">
+                                <input type="hidden" id="shopLong" value="<%= p.lng %>">
+                                <input type="hidden" id="maximum-shop-distance" value="<%= p.maximum_order_distance %>">
+                                <div class="input-group mb-3 input-spinner plusof" id="plusdiv"  style="display: none;">
+                                    <div class="input-group-append">
+                                        <button class="btn btn-light button-minus" type="button" id="button-minus" pid="<%= p.id %>"> − </button>
+                                    </div>
+                                    <input type="text" class="form-control quantityclass" name="quant" value="1" id="quantity">
+                                    <div class="input-group-prepend">
+                                        <button class="btn btn-light button-plus" id="button-plus" type="button" pid="<%= p.id %>"> + </button>
+                                    </div>
+                                    
+                                </div>
+                        </div>
+                        </figcaption>
+                    </div>
+                </div>
+                <% } else { %>
+                <div class="col-md-4 myinnerproduct">
+                    <div href="#" class="card card-product-grid">
+                        <a href="/shop/<%= p.slug %>/<%= p.id %>" class="img-wrap">
+                            <% if(p.file_name){ %>
+                            <img src="<%=session.imgURL %><%= p.file_name %>">
+                            <%}else{%>
+                            <img class="logo" src="/images/logo.png">
+                            <%}%>
+                        </a>
+                        <figcaption class="info-wrap">                        
+                            <a href="/shop/<%= p.slug %>/<%= p.id %>" class="title my-2"><%= p.name %></a>                        
+                            <span class="price mt-1">
+                                Rs. <%= p.variation_regular_price.split(',').sort()[0] %>
+                            </span>
+                            <button id="addingquantity" class="mb-2 addbtn" locationId = "<%= p.location_id %>">ADD +</button>
+                            <input type="hidden" id="shopLat" value="<%= p.lat%>">
+                                <input type="hidden" id="shopLong" value="<%= p.lng %>">
+                                <input type="hidden" id="maximum-shop-distance" value="<%= p.maximum_order_distance %>">
+                            <div class="input-group mb-3 input-spinner plusof" id="plusminus" style="display: none;">
+                            <div class="input-group-append">
+                                <button class="btn btn-light button-minus" type="button"> − </button>
+                            </div>
+                                <input type="text" class="form-control" name="quant" value="1" id="quantity">
+                                <div class="input-group-prepend">
+                                    <button class="btn btn-light button-plus" id="plus" type="button"> + </button>
+                                </div>
+                            </div>
+                        </figcaption>
+                    </div>
+                </div>
+                <% } %>
+                <% }) %>
+            </div>
+            <div class="fl" style="padding-top: 10px; display: flex; justify-content: space-between;">
+                <div style="padding-left: 30px; margin-top: 15px;" class="append-para">
+                    <p>Showing <span class="numRecord"></span> Records of <span class="totalRecord"></span></p>
+                </div>
+                <div class="page-number" style="margin-right: 20px;"></div>
+            </div>
+        </div>
+
+        <div id="list" class="tabcontent">
+            <div class="row" id="main-row1" style="display: none;">
+            <% products.forEach((p) => { %>
+                <% if(p.product_type == 1) { %>
+                <div class="row-parent" style="border: 1px solid rgb(189, 186, 186);" id="row-parent1">
+                    <div class="" style=" width: 100px; padding-left: 10px;">
+                        <a href="/shop/<%= p.slug %>/<%= p.id %>" class="">
+                            <% if(p.file_name){ %>
+                            <img src="<%=session.imgURL %><%= p.file_name %>" class="p-2" style=" width: 100px; height: 100px;" alt="<%= p.name %>">
+                            <%}else{%>
+                            <img src="images/logo.png" alt="<%= p.name %>" class="p-2" style=" width: 100px; height: 100px;">
+                            <%}%>
+                        </a>
+                    </div>
+                        <div style="margin-left: 60px;">   
+                            <div style="display: flex;">                    
+                            <a href="/shop/<%= p.slug %>/<%= p.id %>" class="title fourteen " style="color: black; font-weight: 600; font-size: 17px;" title="<%= p.name %>"><%= p.name %></a>
+                           <span class="myrate green" style="margin-left: 10px; cursor: context-menu; margin-top: 6px; height: 17px; font-size: 13px;"><%= p.avg_rate%><i class="bi bi-star-fill ps-1 ten"></i></span></div> 
+                          
+                           <span style="cursor: default;" class="fw-bold"><i class="fa fa-store"></i> <%= p.brand_name %></span><br>
+                            <span style="color: rgb(104, 104, 241); cursor: context-menu;"><i class="fa fa-map-marker-alt" aria-hidden="true"></i> <%= p.location_name %></span><br>
+
+                            <span class="price mt-1">
+                                 ₹<%= p.regular_price-p.discount_price %><del class="ps-2 pe-2 information" style="font-size: 13px;">₹<%= p.regular_price %> </del>
+                                        <span class="text-success" style="font-size: 13px;"> <%=Math.round(p.discount_price*100 /p.regular_price) %>% off</span>
+                            </span>
+                        </div>
+                            <div style="padding-top: 30px;margin-left: auto;margin-right: 30px;">
+                                <button class="btn btn-warning  mb-2 addbtn1" id="addbtn1" pid="<%= p.id %>" locationId="<%=p.location_id %>" >ADD +</button>
+                                <input type="hidden" id="shopLat" value="<%= p.lat%>">
+                                <input type="hidden" id="shopLong" value="<%= p.lng %>">
+                                <input type="hidden" id="maximum-shop-distance" value="<%= p.maximum_order_distance %>">
+                                <div class="input-group mb-3 input-spinner plusof" id="plusdiv"  style="display: none; margin-right: 20px;">
+                                    <div class="input-group-append">
+                                        <button class="btn btn-light button-minus1" type="button" id="button-minus1" pid="<%= p.id %>"> − </button>
+                                    </div>
+                                        <input type="text" class="form-control quantityclass" name="quant1" value="1" id="quantity">
+                                    <div class="input-group-prepend">
+                                        <button class="btn btn-light button-plus1" id="button-plus1" type="button" pid="<%= p.id %>"> + </button>
+                                    </div>
+                                    
+                                </div>
+                            </div>
+                </div>
+               
+                <% } else { %>
+                <div class="row-parent" style="border: 1px solid gray;" id="row-parent1">
+                    <div  class="img-div">
+                        <a href="/shop/<%= p.slug %>/<%= p.id %>" class="img-wrap">
+                            <% if(p.file_name){ %>
+                            <img src="<%=session.imgURL %><%= p.file_name %>">
+                            <%}else{%>
+                            <img class="logo" src="/images/logo.png">
+                            <%}%>
+                        </a>
+                    </div>
+                        <div class="">                        
+                            <a href="/shop/<%= p.slug %>/<%= p.id %>" class="title my-2"><%= p.name %></a>                        
+                            <span class="price mt-1"></span>
+                        </div>
+                        <div>                                
+                            <button id="addingquantity" class="mb-2 addbtn" locationId = "<%= p.location_id %>">ADD +</button>
+                            <input type="hidden" id="shopLat" value="<%= p.lat%>">
+                                <input type="hidden" id="shopLong" value="<%= p.lng %>">
+                                <input type="hidden" id="maximum-shop-distance" value="<%= p.maximum_order_distance %>">
+                            <div class="input-group mb-3 input-spinner plusof" id="plusminus"  style="display: none;">
+                            <div class="input-group-append">
+                                <button class="btn btn-light button-minus" type="button"> − </button>
+                            </div>
+                                <input type="text" class="form-control" name="quant" value="1" id="quantity">
+                                <div class="input-group-prepend">
+                                    <button class="btn btn-light button-plus" id="plus" type="button"> + </button>
+                                </div>
+                            
+                            </div>
+                            </div>
+                </div>
+               
+                <% } %>
+                <% }) %>
+                
+            </div>
+
+             <div class="pl" style="padding-top: 10px; display: flex; justify-content: space-between;">
+                <div style="padding-left: 30px; margin-top: 15px;" class="append-para1">
+                    <p>Showing <span class="numRecord1"></span> Records of <span class="totalRecord1"></span></p>
+                </div>
+                <div class="page-number1" style="margin-right: 20px;"></div>
+            </div>
+        </div> 
+    </div>
+
+<% } else {%>
+    <div class="card"><center>
+        <img src='/images/no-product.png'>
+    </center></div>
+<% } %>
+
+<script >
+                    function getPageList(totalPages, page, maxLength){
+                        function range(start, end){
+                          return Array.from(Array(end - start + 1), (_, i) => i + start);
+                        }
+                        var sideWidth = maxLength < 9 ? 1 : 2;
+                        var leftWidth = (maxLength - sideWidth * 2 - 3) >> 1;
+                        var rightWidth = (maxLength - sideWidth * 2 - 3) >> 1;
+                  
+                        if(totalPages <= maxLength){
+                          return range(1, totalPages);
+                        }
+                  
+                        if(page <= maxLength - sideWidth - 1 - rightWidth){
+                          return range(1, maxLength - sideWidth - 1).concat(0, range(totalPages - sideWidth + 1, totalPages));
+                        }
+                  
+                        if(page >= totalPages - sideWidth - 1 - rightWidth){
+                          return range(1, sideWidth).concat(0, range(totalPages - sideWidth - 1 - rightWidth - leftWidth, totalPages));
+                        }
+                  
+                        return range(1, sideWidth).concat(0, range(page - leftWidth, page + rightWidth), 0, range(totalPages - sideWidth + 1, totalPages));
+                      }
+
+                      $(document).ready(function(){
+                        $(function(){
+                        var numberOfItems = $("#main-row .myinnerproduct").length;
+                        var limitPerPage = 8;
+                        var totalPages = Math.ceil(numberOfItems / limitPerPage)
+                        var paginationSize = 7;
+                        var currentPage;
+                  
+                        function showPage(whichPage){
+                          if(whichPage < 1 || whichPage > totalPages) return false;
+                  
+                          currentPage = whichPage;
+                  
+                          $("#main-row .myinnerproduct").hide().removeClass("aaa").slice((currentPage - 1) *  limitPerPage, currentPage * limitPerPage).show().addClass("aaa");
+                          var numItems = $("#main-row .aaa").length
+                          $(".numRecord").text(numItems)
+                          $(".totalRecord").text(numberOfItems)
+                        
+                          $(".page-number li").slice(1, -1).remove();
+                  
+                          getPageList(totalPages, currentPage, paginationSize).forEach(item =>{
+                            $("<li>").addClass("page-item").addClass(item ? "current-page" : "dots").toggleClass("acti", item === currentPage).append($("<a>").addClass("page-link").attr({href: "javascript:void(0"}).text(item || "...")).insertBefore(".next-page");
+                          });
+                  
+                          $(".previous-page").toggleClass("disabled", currentPage === 1);
+                          $(".next-page").toggleClass("disabled", currentPage === totalPages)
+                          return true;
+                        }
+                        $(".page-number").append(
+                          $("<li>").addClass("page-item").addClass("previous-page").append($("<a>").addClass("page-link").attr({href: "javascript:void(0)"}).text("Prev")),
+                            $("<li>").addClass("page-item").addClass("next-page").append($("<a>").addClass("page-link").attr({href: "javascript:void(0)"}).text("Next"))
+                          );
+                  
+                          $("#main-row").show();
+                          showPage(1);
+                  
+                          $(document).on("click", ".page-number li.current-page:not(.acti)", function(){
+                            return showPage(+$(this).text());
+                          });
+                  
+                          $(".next-page").on("click", function(){
+                            return showPage(currentPage + 1);
+                          })
+                  
+                          $(".previous-page").on("click", function(){
+                            return showPage(currentPage - 1);
+                          })
+                  
+                      })
+                      })
+
+                      $(document).ready(function(){
+                        $(function(){
+                        var numberOfItems = $("#main-row1 #row-parent1").length;
+                        var limitPerPage = 6;
+                        var totalPages = Math.ceil(numberOfItems / limitPerPage)
+                        var paginationSize = 5;
+                        var currentPage;
+                  
+                        function showPage(whichPage){
+                          if(whichPage < 1 || whichPage > totalPages) return false;
+                  
+                          currentPage = whichPage;
+                  
+                          $("#main-row1 #row-parent1").hide().removeClass("yyy").slice((currentPage - 1) *  limitPerPage, currentPage * limitPerPage).show().addClass("yyy");
+                          var numItems = $("#main-row1 .yyy").length
+                          $(".numRecord1").text(numItems)
+                          $(".totalRecord1").text(numberOfItems)
+                        
+                          $(".page-number1 li").slice(1, -1).remove();
+                  
+                          getPageList(totalPages, currentPage, paginationSize).forEach(item =>{
+                            $(" <li>").addClass("page-item").addClass(item ? "current-page" : "dots").toggleClass("acti", item === currentPage).append($("<a>").addClass("page-link").attr({href: "javascript:void(0"}).text(item || "...")).insertBefore(".next-page1");
+                          });
+                  
+                          $(".previous-page1").toggleClass("disabled", currentPage === 1);
+                          $(".next-page1").toggleClass("disabled", currentPage === totalPages)
+                          return true;
+                        }
+                        $(".page-number1").append(
+                          $("<li>").addClass("page-item").addClass("previous-page1").append($("<a>").addClass("page-link").attr({href: "javascript:void(0)"}).text("Prev")),
+                            $("<li>").addClass("page-item").addClass("next-page1").append($("<a>").addClass("page-link").attr({href: "javascript:void(0)"}).text("Next"))
+                          );
+                  
+                          $("#main-row1").show();
+                          showPage(1);
+                  
+                          $(document).on("click", ".page-number1 li.current-page:not(.acti)", function(){
+                            return showPage(+$(this).text());
+                          });
+                  
+                          $(".next-page1").on("click", function(){
+                            return showPage(currentPage + 1);
+                          })
+                  
+                          $(".previous-page1").on("click", function(){
+                            return showPage(currentPage - 1);
+                          })
+                  
+                      })
+
+                      })
+
+                      function addtocart(productId, variationId, quantity, locationId){
+                        $.ajax({
+                            url: '/shop/add-to-cart',
+                            method: 'POST',
+                            data: {
+                                _csrf:'<%= _csrf %>',
+                                productId: productId,
+                                variationId: variationId,
+                                quantity: quantity,
+                                locationId: locationId
+                            },
+                            success: function (data) {
+                                if (data.success) {
+                                    if(data.cartQty==0){
+                                        alert('Please Login to add items in cart')
+                                        }else{
+                                            alert(('Item added to cart'))
+                                            $(".isLocation").val(locationId)
+                                        $('#cart-qty').text(data.cartQty)
+                                    }
+                                }else {
+                                    alert('Some error occurred. Pelase try again later')
+                                }
+                            }
+                        });
+                    }
+    
+            function getQty() {
+                var qty = parseInt($(this).closest('figcaption').find('.quantityclass').val());
+                if (qty != 0){
+                    return qty
+                }else{
+                    return 1
+                }
+            }
+
+            function setQty(qty) {
+                return $('#quantity').val(qty ? qty : 1)
+            }
+
+            $(document).ready(function () {
+                var session = $(".issesion").val()
+
+                $('.addbtn').click(function(){
+                    if(session == 1){
+                    var locationValue =   $(".isLocation").val()
+                    var productId = $(this).closest('figcaption').find('.addbtn').attr('pid');
+                    var variationId = $(this).closest('figcaption').find('.addbtn').attr('varid');
+                    var quantity = parseInt($(this).closest('figcaption').find('.quantityclass').val());
+                    var locationId = $(this).attr('locationId')
+                    var myLat = $("#MyLatitude").val()
+                    var myLong = $("#MyLongitude").val()
+                    var shopLat = $(this).parent().find("#shopLat").val()
+                    var shopLong = $(this).parent().find("#shopLong").val()
+                    var radlat1 = Math.PI * myLat/180
+                    var radlat2 = Math.PI * shopLat/180
+                    var theta = myLong-shopLong
+                    var radtheta = Math.PI * theta/180
+                    var dist = Math.sin(radlat1) * Math.sin(radlat2) + Math.cos(radlat1) * Math.cos(radlat2) * Math.cos(radtheta);
+                    dist = Math.acos(dist)
+                    dist = dist * 180/Math.PI
+                    dist = dist * 60 * 1.1515 * 1.609344 
+                    var maxDistance = $(this).parent().find("#maximum-shop-distance").val()
+                    // if(dist <= maxDistance){
+                        if(locationValue == 0){
+                            var x=$(this);
+                            $(this).hide();
+                            let y=$(this).next("#plusdiv");
+                            $(y).show();
+                            let r=$(y).find("#button-minus");
+                    
+                            $(r).click(function(){
+                                var quantity = $(this).closest('figcaption').find('.quantityclass').val();
+                                if (quantity=="0"){
+                                    $('input[name=quant]').val(parseInt(quantity)+1)
+                                    $(y).hide();
+                                    $(x).show();
+                                }
+                            })
+                            addtocart(productId, variationId, quantity, locationId);
+                        }
+                        else if(locationValue == locationId){
+                            var x=$(this);
+                            $(this).hide();
+                            let y=$(this).next("#plusdiv");
+                            $(y).show();
+                            let r=$(y).find("#button-minus");
+                    
+                            $(r).click(function(){
+                                var quantity = $(this).closest('figcaption').find('.quantityclass').val();
+                                if (quantity=="0"){
+                                    $('input[name=quant]').val(parseInt(quantity)+1)
+                                    $(y).hide();
+                                    $(x).show();
+                                }
+                            })  
+                            addtocart(productId, variationId, quantity, locationId);
+                        }else{
+                            alert('please select product from same location')
+                        }
+                    // }else{
+                    //     alert('No Delivery At Your Location from this shop')
+                    // }
+                }else{
+                    alert('please login first')
+                }
+                })
+            
+                $('.addbtn1').click(function(){
+                   if(session == 1){
+                   var locationValue =   $(".isLocation").val()
+                   var locationId = $(this).attr('locationId');
+                   var productId = $(this).attr('pid');
+                   var variationId = $(this).closest('figcaption').find('.addbtn').attr('varid');
+                   var quantity =parseInt($(this).parent().parent().find('.quantityclass').val());
+                   var myLat = $("#MyLatitude").val()
+                    var myLong = $("#MyLongitude").val()
+                    var shopLat = $(this).parent().find("#shopLat").val()
+                    var shopLong = $(this).parent().find("#shopLong").val()
+                    var radlat1 = Math.PI * myLat/180
+                    var radlat2 = Math.PI * shopLat/180
+                    var theta = myLong-shopLong
+                    var radtheta = Math.PI * theta/180
+                    var dist = Math.sin(radlat1) * Math.sin(radlat2) + Math.cos(radlat1) * Math.cos(radlat2) * Math.cos(radtheta);
+                    dist = Math.acos(dist)
+                    dist = dist * 180/Math.PI
+                    dist = dist * 60 * 1.1515 * 1.609344 
+                    var maxDistance = $(this).parent().find("#maximum-shop-distance").val()
+                       
+                    // if(dist <= maxDistance){
+                   if(locationValue == 0){
+                       var x=$(this);
+                       $(this).hide();
+                       let y=$(this).next("#plusdiv");
+                       $(y).show();
+                       let r=$(y).find("#button-minus");
+                   
+                       $(r).click(function(){
+                           var quantity = $(this).parent().parent().find('.quantityclass').val();
+                           if (quantity=="0"){
+                               $('input[name=quant1]').val(parseInt(quantity)+1)
+                               $(y).hide();
+                               $(x).show();
+                           }
+                       })  
+                       addtocart(productId, variationId, quantity, locationId);
+                   }
+                   else if(locationValue == locationId){
+                       var x=$(this);
+                       $(this).hide();
+                       let y=$(this).next("#plusdiv");
+                       $(y).show();
+                       let r=$(y).find("#button-minus");
+                   
+                       $(r).click(function(){
+                           var quantity = $(this).parent().parent().find('.quantityclass').val();
+                           if (quantity=="0"){
+                               $('input[name=quant1]').val(parseInt(quantity)+1)
+                               $(y).hide();
+                               $(x).show();
+                           }
+                       })  
+                       addtocart(productId, variationId, quantity, locationId);
+                   }else{
+                       alert('please select product from same location')
+                   }
+                // }else{
+                //     alert('No Delivery At Your Location from this shop')
+                // }
+               }else{
+                        alert('please login first')
+                   }
+               })
+              
+                $('.button-plus1').click(function () {
+                    var productId = $(this).attr('pid');
+                    var variationId = $(this).closest('figcaption').find('.button-plus').attr('vid');
+                    var existingQuantity =parseInt($(this).parent().parent().find('.quantityclass').val());
+                    $(this).parent().parent().find('.quantityclass').val(existingQuantity+1)
+                    var quantity = parseInt($(this).parent().parent().find('.quantityclass').val());
+                    updateCartQuantity(productId, variationId, quantity);
+                })
+
+                $('.button-minus1').click(function () {
+                    var productId = $(this).attr('pid');
+                    var variationId = $(this).closest('figcaption').find('.button-minus').attr('vid');
+                    var existingQuantity =parseInt($(this).parent().parent().find('.quantityclass').val());
+                    if(existingQuantity==1){
+                        $(this).parent().parent().find('.quantityclass').val(existingQuantity-1);
+                        removefromcart(productId,variationId)
+                    } else {
+                        $(this).parent().parent().find('.quantityclass').val(existingQuantity-1);
+                        var quantity = $(this).parent().parent().find('.quantityclass').val();
+                        updateCartQuantity(productId, variationId, quantity);
+                    }
+                })
+
+                $('.button-plus').click(function () {
+                    var productId = $(this).closest('figcaption').find('.button-plus').attr('pid');
+                    var variationId = $(this).closest('figcaption').find('.button-plus').attr('vid');
+                    var existingQuantity =parseInt($(this).closest('figcaption').find('.quantityclass').val());
+                    $(this).closest('figcaption').find('.quantityclass').val(existingQuantity+1)
+                    var quantity = parseInt($(this).closest('figcaption').find('.quantityclass').val());
+                    updateCartQuantity(productId, variationId, quantity);
+                })
+                $('.button-minus').click(function () {
+                    var productId = $(this).closest('figcaption').find('.button-minus').attr('pid');
+                    var variationId = $(this).closest('figcaption').find('.button-minus').attr('vid');
+                    var existingQuantity =parseInt($(this).closest('figcaption').find('.quantityclass').val());
+                    if(existingQuantity==1){
+                        $(this).closest('figcaption').find('.quantityclass').val(existingQuantity-1);
+                        removefromcart(productId,variationId)
+                    } else {
+                        $(this).closest('figcaption').find('.quantityclass').val(existingQuantity-1);
+                        var quantity = $(this).closest('figcaption').find('.quantityclass').val();
+                        updateCartQuantity(productId, variationId, quantity);
+                    }
+                })
+            });
+
+            function updateCartQuantity(productId, variationId, quantity){
+                    $.ajax({
+                        url: '/shop/update-cart-quantity',
+                        method: 'POST',
+                        data: {
+                            _csrf : '<%= _csrf %>',
+                            productId: productId,
+                            variationId: variationId,
+                            quantity: quantity
+                        },
+                        success: function (data) {
+                            if (data.success) {
+                                alert('Cart Updated Successfully')
+                                $('figcaption').each(function(){
+                                    var quantity = $(this).find('.quantity').val();
+                                })
+                            }else{
+                                alert('Sorry there was an error in updating the quantity')
+                                //toastr.error('Sorry there was an error in updating the quantity')
+                            }
+                        }
+                    });
+                }
+
+                function removefromcart (productId,variationId) {
+                    $.ajax({
+                       url: '/shop/remove-cart-item',
+                        method: 'POST',
+                        data: {
+                            _csrf: '<%= _csrf %>',
+                            productId: productId,
+                            variationId: variationId
+                        },
+                        success: function (data) {
+                            if (data.success) {
+                                //window.location.reload();
+                                alert('Item removed from cart successfully')
+                            }else{
+                                alert('Sorry there was an error in updating the quantity')
+                                //toastr.error('Sorry there was an error in updating the quantity')
+                            }
+                        }
+                    });
+                }
+
+    var i;
+    function listView() { 
+        for (i = 0; i < elements.length; i++) {
+            elements[i].style.width = "100%";
+        }
+    }
+    function gridView() {
+        for (i = 0; i < elements.length; i++) {
+            elements[i].style.width = "33%";
+        }
+    }
+</script>

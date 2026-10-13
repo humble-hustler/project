@@ -1,0 +1,876 @@
+<%- include("./partials/header.html") %>
+<%- include("./partials/topnav.html") %>
+<%- include("./partials/sidebar.html") %>
+<div class="page">
+    <div class="page-content container-fluid">
+        <div class="row">
+            <div class="col-lg-3">
+                <div class="card card-shadow text-center">
+                    <div class="card-block">
+                        <a class="avatar avatar-lg" href="javascript:void(0)" id="capture-image">
+                            <img id="member-profile-image" src="<%= user.image_file ? user.profile_image : '/images/avatar-placeholder.png' %>">
+                        </a>
+                        <h4 class="profile-user"><%= user.fname %> <%= user.lname %></h4>
+                        Inactive
+                        <input type="checkbox" id="user-active-switch" data-color="#eb6709" class="js-switch edit-data" name="is_active" <%= user.is_active ? 'checked' : '' %> />
+                               Active
+                               <hr />
+                        <div>
+                            <p><strong>Member Details</strong></p>
+                            Joining Date: <%= formatDate(user.created_date, 'Do MMM YYYY') %><br>
+                            <% if(activePlan){ %>
+                            Active Plan: <%= activePlan.package_name %><br>
+                            Expiry: <%= formatDate(activePlan.expiry_date, 'Do MMM YYYY') %>
+                            <% } %>
+                        </div>
+                        <hr>
+                        <% if(activePlan){ %>
+                        <div class="form-group">
+                            <label class="form-control-label" for="workout-program">Workout Program</label>
+                            <select class="form-control edit-data" id="workout-program" name="workout_program_id">
+                                <option value="">Select Workout Chart</option>
+                                <% workoutPrograms.forEach((w) => { %>
+                                <option value="<%= w.id %>" <%= w.id === user.workout_program_id ? 'selected' : '' %>><%= w.program_name %></option>
+                                <% }) %>
+                            </select>
+                        </div>
+                        <% } %>
+
+                        <div class="form-group">
+                            <label class="form-control-label" for="brand">Brand </label>
+                            <select class="form-control " id="brand" name="brand">
+                                <option value="">-- Select Brand --</option>
+                                <option value="<%= brand.brand_id %>" selected><%= brand.brand_name %></option>
+                            </select>
+                        </div>
+                        <div class="form-group">
+                            <label class="form-control-label" for="brand-location">Brand Location </label>
+                            <select class="form-control " id="brand-location" name="brand-location">
+                                <option value="" selected="disabled">-- Select Brand Location--</option>
+                                <% locations.forEach(function(l){ %>
+                                <option value="<%= l.id %>" <%= l.id == memberlocation.id ? 'selected' : ''%>><%= l.name %></option>
+                                <% }) %>
+                            </select>
+                        </div>
+                        <div class="text-right"><a class=" delete-member" data-target="#delete-member" data-toggle="modal"><i class="fa fa-trash"></i> Delete</a></div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="col-lg-9">
+                <div class="panel">
+                    <div class="panel-body nav-tabs-animate nav-tabs-horizontal">
+                        <ul class="nav nav-tabs nav-tabs-line tabs-line-top mb-10" role="tablist">
+                            <li class="nav-item" role="presentation"><a class="nav-link <%= (activeTab==0)?('active'):('') %>" data-toggle="tab" href="#personal-details" aria-controls="personal-details" role="tab">Personal Details</a></li>
+                            <li class="nav-item" role="presentation"><a class="nav-link <%= (activeTab==1)?('active'):('') %>" data-toggle="tab" href="#bmi" aria-controls="bmi" role="tab">BMI</a></li>
+                            <li class="nav-item" role="presentation"><a class="nav-link <%= (activeTab==2)?('active'):('') %>" data-toggle="tab" href="#membership" aria-controls="membership" role="tab">Membership</a></li>
+                            <li class="nav-item" role="presentation"><a class="nav-link <%= (activeTab==3)?('active'):('') %>" data-toggle="tab" href="#payments" aria-controls="payments" role="tab">Payments</a></li>
+                            <li class="nav-item" role="presentation"><a class="nav-link <%= (activeTab==4)?('active'):('') %>" data-toggle="tab" href="#attendance" aria-controls="attendance" role="tab">Attendance</a></li>
+                            <li class="nav-item" role="presentation"><a class="nav-link " data-toggle="tab" href="#enrollment" aria-controls="enrollment" role="tab">Enrollment Details</a></li>
+                            <li class="nav-item" role="presentation"><a class="nav-link " data-toggle="tab" href="#sms-email-logs" aria-controls="sms-email-logs" role="tab">SMS & Email Logs</a></li>
+                        </ul>
+
+                        <div class="tab-content">
+                            <div class="tab-pane <%= (activeTab==0)?('active'):('') %>" id="personal-details" role="tabpanel">
+                                <div class="row">
+                                    <div class="form-group col-md-6">
+                                        <label class="form-control-label" for="fname">First Name</label>
+                                        <input type="text" class="form-control edit-data" id="fname" name="fname" value="<%= user.fname %>">
+                                        <div class="invalid-feedback"></div>
+                                    </div>
+                                    <div class="form-group col-md-6">
+                                        <label class="form-control-label" for="lname">Last Name</label>
+                                        <input type="text" class="form-control edit-data" id="lname" name="lname" value="<%= user.lname %>">
+                                        <div class="invalid-feedback"></div>
+                                    </div>
+                                </div>
+                                <div class="row">
+                                    <div class="form-group col-md-6">
+                                        <label class="form-control-label" for="fname">Phone</label>
+                                        <input type="text" class="form-control edit-data" id="phone" name="phone" value="<%= user.phone %>">
+                                        <div class="invalid-feedback"></div>
+                                    </div>
+                                    <div class="form-group col-md-6">
+                                        <label class="form-control-label" for="lname">Email</label>
+                                        <input type="text" class="form-control edit-data" id="email" name="email" value="<%= user.email %>">
+                                        <div class="invalid-feedback"></div>
+                                    </div>
+                                </div>
+                                <div class="row">
+                                    <div class="form-group col-md-6">
+                                        <label class="form-control-label mr-10" for="lname">Gender</label>
+                                        <div class="radio-custom radio-default radio-inline">
+                                            <input type="radio" class="edit-data" id="gender-male" value="M" name="gender" <%= user.gender == 'M' ? 'checked' : '' %>>
+                                                   <label for="gender-male">Male</label>
+                                        </div>
+                                        <div class="radio-custom radio-default radio-inline">
+                                            <input type="radio" class="edit-data" id="gender-female" value="F" name="gender" <%= user.gender == 'F' ? 'checked' : '' %>>
+                                                   <label for="gender-female">Female</label>
+                                        </div>
+                                    </div>
+                                    <div class="form-group col-md-6">
+                                        <label class="form-control-label mr-10" for="lname">Marital Status</label>
+                                        <div class="radio-custom radio-default radio-inline">
+                                            <input type="radio" class="edit-data" id="marital-status-married" value="1" name="marital_status" <%= user.marital_status == '1' ? 'checked' : '' %>>
+                                                   <label for="marital-status-married">Married</label>
+                                        </div>
+                                        <div class="radio-custom radio-default radio-inline">
+                                            <input type="radio" class="edit-data" id="marital-status-single" value="0" name="marital_status" <%= user.marital_status == '2' ? 'checked' : '' %>>
+                                                   <label for="marital-status-single">Single</label>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="row">
+                                    <div class="form-group col-md-4">
+                                        <label class="form-control-label" for="fname">Emergency Contact Name</label>
+                                        <input type="text" class="form-control edit-data" id="emergency_contact_name" name="emergency_contact_name" value="<%= user.emergency_contact_name %>">
+                                    </div>
+                                    <div class="form-group col-md-4">
+                                        <label class="form-control-label" for="fname">Emergency Contact Phone</label>
+                                        <input type="text" class="form-control edit-data" id="emergency_contact_number" name="emergency_contact_number" value="<%= user.emergency_contact_number %>">
+                                        <div class="invalid-feedback"></div>
+                                    </div>
+                                    <div class="form-group col-md-4">
+                                        <label class="form-control-label" for="blood-group">Blood Group</label>
+                                        <!-- <input type="text" value="<%= user.blood_group %>"> -->
+                                        <select class="form-control edit-data" id="blood-group" name="blood_group" >
+                                            <option value="">--Select Blood Group--</option>
+                                            <option <%= (user.blood_group=='A+ve')?('selected'):('') %>>A+ve</option>
+                                            <option <%= (user.blood_group=='A-ve')?('selected'):('') %>>A-ve</option>
+                                            <option <%= (user.blood_group=='B+ve')?('selected'):('') %>>B+ve</option>
+                                            <option <%= (user.blood_group=='B-ve')?('selected'):('') %>>B-ve</option>
+                                            <option <%= (user.blood_group=='AB+ve')?('selected'):('') %>>AB+ve</option>
+                                            <option <%= (user.blood_group=='AB-ve')?('selected'):('') %>>AB-ve</option>
+                                            <option <%= (user.blood_group=='O+ve')?('selected'):('') %>>O+ve</option>
+                                            <option <%= (user.blood_group=='O-ve')?('selected'):('') %>>O-ve</option>
+                                        </select>
+                                    </div>
+                                </div>
+                                <div class="row">
+                                    <div class="form-group col-md-6">
+                                        <label class="form-control-label" for="dob">Date of Birth</label>
+                                        <input type="text" class="form-control edit-data" id="dob" name="birth_date" value="<%= formatDate(user.birth_date, 'DD-MM-YYYY') %>">
+                                    </div>
+                                    <div class="form-group col-md-6">
+                                        <label class="form-control-label" for="anniversary">Anniversary Date</label>
+                                        <input type="text" class="form-control edit-data" id="anniversary_date" name="anniversary_date" value="<%= formatDate(user.anniversary_date, 'DD-MM-YYYY') %>">
+                                    </div>
+                                </div>
+                                <div class="row">
+                                    <div class="form-group col-md-6">
+                                        <label class="form-control-label" for="dob">Address Line 1</label>
+                                        <input type="text" class="form-control edit-data" id="address_line_1" name="address_line_1" value="<%= user.address_line_1 %>">
+                                    </div>
+                                    <div class="form-group col-md-6">
+                                        <label class="form-control-label" for="anniversary">Address Line 2</label>
+                                        <input type="text" class="form-control edit-data" id="address_line_2" name="address_line_2" value="<%= user.address_line_2 %>">
+                                    </div>
+                                </div>
+                                <div class="row">
+                                    <div class="form-group col-md-4">
+                                        <label class="form-control-label" for="state">State</label>
+                                        <select id="state" name="state_id" class="form-control edit-data">
+                                            <option value>Select State</option>
+                                            <% states.forEach((s) => { %>
+                                            <option value="<%= s.id %>" <%= s.id === user.state_id ? 'selected' : '' %>><%= s.name %></option>
+                                            <% }) %>
+                                        </select>
+                                    </div>
+                                    <div class="form-group col-md-4">
+                                        <label class="form-control-label" for="city">City</label>
+                                        <select id="city" name="city_id" class="form-control edit-data">
+                                            <% cities.forEach((c) => { %>
+                                            <option value="<%= c.id %>" <%= c.id === user.city_id ? 'selected' : '' %>><%= c.name %></option>
+                                            <% }) %>
+                                        </select>
+                                    </div>
+                                    <div class="form-group col-md-4">
+                                        <label class="form-control-label" for="zip">Zip</label>
+                                        <input type="text" class="form-control edit-data" id="zip" name="zip" value="<%= user.zip %>">
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="tab-pane <%= (activeTab==1)?('active'):('') %>" id="bmi" role="tabpanel">
+                                <div class="row">
+                                    <div class="col-md-12">
+                                        <a href="#" data-target="#add-bmi" data-toggle="modal" style="float:right;">ADD BMI</a>
+                                        <% if(bmi.length) { %>
+                                        <table class="table table-hover dataTable table-striped w-full">
+                                            <thead>
+                                                <tr>                                            
+                                                    <th>Height(cms)</th>                                                    
+                                                    <th>Weight(Kg)</th>                                                    
+                                                    <th>BMI</th>   
+                                                    <th>Date of Updation</th>                                                  
+                                                </tr>
+                                            </thead>
+                                            <tbody>
+                                                <%bmi.forEach(function(b){%>
+                                                <tr>
+                                                    <td><%= b.height %></td>
+                                                    <td><%= b.weight %></td>
+                                                    <td><%= ((b.weight/b.height/b.height)*10000).toFixed(2) %></td>
+                                                    <td><%= formatDate(b.bmi_date, 'Do MMM YYYY') %></td>
+                                                </tr>
+                                                <%})%>
+                                            </tbody>
+                                        </table>
+                                        <% } else { %>
+                                        <div class="text-center text-muted mt-20">No Data Found</div>
+                                        <% } %>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="tab-pane <%= (activeTab==2)?('active'):('') %>" id="membership" role="tabpanel">
+                                <div class="row">
+                                    <div class="col-md-12">
+                                        <% if(membershipLogs.length) { %>
+                                        <table class="table table-hover dataTable table-striped w-full">
+                                            <thead>
+                                                <tr>                                            
+                                                    <th>Package Name</th>
+                                                    <th>Package Start</th>
+                                                    <th>Package End</th>
+                                                    <th>Trainer</th>
+                                                    <th>Status</th>
+                                                    <th>Action</th>
+                                                </tr>
+                                            </thead>
+                                            <tbody>
+                                                <% membershipLogs.forEach((m) => { %>
+                                                <tr membership_id='<%= m.id %>' exp_date="<%= formatDate(m.expiry_date, 'YYYY-MM-DD') %>">
+                                                    <td><%= m.package_name %></td>
+                                                    <td><%= formatDate(m.start_date, 'Do MMM YYYY') %></td>
+                                                    <td><%= formatDate(m.expiry_date, 'Do MMM YYYY') %></td>
+                                                    <td><%= m.trainer_fname %> <%= m.trainer_lname %></td>
+                                                    <td>
+                                                        <% var status = ''
+                                                        if(new Date() < m.start_date) {
+                                                            status = '<span class="badge badge-warning">To Start</span>'
+                                                        } else if (new Date() > m.expiry_date) {
+                                                            status = '<span class="badge badge-default">Expired</span>'
+                                                        }else if(m.is_transferred && m.member_id != user.id){
+                                                            status = '<span class="badge badge-warning">Transferred</span>'
+                                                        }else if(m.is_frozen && new Date() >= m.frozen_start_date && new Date() <= m.frozen_end_date){
+                                                            status = '<span class="badge badge-default">Frozen</span>'
+                                                        }else if(m.is_upgraded){
+                                                            status = '<span class="badge badge-warning">Upgraded</span>'
+                                                        }else if(m.is_downgraded){
+                                                            status = '<span class="badge badge-warning">Downgraded</span>'
+                                                        }else{
+                                                            status = '<span class="badge badge-success">Active</span>'
+                                                        }
+                                                        %>
+                                                        <%- status %>
+                                                    </td>
+                                                    <td>
+                                                        <!-- transferred membership -->
+                                                        <% if(m.transferred_to_member == user.id){ %>
+                                                        <!-- if transferred to current account -->
+                                                        <span class="badge badge-default ">Transferred From <a href="/app/members/<%= m.member_id%>"><%= m.transferred_from_member_name %></a></span><br>
+                                                        <% }else if(m.is_transferred){ %>
+                                                        <!-- transferredd to some other account -->
+                                                        <span class="badge badge-default ">Transferred To <a href="/app/members/<%= m.transferred_to_member%>"><%= m.transferred_to_member_name %></a></span><br>
+                                                        <% } else if(m.is_frozen_period || m.package_validity_days< 365 || m.is_upgraded){ %>
+
+                                                        <% } else { %>
+                                                        <a class='badge badge-warning color-white cursor-pointer transfer-membership' data-target='#transfer-membership' data-toggle='modal'><span class='color-white'>Transfer Ownership</span></a><br>
+                                                        <% } %>
+
+                                                        <!-- Freeze membership -->
+                                                        <%  if(m.is_frozen){ %>
+                                                        <span class="badge badge-default "> Frozen</span>
+                                                        <% } else if(m.package_validity_days >= 365 && m.completed && (!m.is_transferred || m.member_id != user.id)){ %>
+                                                        <!-- only if yearly package and full payment done -->
+                                                        <a class='badge badge-warning color-white cursor-pointer freeze-membership' data-target='#freeze-membership' data-toggle='modal'><span class='color-white'>Freeze Membership</span></a><br>
+                                                        <% } %>
+
+                                                        <!-- upgrade & downgrade -->
+                                                        <% if(!m.is_upgraded && !m.is_downgraded  && m.completed && m.is_upgradable){ %>
+                                                        <a class='badge badge-warning color-white cursor-pointer upgrade' href='/app/members/upgrade/<%= m.id %>'><span class='color-white'>Upgrade </span></a><br>
+                                                        <% } else if(m.is_upgraded){%>
+                                                        <a class="badge badge-default upgrade-restrict cursor-pointer" reason="already-upgraded"> Upgraded</a>
+                                                        <% } else if(!m.completed){ %>
+                                                        <!-- if partial payment is done -->
+                                                        <a class="badge badge-default upgrade-restrict cursor-pointer" reason="payment-incomplete"> Upgrade</a>
+                                                        <% } else if(!m.is_upgradable){ %>
+                                                        <a class="badge badge-default upgrade-restrict cursor-pointer" reason="not-upgradable"> Upgrade</a>
+                                                        <% } %>
+
+                                                        <% if(!m.is_downgraded && !m.is_upgraded  && m.is_downgradable){ %>
+                                                        <a class='badge badge-warning color-white cursor-pointer downgrade' href='/app/members/downgrade/<%= m.id %>'><span class='color-white'>Downgrade </span></a>
+                                                        <% } else if(m.is_downgraded){%>
+                                                        <a class="badge badge-default downgrade-restrict cursor-pointer" reason="already-downgraded"> Downgraded</a>
+                                                        <% } else if(!m.is_downgradable){ %>
+                                                        <a class="badge badge-default downgrade-restrict cursor-pointer" reason="not-downgradable"> Downgrade</a>
+                                                        <% } %>
+                                                    </td>
+                                                </tr>
+                                                <% }) %>                                        
+                                            </tbody>
+                                        </table>
+                                        <% } else { %>
+                                        <div class="text-center text-muted mt-20">No Data Found</div>
+                                        <% } %>
+                                    </div>                                    
+                                </div>
+                            </div>
+                            <div class="tab-pane <%= (activeTab==3)?('active'):('') %>" id="payments" role="tabpanel">
+                                <div class="row">
+                                    <div class="col-md-12">
+                                        <% if(paymentLogs.length) { %>
+                                        <table class="table table-hover dataTable table-striped w-full">
+                                            <thead>
+                                                <tr>                                            
+                                                    <th>Sale Date</th>
+                                                    <th>Sale ID</th>
+                                                    <th>Total Amount</th>
+                                                    <th>Amount Paid</th>
+                                                    <th>Comment</th>
+                                                    <th>Status</th>
+                                                </tr>
+                                            </thead>
+                                            <tbody>
+                                                <% paymentLogs.forEach((p) => { %>
+                                                <tr>
+                                                    <td><%= formatDate(p.created_date, 'Do MMM YYYY') %> <small><%= formatDate(p.created_date, 'hh:mm A') %></small></td>
+                                                    <td><%= p.sale_location_id %></td>                                                    
+                                                    <td>Rs. <%= p.total_amount %> %></td>
+                                                    <td>Rs. <%= p.amount_paid %> %></td>
+                                                    <td><%= p.comment %> %></td>
+                                                    <td><%- p.completed ? '<span class="badge badge-success">Complete</span>' : '<span class="badge badge-danger">Partial</span>' %> %></td>
+                                                </tr>
+                                                <% }) %>                                        
+                                            </tbody>
+                                        </table>
+                                        <% } else { %>
+                                        <div class="text-center text-muted mt-20">No Data Found</div>
+                                        <% } %>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="tab-pane <%= (activeTab==4)?('active'):('') %>" id="attendance" role="tabpanel">
+                                <div class="row">
+                                    <div class="col-md-12">
+                                        <% if(attendanceLogs.length) { %>
+                                        <table class="table table-hover dataTable table-striped w-full">
+                                            <thead>
+                                                <tr>                                            
+                                                    <th>In Time</th>                                                    
+                                                    <th>Out Time</th>                                                    
+                                                    <th>Session Duration</th>                                                    
+                                                </tr>
+                                            </thead>
+                                            <tbody>
+                                                <% attendanceLogs.forEach((a) => { %>
+                                                <tr>
+                                                    <td><%= formatDate(a.in_time, 'Do MMM YYYY') %> <small><%= formatDate(a.in_time, 'hh:mm A') %></small></td>
+                                                    <td><%= formatDate(a.out_time, 'Do MMM YYYY') %> <small><%= formatDate(a    .out_time, 'hh:mm A') %></small></td>
+                                                    <td><%= a.session_duration %></td>
+                                                </tr>
+                                                <% }) %>                                        
+                                            </tbody>
+                                        </table>
+                                        <% } else { %>
+                                        <div class="text-center text-muted mt-20">No Data Found</div>
+                                        <% } %>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="tab-pane" id="enrollment" role="tabpanel">
+                                <div class="row">
+                                    <div class="col-md-12">
+                                        <% if(enrollment.length) { %>
+                                        <table class="table table-hover dataTable table-striped w-full">
+                                            <thead>
+                                                <tr>                                            
+                                                    <th>Name</th>
+                                                    <th>Date</th>                                      
+                                                    <th>View Attachment</th>                       
+                                                </tr>
+                                            </thead>
+                                            <tbody>
+                                                <% enrollment.forEach((a) => { %>
+                                                <tr>
+                                                    <td><%= a.name %></td>
+                                                    <td><%= formatDate(a.in_time, 'Do MMM YYYY') %> <small><%= formatDate(a.in_time, 'hh:mm A') %></small></td>
+                                                    <td><a href='/member-details/<%= memberlocation.id %>/<%= a.file_path %>' target="_blank">View File</a></td>
+                                                </tr>
+                                                <% }) %>                                        
+                                            </tbody>
+                                        </table>
+                                        <% } else { %>
+                                        <div class="text-center text-muted mt-20">No Data Found</div>
+                                        <% } %>
+                                    </div>
+                                </div>
+                                <hr />
+                                <form action="/app/members/add/enrollment-details" method="POST" enctype='multipart/form-data'>
+                                    <%- csrf_html %>
+                                    <input type="hidden" name="enrollment_member_id" value="<%= user.id %>">
+                                    <div class="row">
+                                        <div class="form-group col-md-4">
+                                            <div class="form-control-label">Name</div>
+                                            <input type="text" class="form-control" id="enrollment-file-name" name="enrollment_file_name">
+                                        </div>
+                                        <div class="form-group col-md-4">
+                                            <div class="form-control-label">Attach File</div>
+                                            <input type="file" class="form-control" name="enrollment_file" id="enrollment-file" required/>
+                                        </div>
+                                        <div class="form-group col-md-4 text-right">
+                                            <button class="btn btn-primary mt-40">Upload</button>
+                                        </div>
+                                    </div>
+                                </form>
+                            </div>
+                            <div class="tab-pane" id="sms-email-logs" role="tabpanel">
+                                <div class="nav-tabs-vertical">
+                                    <ul class="nav nav-tabs mr-25" role="tablist">
+                                        <li class="nav-item" role="presentation"><a class="nav-link active" data-toggle="tab" href="#sms" aria-controls="sms" role="tab">SMS</a></li>
+                                        <li class="nav-item" role="presentation"><a class="nav-link" data-toggle="tab" href="#email-log" aria-controls="email" role="tab">Email</a></li>
+                                    </ul>
+                                    <div class="tab-content">
+                                        <div class="tab-pane active" id="sms" role="tabpanel">
+                                            <table class="table table-hover dataTable table-striped w-full mt-10" id='sms-list'>
+                                                <thead>
+                                                    <tr>
+                                                        <th>Date</th>
+                                                        <th>Message</th>
+                                                    </tr>
+                                                </thead>
+                                                <tbody>
+                                                    
+                                                </tbody>
+                                            </table>
+                                        </div>
+                                        <div class="tab-pane" id="email-log" role="tabpanel">
+                                            <table class="table table-hover dataTable table-striped w-full mt-10" id='email-list'>
+                                                <thead>
+                                                    <tr>
+                                                        <th>Date</th>
+                                                        <th>Message</th>
+                                                    </tr>
+                                                </thead>
+                                                <tbody>
+                                                    
+                                                </tbody>
+                                            </table>
+                                        </div>                                        
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<div class="modal fade" id="profile-picture-capture" aria-hidden="false" aria-labelledby="profile-picture-capture" role="dialog" tabindex="-1">
+    <div class="modal-dialog modal-simple">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">×</span>
+                </button>
+                <h4 class="modal-title">Capture Profile Picture</h4>
+            </div>
+            <div class="modal-body">
+                <div class="col-md-12">
+                    <div id="camera-container"></div>
+                </div>                
+                <div class="col-md-12 text-center">
+                    <button class="btn btn-primary" id="capture">Capture</button>
+                </div>                
+            </div>            
+        </div>
+    </div>
+</div>
+<div class="modal fade" id="add-bmi" aria-hidden="false" aria-labelledby="add-bmi" role="dialog" tabindex="-1">
+    <div class="modal-dialog modal-lg">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">×</span>
+                </button>
+                <h4 class="modal-title">BMI</h4>
+            </div>
+            <form action="/app/members/add/bmi" method="POST" >
+                <input type="hidden" name="member_id" value="<%= user.id %>">
+                <div class="modal-body" style="overflow-y:auto;height:500px">
+                    <div class="col-md-12">
+                        <%- csrf_html %>
+                        <div class="row">                            
+                            <div class="form-group col-md-3">
+                                <label class="form-control-label" for="height">Height (cms)</label>
+                                <input type="number" step="0.01" class="form-control" id="height" name="height">
+                            </div>
+                            <div class="form-group col-md-3">
+                                <label class="form-control-label" for="weight">Weight (Kg)</label>
+                                <input type="number" step="0.01" class="form-control" id="weight" name="weight" >
+                            </div>
+                            <div class="form-group col-md-3">
+                                <label class="form-control-label" for="bmi">BMI</label>
+                                <input type="text" class="form-control" id="bmi" name="bmi" readonly>
+                            </div>
+                            <div class="form-group col-md-3">
+                                <label class="form-control-label" for="bmi_date">BMI Date</label>
+                                <input type="text" class="form-control " id="bmi-date" name="bmi_date" >
+                                <!-- applying this is_web tag temporarily as need to confirm the code at API end before final changes -->
+                                <input type="hidden" class="form-control " id="is-web" name="is_web" value="1">
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="form-group col-md-3">
+                                <label class="form-control-label" for="fat_weight">Fat Weight(Kg)</label>
+                                <input type="text" class="form-control " id="fat_weight" name="fat_weight" readonly>
+                            </div>
+                            <div class="form-group col-md-3">
+                                <label class="form-control-label" for="lean_weight">Lean Weight(Kg)</label>
+                                <input type="text" class="form-control edit-data" id="lean_weight" name="lean_weight" readonly>
+                            </div>
+                        </div>
+                        <h4>Body Measurements</h4>
+                        <div class="row">
+                            <div class="form-group col-md-3">
+                                <label class="form-control-label" for="chest">Chest</label>
+                                <input type="text" class="form-control" id="chest" name="chest" value="">
+                            </div>
+                            <div class="form-group col-md-3">
+                                <label class="form-control-label" for="hips">Hips</label>
+                                <input type="text" class="form-control " id="hips" name="hips" value="">
+                            </div>
+                            <div class="form-group col-md-3">
+                                <label class="form-control-label" for="waist">Waist</label>
+                                <input type="text" class="form-control " id="waist" name="waist" value="">
+                            </div>
+                            <div class="form-group col-md-3">
+                                <label class="form-control-label" for="thigh_left">Thigh Left</label>
+                                <input type="text" class="form-control" id="thigh_left" name="thigh_left" >
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="form-group col-md-3">
+                                <label class="form-control-label" for="thigh_right">Thigh Right</label>
+                                <input type="text" class="form-control" id="thigh_right" name="thigh_right" value="">
+                            </div>
+                            <div class="form-group col-md-3">
+                                <label class="form-control-label" for="calf_left">Calf Left</label>
+                                <input type="text" class="form-control " id="calf_left" name="calf_left" value="">
+                            </div>
+                            <div class="form-group col-md-3">
+                                <label class="form-control-label" for="calf_right">Calf Right</label>
+                                <input type="text" class="form-control " id="calf_right" name="calf_right" value="">
+                            </div>
+                            <div class="form-group col-md-3">
+                                <label class="form-control-label" for="wrist_left">Wrist Left</label>
+                                <input type="text" class="form-control" id="wrist_left" name="wrist_left" >
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="form-group col-md-3">
+                                <label class="form-control-label" for="wrist_right">Wrist Right</label>
+                                <input type="text" class="form-control" id="wrist_right" name="wrist_right" value="">
+                            </div>
+                            <div class="form-group col-md-3">
+                                <label class="form-control-label" for="forearm_left">Forearm Left</label>
+                                <input type="text" class="form-control " id="forearm_left" name="forearm_left" value="">
+                            </div>
+                            <div class="form-group col-md-3">
+                                <label class="form-control-label" for="forearm_right">Forearm Right</label>
+                                <input type="text" class="form-control" id="forearm_right" name="forearm_right" value="">
+                            </div>
+                            <div class="form-group col-md-3">
+                                <label class="form-control-label" for="shoulder">Shoulder</label>
+                                <input type="text" class="form-control" id="shoulder" name="shoulder" >
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="form-group col-md-3">
+                                <label class="form-control-label" for="neck_girth">Neck Girth</label>
+                                <input type="text" class="form-control" id="neck_girth" name="neck_girth" value="">
+                            </div>
+                            <div class="form-group col-md-3">
+                                <label class="form-control-label" for="knee_left">Knee Left</label>
+                                <input type="text" class="form-control " id="knee_left" name="knee_left" value="">
+                            </div>
+                            <div class="form-group col-md-3">
+                                <label class="form-control-label" for="knee_right">Knee Right</label>
+                                <input type="text" class="form-control " id="knee_right" name="knee_right" value="">
+                            </div>
+                            <div class="form-group col-md-3">
+                                <label class="form-control-label" for="triceps_left">Triceps Left</label>
+                                <input type="text" class="form-control" id="triceps_left" name="triceps_left" >
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="form-group col-md-3">
+                                <label class="form-control-label" for="triceps_right">Triceps Right</label>
+                                <input type="text" class="form-control" id="triceps_right" name="triceps_right" value="">
+                            </div>
+                            <div class="form-group col-md-3">
+                                <label class="form-control-label" for="biceps_left">Biceps Left</label>
+                                <input type="text" class="form-control " id="biceps_left" name="biceps_left" value="">
+                            </div>
+                            <div class="form-group col-md-3">
+                                <label class="form-control-label" for="biceps_right">Biceps Right</label>
+                                <input type="text" class="form-control " id="biceps_right" name="biceps_right" value="">
+                            </div>
+                        </div>
+                        <h4>Body Fat Measurement</h4>
+                        <div class="row">
+                            <div class="form-group col-md-3">
+                                <label class="form-control-label" for="suprailac">Suprailac(mm)</label>
+                                <input type="text" class="form-control" id="suprailac" name="suprailac" value="">
+                            </div>
+                            <div class="form-group col-md-3">
+                                <label class="form-control-label" for="subscapular">Subscapular(mm)</label>
+                                <input type="text" class="form-control " id="subscapular" name="subscapular" value="">
+                            </div>
+                            <div class="form-group col-md-3">
+                                <label class="form-control-label" for="thigh">Thigh(mm)</label>
+                                <input type="text" class="form-control " id="thigh" name="thigh" value="">
+                            </div>
+                            <div class="form-group col-md-3">
+                                <label class="form-control-label" for="pectoral">Pectoral(mm)</label>
+                                <input type="text" class="form-control " id="pectoral" name="pectoral" value="">
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="form-group col-md-3">
+                                <label class="form-control-label" for="abdomen">Abdomen(mm)</label>
+                                <input type="text" class="form-control" id="abdomen" name="abdomen" value="">
+                            </div>
+                            <div class="form-group col-md-3">
+                                <label class="form-control-label" for="midaxillary">Midaxillary(mm)</label>
+                                <input type="text" class="form-control " id="midaxillary" name="midaxillary" value="">
+                            </div>
+                            <div class="form-group col-md-3">
+                                <label class="form-control-label" for="calf">Calf(mm)</label>
+                                <input type="text" class="form-control " id="calf" name="calf" value="">
+                            </div>
+                        </div>
+                        <h4>Flexibility</h4>
+                        <div class="row">
+                            <div class="form-group col-md-3">
+                                <label class="form-control-label" for="upper_body_left">Upper Body Left</label>
+                                <input type="text" class="form-control" id="upper_body_left" name="upper_body_left" value="">
+                            </div>
+                            <div class="form-group col-md-3">
+                                <label class="form-control-label" for="upper_body_right">Upper Body Right</label>
+                                <input type="text" class="form-control " id="upper_body_right" name="upper_body_right" value="">
+                            </div>
+                            <div class="form-group col-md-3">
+                                <label class="form-control-label" for="lower_body_left">Lower Body Left</label>
+                                <input type="text" class="form-control " id="lower_body_left" name="lower_body_left" value="">
+                            </div>
+                            <div class="form-group col-md-3">
+                                <label class="form-control-label" for="lower_body_right">Lower Body Right</label>
+                                <input type="text" class="form-control " id="lower_body_right" name="lower_body_right" value="">
+                            </div>
+                        </div>
+                        <h4>Fitness Assessment</h4>
+                        <div class="row">
+                            <div class="form-group col-md-3">
+                                <label class="form-control-label" for="dob">VO2Max (Kg/mi)</label>
+                                <input type="text" class="form-control" id="VO2max" name="VO2max" value="">
+                            </div>
+                            <div class="form-group col-md-3">
+                                <label class="form-control-label" for="duration">Duration (Mins)</label>
+                                <input type="text" class="form-control " id="duration" name="duration" value="">
+                            </div>
+                            <div class="form-group col-md-6">
+                                <label class="form-control-label" for="self_appraisal">Self Appraisal</label>
+                                <textarea class="form-control " id="self_appraisal" name="self_appraisal" ></textarea>
+                            </div>
+                        </div>
+                        <h4>Strength Assessment</h4>
+                        <div class="row">
+                            <div class="form-group col-md-3">
+                                <label class="form-control-label" for="bench_press">BenchPress 1RM (Kg)</label>
+                                <input type="text" class="form-control" id="bench_press" name="bench_press" value="">
+                            </div>
+                            <div class="form-group col-md-3">
+                                <label class="form-control-label" for="squat">Squat1RM (Kg)</label>
+                                <input type="text" class="form-control " id="squat" name="squat" value="">
+                            </div>
+                            <div class="form-group col-md-6">
+                                <label class="form-control-label" for="notes">Notes</label>
+                                <textarea class="form-control " id="notes" name="notes" ></textarea>
+                            </div>
+                        </div>
+                    </div>                
+                </div>  
+                <div class="modal-footer">
+                    <button type="submit" class="btn btn-primary" >Submit</button>
+                    <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+
+<div class="modal fade" id="transfer-membership" aria-hidden="false" aria-labelledby="filter" role="dialog" tabindex="-1">
+    <div class="modal-dialog modal-simple">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">×</span>
+                </button>
+                <h4 class="modal-title">Transfer Ownership</h4>
+            </div>
+            <div class="modal-body">
+                <form action='/app/members/transfer-membership' method='POST'>
+                    <input type='hidden' name="membership_id">
+                    <div class="row">
+                        <div class="form-group col-xl-6">
+                            <label class="form-control-label">Member</label>
+                            <select class="form-control" id="transfer_member_id" name='transfer_member_id' required ></select>
+                        </div>
+                        <div class="form-group col-xl-6">
+                            <label class="form-control-label">Relationship</label>
+                            <input type="text" class="form-control" id="relationship" name='relationship' required>
+                        </div>
+                        <div class="form-group col-xl-12">
+                            <label class="form-control-label">Reason</label>
+                            <textarea  class="form-control" id="transfer_reason" name='transfer_reason' ></textarea>
+                        </div>
+                        <div class="form-group col-xl-4">
+                            <label class="form-control-label">Transfer fees</label>
+                            <input type='text' class="form-control" id="transfer_fees" name='transfer_fees' required >
+                        </div>
+                        <div class="form-group col-xl-4">
+                            <label class="form-control-label">Tax</label>
+                            <select class="form-control" id="transfer_tax" name='transfer_tax'  >
+                                <option value=''>-- Select Tax --</option>
+                                <% taxes.forEach(function(t){ %>
+                                <option value='<%= t.id %>'><%= t.label %>(<%= t.rate %>%)</option>
+                                <% }) %>
+                            </select>
+                        </div>
+                        <div class="form-group col-xl-4">
+                            <label class="form-control-label">Total Price</label>
+                            <input type="text" class="form-control" id="total_transfer_price" name='total_transfer_price' >
+                        </div>
+                        <div class="form-group col-xl-12 text-right">
+                            <%- csrf_html %>
+                            <button class="btn btn-primary" id="">Transfer</button>
+                        </div>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="modal fade" id="freeze-membership" aria-hidden="false" aria-labelledby="filter" role="dialog" tabindex="-1">
+    <div class="modal-dialog modal-simple modal-lg">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">×</span>
+                </button>
+                <h4 class="modal-title">Freeze Membership</h4>
+            </div>
+            <div class="modal-body">
+                <form action='/app/members/freeeze-membership' method='POST'>
+                    <input type='hidden' name="freeze_membership_id">
+                    <input type='hidden' name="mem_exp_date" id="mem_exp_date">
+                    <div class="row">
+                        <div class="form-group col-xl-4">
+                            <label class="form-control-label"> Membership Start Date</label>
+                            <input type="text" name="membership_start_date" id="membership_start_date" class="form-control" disabled>
+                        </div>
+                        <div class="form-group col-xl-4">
+                            <label class="form-control-label">Membership Freeze Start Date</label>
+                            <input type="text" name="membership_freeze_start_date" id="membership_freeze_start_date" class="form-control" required>
+                        </div>
+                        <div class="form-group col-xl-4">
+                            <label class="form-control-label">Membership Freeze End Date</label>
+                            <input type="text" name="membership_freeze_end_date" id="membership_freeze_end_date" class="form-control" required>
+                        </div>
+                        <div class="form-group col-xl-4">
+                            <label class="form-control-label">New Membership End Date</label>
+                            <input type="text" name="new_membership_end_date" id="new_membership_end_date" class="form-control" disabled>
+                        </div>
+                        <div class="form-group col-xl-4">
+                            <label class="form-control-label">Frozen By</label>
+                            <select class='form-control' name='frozen_by' id="frozen_by" required>
+                                <option>-- Select User --</option>
+                                <% team.forEach(function(t){ %>
+                                <option value="<%= t.id %>"><%= t.user_name %></option>
+                                <% }) %>
+                            </select>
+                        </div>
+                        <div class="form-group col-xl-4">
+                            <label class="form-control-label">Freeze Price (Rs)</label>
+                            <input type="text" name="freeze_price" id="freeze_price" class="form-control" required>
+                        </div>
+                        <div class="form-group col-xl-12">
+                            <label class="form-control-label">Reason for Freezing</label>
+                            <textarea name="freeze_reason" id="freeze_reason" class="form-control" ></textarea>
+                        </div>
+                        <div class="form-group col-xl-4">
+                            <label class="form-control-label">Apply Taxes</label><br>
+                            <input type="checkbox" name="apply_tax" id="apply_tax"  class="form-control" data-plugin="switchery">
+                        </div>
+                        <div class="form-group col-xl-4">
+                            <label class="form-control-label">Select Tax</label><br>
+                            <select name="tax" id="tax"  class="form-control" >
+                                <option value=''>-- Select Tax --</option>
+                                <% taxes.forEach(function(t){ %>
+                                <option value='<%= t.id %>'><%= t.label %>(<%= t.rate %>%)</option>
+                                <% }) %>
+                            </select>
+                        </div>
+                        <div class="form-group col-xl-4">
+                            <label class="form-control-label">Total Price (Rs)</label>
+                            <input type="text" name="total_price" id="total_price" class="form-control ">
+                        </div>
+                        <div class="form-group col-xl-12 text-right">
+                            <%- csrf_html %>
+                            <button class="btn btn-primary" >Freeze</button>
+                        </div>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+<div class="modal fade" id="delete-member" aria-hidden="false" aria-labelledby="delete-member" role="dialog" tabindex="-1">
+    <div class="modal-dialog modal-simple">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">×</span>
+                </button>
+                <h4 class="modal-title">Delete Member</h4>
+            </div>
+            <div class="modal-body">
+                <form action="/app/members/delete" method="POST">
+                    <%- csrf_html %>
+                    <div class="row">
+                        <div class='col-md-12'>
+                            <input type="hidden" name="delete_member_id" value="<%= user.id %>">
+                            <p>Are you sure you want to DELETE every data of Member - <span class="member-name"><%= user.fname +' '+ user.lname %></span></p>
+                        </div>                    
+                    </div>
+                    <div class="row">
+                        <div class='col-md-12'>
+                            <button type="submit" class="btn btn-primary"> Delete</button>
+                        </div>                    
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+<%- include("./partials/footer.html") %>
+<script type="text/javascript">
+    SINGLE_MEMBER.init({
+        _csrf: '<%= _csrf %>',
+        userData: '<%- JSON.stringify(user) %>',
+        membershipLogs: '<%- JSON.stringify(membershipLogs) %>',
+        taxes: '<%- JSON.stringify(taxes)%>'
+    })
+</script>

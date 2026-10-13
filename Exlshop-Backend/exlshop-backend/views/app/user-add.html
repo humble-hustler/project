@@ -1,0 +1,419 @@
+<%- include("./partials/header.html") %>
+<%- include("./partials/topnav.html") %>
+<%- include("./partials/sidebar.html") %>
+<style>
+    .required {
+        position: absolute;
+        margin-top: -50px;
+        color: #FB0000;
+        font-size: 15px;
+    }
+</style>
+<div class="page">    
+    <div class="page-content">
+        <div class="panel">
+            <div class="panel-heading">
+                <h3 class="panel-title">Add New Staff Member</h3>
+            </div>
+            <div class="panel-body">
+                <div class="panel panel-bordered">
+                    <div class="panel-heading">
+                        <span class="panel-title padding-0 badge badge-danger color-white">Personal Details</span>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="form-group col-xl-3">
+                        <label class="form-control-label"> First Name</label>
+                        <input type="text" class="form-control" id="user-fname" name="user_fname"  required />
+                    </div>
+                    <div class="form-group col-xl-3">
+                        <label class="form-control-label"> Last Name</label>
+                        <input type="text" class="form-control" id="user-lname" name="user_lname"  required />
+                    </div>
+                    <div class="form-group col-xl-3">
+                        <label class="form-control-label" for="anniversary">Password</label>
+                        <input type="password" class="form-control" id="user-password" name="user_password"  autocomplete="new-password" required />
+                    </div>
+                    <div class="form-group col-xl-3">
+                        <label class="form-control-label" for="anniversary">Confirm Password</label>
+                        <input type="password" class="form-control" id="user-confirm-password" name="user_confirm_password"  autocomplete="new-password" required />
+                        <div class="invalid-feedback" id="password-mismatch">Passwords do not match</div>
+                    </div>
+                    <div class="form-group col-xl-3">
+                        <label class="form-control-label"> Email</label>
+                        <input type="text" class="form-control" id="user-email" name="user_email"  required />
+                        <div class="invalid-feedback"></div>
+                    </div>
+                    <div class="form-group col-xl-3">
+                        <label class="form-control-label"> Phone</label>
+                        <input type="text" class="form-control" id="user-phone" name="user_phone"  required />
+                        <div class="invalid-feedback"></div>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="form-group col-md-3">
+                        <label class="form-control-label"> Date of Birth</label>
+                        <div class="input-group input-group-icon">
+                            <span class="input-group-addon" style="border: 1px solid #e4eaec;
+                            padding: 6px 10px;
+                            background-color: #eee">
+                              <span class="icon fa-calendar" aria-hidden="true"></span>
+                            </span>
+                            <input type="text" class="form-control edit-data" id="dob" name="birth_date" value="" >
+                        </div>
+                    </div>
+                    <div class="form-group col-xl-3">
+                        <label class="form-control-label"> Select Role</label>
+                        <select class="form-control" id="role" name="role_id" required>
+                            <option value="">Select Role</option>
+                            <% roles.forEach((r)=>{ %>
+                            <option value="<%= r.id %>"><%= r.verbose %></option>
+                            <% }) %>
+                        </select>
+                    </div>
+                    <div class="form-group col-xl-3">
+                        <label class="form-control-label"> Select Department</label>
+                        <select class="form-control" id="department" name="department_id" required>
+                            <option value="">Select Department</option>
+                            <% departments.forEach((d)=>{ %>
+                            <option value="<%= d.id %>"><%= d.department %></option>
+                            <% }) %>
+                        </select>
+                    </div>
+                    <div class="form-group col-xl-3">
+                        <label class="form-control-label"> Select Designation</label>
+                        <select class="form-control" id="designation" name="designation_id" required>
+                            <option value="">Select Designation</option>
+                            <% designations.forEach((d)=>{ %>
+                            <option value="<%= d.id %>"><%= d.designation %></option>
+                            <% }) %>
+                        </select>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="form-group col-md-4">
+                        <label class="form-control-label mr-10" for="lname">Gender</label>
+                        <div class="radio-custom radio-default radio-inline">
+                            <input type="radio" class="edit-data" id="gender-male" value="M" name="gender" >
+                            <label for="gender-male">Male</label>
+                        </div>
+                        <div class="radio-custom radio-default radio-inline">
+                            <input type="radio" class="edit-data" id="gender-female" value="F" name="gender" >
+                            <label for="gender-female">Female</label>
+                        </div>
+                    </div>
+                    <div class="form-group col-md-5">
+                        <label class="form-control-label mr-10" for="lname">Marital Status</label>
+                        <div class="radio-custom radio-default radio-inline">
+                            <input type="radio" class="edit-data" id="marital-status-married" value="1" name="marital_status" >
+                                   <label for="marital-status-married">Married</label>
+                        </div>
+                        <div class="radio-custom radio-default radio-inline">
+                            <input type="radio" class="edit-data" id="marital-status-single" value="0" name="marital_status" >
+                                   <label for="marital-status-single">Single</label>
+                        </div>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="form-group col-md-4">
+                        <label class="form-control-label"> Emergency Contact Name</label>
+                        <input type="text" class="form-control edit-data" id="emergency_contact_name" name="emergency_contact_name" value="" >
+                        <div class="invalid-feedback"></div>
+                    </div>
+                    <div class="form-group col-md-4">
+                        <label class="form-control-label" for="fname">Emergency Contact Phone</label>
+                        <input type="text"  class="form-control edit-data" id="emergency_contact_number" name="emergency_contact_number" value="" >
+                        <div class="invalid-feedback"></div>
+                    </div>
+                    
+                    <div class="form-group col-md-4">
+                        <label class="form-control-label" for="anniversary">Anniversary Date</label>
+                        <div class="input-group input-group-icon">
+                            <span class="input-group-addon" style="border: 1px solid #e4eaec;
+                            padding: 6px 10px;
+                            background-color: #eee">
+                              <span class="icon fa-calendar" aria-hidden="true"></span>
+                            </span>
+                            <input type="text" class="form-control edit-data" id="anniversary_date" name="anniversary_date" value="">
+                        </div>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="form-group col-md-4">
+                        <label class="form-control-label" for="anniversary">Blood Group</label>
+                        <select class="form-control edit-data" id="blood-group" name="blood_group" value="">
+                            <option value="">--Select Blood Group--</option>
+                            <option >A+ve</option>
+                            <option >A-ve</option>
+                            <option >B+ve</option>
+                            <option >B-ve</option>
+                            <option >AB+ve</option>
+                            <option >AB-ve</option>
+                            <option >O+ve</option>
+                            <option >O-ve</option>
+                        </select>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="form-group col-md-4">
+                        <label class="form-control-label" for="state">State</label>
+                        <select id="state" name="state_id" class="form-control edit-data">
+                            <option value>Select State</option>
+                            <% states.forEach((s) => { %>
+                            <option value="<%= s.id %>" ><%= s.name %></option>
+                            <% }) %>
+                        </select>
+                    </div>
+                    <div class="form-group col-md-4">
+                        <label class="form-control-label" for="city">City</label>
+                        <select id="city" name="city_id" class="form-control edit-data">
+                            <option value>Select City</option>
+
+                        </select>
+                    </div>
+                    <div class="form-group col-md-4">
+                        <label class="form-control-label" for="zip">Zip</label>
+                        <input type="text" class="form-control edit-data" id="zip" name="zip" value="" maxlength="6" oninput="this.value = this.value.replace(/[^0-9.]/g, '').replace(/(\..*)\./g, '$1');">
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="form-group col-md-6">
+                        <label class="form-control-label" for="dob">Address Line 1</label>
+                        <textarea type="text" class="form-control edit-data" id="address_line_1" name="address_line_1" value="" ></textarea>
+                    </div>
+                    <div class="form-group col-md-6">
+                        <label class="form-control-label" for="anniversary">Address Line 2</label>
+                        <textarea type="text" class="form-control edit-data" id="address_line_2" name="address_line_2" value="" ></textarea>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-lg-12"><hr></div>
+                </div>
+                <br>
+                <!-- education start -->
+                <div class="panel panel-bordered">
+                    <div class="panel-heading">
+                        <span class="panel-title padding-0 badge badge-danger color-white">Education</span>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-lg-12">
+                        <table class="table table-bordered " id="education-table">
+                            <thead>
+                                <th>Education Level</th>
+                                <th>Institute</th>
+                                <th>Description</th>
+                                <th>Month</th>
+                                <th>Year</th>
+                            </thead>
+                            <tbody>
+                                <tr class=" display-hidden " id="sample-education">
+                                    <td>
+                                        <select class="form-control education_level" name="education_level" required>
+                                            <option value="">Select Level</option>
+                                            <option value="1">Degree</option>
+                                            <option value="2">Diploma</option>
+                                            <option value="3">Certificate</option>
+                                        </select>
+                                    </td>
+                                    <td><input type="text" class="form-control institute" name="institute" required/></td>
+                                    <td><input type="text" class="form-control description" name="description"  /></td>
+                                    <td>
+                                        <select class="form-control month" name="month" >
+                                            <option value="">Select Month</option>
+                                            <option value="1">January</option>
+                                            <option value="2">February</option>
+                                            <option value="3">March</option>
+                                            <option value="4">April</option>
+                                            <option value="5">May</option>
+                                            <option value="6">June</option>
+                                            <option value="7">July</option>
+                                            <option value="8">August</option>
+                                            <option value="9">September</option>
+                                            <option value="10">October</option>
+                                            <option value="11">November</option>
+                                            <option value="12">december</option>
+                                        </select>
+                                    </td>
+                                    <td>
+                                        <input type="text" class="form-control year" name="year" />
+                                    </td>
+                                </tr>
+                            </tbody>
+                        </table>
+                        <a class="cursor-pointer" style="float:right" id="add-education-entry"><i class="fa fa-plus-circle"></i> Add</a>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-lg-12"><hr></div>
+                </div>
+                <br>
+                <!-- education end -->
+
+                <!-- experience start -->
+                <div class="panel panel-bordered">
+                    <div class="panel-heading">
+                        <span class="panel-title padding-0 badge badge-danger color-white">Experience</span>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-lg-12">
+                        <table class="table table-bordered " id="experience-table">
+                            <thead>
+                                <th>Job Position</th>
+                                <th>Employer Name</th>
+                                <th>Job Description</th>
+                                <th>From Month</th>
+                                <th>Year</th>
+                                <th>To Month</th>
+                                <th>Year</th>
+                            </thead>
+                            <tbody>
+                                <tr class=" display-hidden " id="sample-experience">
+                                   <td><input type="text" class="form-control job_position" name="job_position"  required/></td>
+                                   <td><input type="text" class="form-control employer_name" name="employer_name"  required/></td>
+                                   <td><input type="text" class="form-control job_description" name="job_description" /></td>
+                                   <td>
+                                       <select class="form-control from_month_exp" name="from_month_exp"  required>
+                                            <option value="">Select Month</option>
+                                            <option value="1">January</option>
+                                            <option value="2">February</option>
+                                            <option value="3">March</option>
+                                            <option value="4">April</option>
+                                            <option value="5">May</option>
+                                            <option value="6">June</option>
+                                            <option value="7">July</option>
+                                            <option value="8">August</option>
+                                            <option value="9">September</option>
+                                            <option value="10">October</option>
+                                            <option value="11">November</option>
+                                            <option value="12">december</option>
+                                        </select>
+                                   </td>
+                                   <td><input type="text" class="form-control from_year_exp" name="from_year_exp"  required/></td>
+                                   <td>
+                                        <select class="form-control to_month_exp" name="to_month_exp" >
+                                            <option value="">Select Month</option>
+                                            <option value="1">January</option>
+                                            <option value="2">February</option>
+                                            <option value="3">March</option>
+                                            <option value="4">April</option>
+                                            <option value="5">May</option>
+                                            <option value="6">June</option>
+                                            <option value="7">July</option>
+                                            <option value="8">August</option>
+                                            <option value="9">September</option>
+                                            <option value="10">October</option>
+                                            <option value="11">November</option>
+                                            <option value="12">december</option>
+                                        </select>
+                                   </td>
+                                   <td><input type="text" class="form-control to_year_exp" name="to_year_exp"  /></td>
+                                </tr>
+                            </tbody>
+                        </table>
+                        <a class=" cursor-pointer" style="float:right" id="add-experience-entry"><i class="fa fa-plus-circle"></i> Add</a>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-lg-12"><hr></div>
+                </div>
+                <br>
+                <!-- experience end -->
+
+                <!-- compensation salary start -->
+                <div class="panel panel-bordered">
+                    <div class="panel-heading">
+                        <span class="panel-title padding-0 badge badge-danger color-white">Compensations - Salary </span>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-lg-6">
+                        <table class="table table-bordered " id="compensation-salary-table">
+                            <thead>
+                                <th>Salary Type</th>
+                                <th>Amount</th>
+                            </thead>
+                            <tbody>
+                                <tr class=" display-hidden" id="sample-compensation-salary">
+                                    <td>
+                                        <select class="form-control salary_type" name="salary_type">
+                                            <option value="" >Select Salary Type</option>
+                                            <option value="1" >Hourly</option>
+                                            <option value="2" >Daily</option>
+                                            <option value="3" >Monthly</option>
+                                            <option value="4" >Pay Per Class</option>
+                                            <option value="5" >Pay Per Check In</option>
+                                        </select>
+                                    </td>
+                                    <td>
+                                        <input type="number" class="form-control salary_amount" name="salary_amount"/>
+                                    </td>
+                                </tr>
+                            </tbody>
+                        </table>
+                        <a class=" cursor-pointer" style="float:right" id="add-compensation-salary-entry"><i class="fa fa-plus-circle"></i> Add</a>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-lg-12"><hr></div>
+                </div>
+                <br>
+                <!-- compensation salary end -->
+
+                <!-- compensation Personal training pay start -->
+                <div class="panel panel-bordered">
+                    <div class="panel-heading">
+                        <span class="panel-title padding-0 badge badge-danger color-white">Personal Identification </span>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-lg-6">
+                        <table class="table table-bordered " id="compensation-personal-training-table">
+                            <thead>
+                                <th>Identity Type</th>
+                                <th>ID Number </th>
+                            </thead>
+                            <tbody>
+                                <tr class=" display-hidden" id="sample-compensation-personal-training">
+                                    <td>
+                                        <select class="form-control salary_type" name="salary_type" >
+                                            <option value="" >Select Identity Type</option>
+                                            <option value="1" >ADHAR CARD</option>
+                                            <option value="2"> PAN CARD</option>
+                                            <option value="3" >VOTER CARD</option>
+                                            <option value="4" >DRIVING LICENSE</option>
+                                        </select>
+                                    </td>
+                                    <td>
+                                        <input type="number" class="form-control salary_amount" name="salary_amount" />
+                                    </td>
+                                </tr>
+                            </tbody>
+                        </table>
+                        <a class=" cursor-pointer" style="float:right" id="add-compensation-personal-training-entry"><i class="fa fa-plus-circle"></i> Add</a>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-lg-12"><hr></div>
+                </div>
+                <br>
+                <!-- compensation personal training pay end -->
+                
+
+                <div class="row">
+                    <div class="form-group col-xl-12 text-right">
+                        <%- csrf_html %>
+                        <button class="btn btn-primary" id="add-new-user-btn">Add Member</button>
+                    </div>
+                </div>
+            </div>
+        </div>       
+    </div>
+</div>
+<%- include("./partials/footer.html") %>
+<script type="text/javascript">
+    USER_ADD.init({
+        _csrf: '<%= _csrf %>'
+    })
+</script>

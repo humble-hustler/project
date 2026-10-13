@@ -1,0 +1,86 @@
+<%- include('../partials/header.html') %>
+<section class="section-pagetop bg">
+    <div class="container">
+        <h2 class="title-page">Marathons</h2>
+    </div>
+</section>
+<section class="section-content padding-y" id="order-history">
+    <div class="container">
+        <div class="row">
+            <%- include('../partials/my-account-menu.html') %>
+            <main class="col-md-9">
+                <% if(bestPerformance){ %>
+                <article class="card  mb-3">
+                    <div class="card-body">
+                        <h4 class="card-title mb-4">Best Performance</h4>
+                        <h5 class="card-title mb-4">Event # <%= bestPerformance.event_name %><br>
+                        <!-- <h6 class="card-title mb-4">Completed <%= bestPerformance.distance %></h6> -->
+                    </div> 
+                </article>
+                <% } %> 
+                <div class="accordion" id="marathonList">
+                <% purchasedMarathons.forEach(function(pm){ %>
+                <article class="card shadow-sm">
+                    <header class="card-header" id="heading-<%= pm.id %>">
+                        <h2 class="mb-0">
+                            <button class="btn btn-link text-dark pm-btn" data-pm-id="<%= pm.id %>" type="button" data-toggle="collapse" data-target="#pm-<%= pm.id %>" aria-expanded="false" aria-controls="pm-<%= pm.id %>">
+                                <%= pm.event_name %>
+                            </button>
+                        </h2>
+                    </header>
+                    <div id="pm-<%= pm.id %>" class="collapse bg" aria-labelledby="pm-<%= pm.id %>" data-parent="#marathonList">
+                        <div class="row card-body">
+                            <div class="col-lg-4">
+                                <span class="card-title mb-4">Purchased On: </span>
+                                <span class="card-title mb-4"><%= formatDate(pm.created_date, 'Do MMM YYYY') %></span>
+                            </div> 
+                            <div class="col-lg-4">
+                                <span class="card-title mb-4">Price: </span>
+                                <span class="card-title mb-4">Rs. <%= pm.payment_amount %></span>
+                            </div>
+                            <div class="col-lg-4">
+                                <span class="card-title mb-4">Transaction Id: </span>
+                                <span class="card-title mb-4">#. <%= pm.payment_id %></span>
+                            </div>
+                        </div>
+                        <% if(marathons.length >0){ %>
+                        <table class="table ">
+                            <thead>
+                                <tr>
+                                    <th>Event Name</th>
+                                    <th>Start Date Time</th>
+                                    <th>End Date Time</th>
+                                    <th>Total Distance Covered(Km)</th>
+                                    <th>Calories Burned</th>
+                                    <th>Total Steps</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <% marathons.forEach(function(m){ %>
+                                <% if(m.event_id == pm.event_id){ %>
+                                <tr>
+                                    <td><%= m.event_name %></td>
+                                    <td><%= formatDate(m.start_datetime, 'Do MMM YYYY hh:mm A') %></td>
+                                    <td><%= formatDate(m.end_datetime, 'Do MMM YYYY hh:mm A') %></td>
+                                    <td><%= m.distance %></td>
+                                    <td><%= m.calories %></td>
+                                    <td><%= m.steps %></td>
+                                </tr>
+                                <% } %>
+                                <% }) %>
+                            </tbody>
+                        </table> 
+                        <% } %>    
+                    </div>
+                </article>
+                <% }) %>
+                </div>
+                  
+            </main> 
+        </div>
+    </div> 
+</section>
+
+<%- include('../partials/footer.html') %>
+<script type="text/javascript">
+</script>

@@ -1,0 +1,70 @@
+<%- include("./partials/header.html") %>
+<%- include("./partials/topnav.html") %>
+<%- include("./partials/sidebar.html") %>
+<div class="page">
+    <div class="page-header">
+        <h1 class="page-title">Brand Information</h1>
+    </div>    
+    <div class="page-content">
+        <% if(messages.success) { %>
+        <div class="alert alert-success"><%= messages.success %></div>
+        <% } %>
+        <% if(messages.error) { %>
+        <div class="alert alert-danger"><%= messages.error %></div>
+        <% } %>
+      <div class="panel"> 
+        <div class="panel-body">                
+          <!-- <form action="#" method="POST" autocomplete="off">   -->
+                <div class="form-group row">
+                    <div class="col-md-6">
+                        <label class="floating-label" for="brand-name">Brand Name *</label>
+                        <input type="text" class="form-control" id="brand-name" name="name" value="<%= brand.name %>" />
+                    </div>  
+                    <div class="col-md-6">
+                        <label class="floating-label" for="brand-id"></label>
+                        <input type="hidden" class="form-control" id="brand-id1" name="id" value="<%= brand.id %>" />
+                    </div>                     
+                </div>
+                <div class="form-group row">
+                    <div class="col-md-6">
+                        <%- csrf_html %>
+                        <button class="btn btn-primary" id="updatebtn">Update</button>
+                       
+                    </div>
+                </div>
+             <!-- </form>                  -->
+        </div>            
+    </div>
+</div>
+</div>
+<%- include("./partials/footer.html") %>
+<script type="text/javascript">
+    EDIT_BRAND.init({
+        _csrf: '<%= _csrf %>'
+    })
+
+    $('#updatebtn').click(function(){  
+        let name = $("#brand-name").val();
+        $.ajax({
+      url: 'super-admin/brands/edit',
+      method: 'POST',
+      dataType: 'json',
+      headers: {
+                 'csrf-token': _csrf
+              },
+      data: {name:name},
+      success: function (data) {
+        if (data.success) {
+         toastr.success('brandname updated successfully!');
+        } 
+        else {
+         toastr.error('Some error occurred')
+         }
+        },
+      error: function (error) {
+         console.log(`Error ${error}`);
+          } 
+
+    })
+});
+</script>

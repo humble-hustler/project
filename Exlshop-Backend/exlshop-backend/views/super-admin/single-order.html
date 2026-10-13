@@ -1,0 +1,294 @@
+<%- include("./partials/header.html") %>
+<%- include("./partials/topnav.html") %>
+<%- include("./partials/sidebar.html") %>
+<div class="page add-product">
+    <div class="page-content">
+        <div class="row">
+            <div class="col-md-8">
+                <div class="panel panel-bordered">
+                    <div class="panel-heading">
+                        <h3 class="panel-title">Order: <%= order.razorpay_order_id %></h3>
+                        <span class=" pd-10">Date: <%= formatDate(order.created_date, 'Do MMM YYYY') %></span>
+                    </div>
+                    <div class="panel-body">
+                        <div class="col-lg-12 ">
+                            <% orderProducts.forEach(function(op){ %>
+                            <div class="row order-item pd-5">
+                                <div class="col-lg-8">
+                                    <figure class="itemside">
+                                        <div class="aside">
+                                            <a href="/super-admin/shop/view/product/<%= op.product_id %>" alt="" class="title text-dark">
+                                                <% if(op.file_name){ %>
+                                                <img src="/product-img/<%= op.file_name %>" class="img-sm">
+                                                <% }else{ %>
+                                                <img src="/images/logo.png" class="img-sm">
+                                                <% } %>
+                                            </a>
+                                        </div>
+                                        <figcaption class="info">
+                                            <a href="/shop" title="" class="title text-dark"><%= op.product_name %></a><br>
+                                            <span class="text-uppercase small"><%= op.category_name %></span><br>
+                                            <% if(op.product_type == 2) {%>
+                                            <span class="small"><%= op.variation_name %></span><br>
+                                            <% } %>
+                                            <span class="small">Qty: <%= op.quantity %></span>
+                                        </figcaption>
+                                    </figure>
+                                </div>
+                                <div class="col-lg-4">
+                                    <% if(op.product_type == 1){ %>
+                                    <span class="text-dark"> Price: Rs. <%= op.regular_price*op.quantity %></span><br>
+                                    <% }else{ %>
+                                    <span class="text-dark"> Price: Rs. <%= op.variation_regular_price*op.quantity %></span><br>
+                                    <% } %>
+                                </div>
+                                <div class="col-lg-12 dietitian-row">
+                                <% if(op.slug =='diet-plans'){ %>
+                                    <% if(op.dietitian_id){ %>
+                                    <div class="col-lg-6 ">
+                                        <div class="row ">
+                                            Allocated Dietitian:&nbsp;<a href="/super-admin/settings/dietitian/<%= op.dietitian_id %>" class="dietitian-name"><%= op.dietitian_name %></a>
+                                        </div>
+                                    </div>
+                                    <% } %>
+                                    <div class="col-lg-6 text-right">
+                                        <a href="#" class="dietitian" data-target="#update-dietitian" data-toggle="modal" order_product_id="<%= op.id %>"><i class="fa fa-pencil" ></i> Dietitian</a>
+                                    </div>
+                                <% } %> 
+                                </div>                             
+                            </div>
+                            <% }) %>
+                            <div class="row order-item pd-5">
+                                <h3 class="panel-title">Total Amount: <%= order.amount %></h3>   
+                            </div>
+                            <h4> Which option you want to select for delivery of product?</h2>
+                            <div class="row order-item pd-5"><br>
+                                <div>
+                                 <input name="collapseGroup" type="radio" data-toggle="collapse" data-target="#collapseOne123" checked/>
+                                 <label> Exlshop Delhivery</label>
+                                </div> <br><br>
+                                <div>
+                                 <input name="collapseGroup" type="radio" data-toggle="collapse" data-target="#collapseOne" /> 
+                                 <label>  Shop Admin Delivery</label>
+                                </div>
+                                </div>
+                        </div>
+                    </div>                    
+                </div>
+                <div id="collapseOne123" class="panel-collapse collapse">
+                    <div class="modal-dialog modal-simple">
+                        <div class="modal-content">
+                            <div class="modal-header">
+                                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                    <span aria-hidden="true">×</span>
+                                </button>
+                                <h4 class="modal-title"> Delivery By Exlshop Delhivery</h4>
+                            </div>
+                            <div class="modal-body">
+                                    <div class="row">
+                                        <div class="form-group col-xl-4">
+                                            <label class="form-control-label">Pickup_date</label>
+                                            <input type="date" class="form-control" id="pickup_date_id" name="pickup_date" placeholder="Pickup Date" required />
+                                        </div>
+                                        <div class="form-group col-xl-4">
+                                            <label class="form-control-label">Pickup_time</label>
+                                            <input type="time" class="form-control" id="pickup_time_id" name="pickup_time" placeholder="Pickup Time" required />
+                                        </div>
+                                        
+                                        <div class="form-group col-xl-4">
+                                            <label class="form-control-label">Pickup_location</label>
+                                            <input type="text" class="form-control" id="pickup_location_id" name="pickup_location" placeholder="Pickup Location" required />
+                                        </div>
+                                        <div class="form-group col-xl-4">
+                                            <label class="form-control-label">Expected_package_count</label>
+                                            <input type="text" class="form-control" id="expected_package_count_id" name="expected_package_count" placeholder="expected package count" required />
+                                        </div>
+                                        <div class="form-group col-xl-12">
+                                            <%- csrf_html %>
+                                            <button class="btn btn-primary" id="add-lead-btn">Add</button>
+                                        </div>
+                                    </div>
+                               
+                            </div>
+                        </div>
+                    </div>
+                  </div>
+                  <div id="collapseOne" class="panel-collapse collapse">
+                    <div class="modal-dialog modal-simple">
+                        <div class="modal-content">
+                            <div class="modal-header">
+                                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                    <span aria-hidden="true">×</span>
+                                </button>
+                                <h4 class="modal-title"> Delivery By Shop Admin</h4>
+                            </div>
+                            <div class="modal-body">
+                                    <div class="row">
+                                        <div class="form-group col-xl-4">
+                                            <label class="form-control-label">Staff</label>
+                                            <select class="form-control" id="staff_id" name="staff" required>
+                                                <option disabled selected value>Select staff</option>
+                                                <option value="101">ram</option>
+                                            </select>
+                                        </div>
+                                        <div class="form-group col-xl-4">
+                                            <label class="form-control-label">Pickup_date</label>
+                                            <input type="date" class="form-control" id="pickup_date_id" name="pickup_date" placeholder="Pickup Date" required />
+                                        </div>
+                                        <div class="form-group col-xl-4">
+                                            <label class="form-control-label">Pickup_time</label>
+                                            <input type="time" class="form-control" id="pickup_time_id" name="pickup_time" placeholder="Pickup Time" required />
+                                        </div>
+                                        
+                                        <div class="form-group col-xl-4">
+                                            <label class="form-control-label">Pickup_location</label>
+                                            <input type="text" class="form-control" id="pickup_location_id" name="pickup_location" placeholder="Pickup Location" required />
+                                        </div>
+                                        <div class="form-group col-xl-12">
+                                            <%- csrf_html %>
+                                            <button class="btn btn-primary" id="add_shopadmin_delivery">Add</button>
+                                        </div>
+                                    </div>
+                               
+                            </div>
+                        </div>
+                    </div>
+                  </div>  
+            </div>
+            <div class="col-md-4">
+                <% if(user){ %>
+                <div class="panel panel-bordered">
+                    <div class="panel-heading">
+                        <h3 class="panel-title">Customer Details</h3>
+                    </div>
+                    <div class="panel-body">
+                        <a ><%= user.fname+' '+user.lname %></a><br>
+                        <span class="font-size-12"><i class="fa fa-phone"></i> <%= user.phone %></span><br>
+                        <span class="font-size-12"><i class="fa fa-envelope"></i> <%= user.email %></span>
+                    </div>
+                </div>
+                <% } %>
+                <% if(order){ %>
+                <div class="panel panel-bordered">
+                    <div class="panel-heading">
+                        <h3 class="panel-title">Shipping Address</h3>
+                    </div>
+                    <div class="panel-body">
+                        <span><i class="fa fa-map-marker" aria-hidden="true"></i></span>
+                        <span ><%= order.label %></span><br>
+                        <span class="font-size-12"><%= order.address_name %> | <%= order.phone %></span><br>
+                        <% if(order.address_line_1){%>
+                        <span class="font-size-12"><%= order.address_line_1 %></span><br>
+                        <% } %>
+                        <% if(order.address_line_2){%>
+                        <span class="font-size-12"><%= order.address_line_2 %></span><br>
+                        <% } %>
+                        <span class="font-size-12"><%= order.zip+', '+order.city_name+', '+order.state_name+', '+order.country_name %></span>
+                    </div>
+                </div> 
+                <div class="panel panel-bordered">
+                    <div class="panel-heading">
+                                <div  id="selectId" class="form-group col-xl-6">
+                                    <br>
+                                    <select  id="order_status_id" name="order_statusid" >
+                                        <option  value="<%-order_status[0].id%>"><%-order_status[0].name%></option>
+                                        
+                                    </select>
+                                </div>                 
+                                <div class="form-group col-xl-12">
+                                    <%- csrf_html %>
+                                    <button class="btn btn-primary" id="update-status-btn">Update Status</button>
+                                </div>
+                    </div>
+                </div>
+                <% } %>                               
+            </div>
+           
+        </div>       
+    </div>
+  
+</div>
+
+
+
+<div class="modal fade" id="update-dietitian" aria-hidden="false" aria-labelledby="update-dietitian" role="dialog" tabindex="-1">
+    <div class="modal-dialog modal-md">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">×</span>
+                </button>
+                <h4 class="modal-title">Select Dietitian</h4>
+            </div>
+            <div class="modal-body">
+                <form action="/super-admin/shop/update-dietitian" method="POST">
+                    <input type="hidden" name="order_product_id">
+                    <div class="row">
+                        <div class="form-group col-xl-6">
+                            <!-- <label class="form-control-label">Select Dietitan</label> -->
+                            <select class="form-control" id="dietitian" name="dietitian_id">
+                                
+                            </select>
+                        </div>
+                        <div class="form-group col-xl-12">
+                            <%- csrf_html %>
+                            <button class="btn btn-primary" id="btn">Save</button>
+                        </div>
+                    </div>
+                </form>
+            </div>            
+        </div>
+    </div>
+</div>
+<%- include("./partials/footer.html") %>
+<script type="text/javascript">
+    SINGLE_ORDER.init({
+        _csrf: '<%= _csrf %>'
+    })
+   $('#add_shopadmin_delivery').click(()=>{
+    alert("hi")
+    var pickup_time=$('#pickup_date_id').val()
+    var pickup_date=$('#pickup_time_id').val()
+    var pickup_location=$('#pickup_location_id').val()
+    var staff_id=$('#staff_id').val();
+    $.ajax({
+           url: "/app/asset-management/add/shopadmin_delivery",
+           data: {
+            pickup_time,
+            pickup_date,
+            pickup_location,
+            staff_id,
+            order_id:10,
+            _csrf:'<%= _csrf %>'
+           },
+           method: 'POST',
+           success: function (data) {
+               toastr.success(' delivery Request created successfully!');
+               window.location.reload();
+           },
+           error: function (data, status, error) {
+               toastr.error('Some error occurred')
+           }
+       });
+     })
+    $('#update-status-btn').click(function(e){
+                    var status_id = $("#order_status_id").val();
+                    alert('<%-order.id%>')
+                    $.ajax({
+                        url : '/app/accounts/updatestatus',
+                        data :{
+                            status_id: status_id,
+                            order_id:'<%-order.id%>',
+                            _csrf: '<%= _csrf %>'
+                        },
+                        method: 'POST',
+                        success: function (data) {
+                            window.location.reload()
+                        },
+                        error: function (data, status, error) {
+                            alert("not successfull")
+                        }
+                    })
+                })
+   
+</script>

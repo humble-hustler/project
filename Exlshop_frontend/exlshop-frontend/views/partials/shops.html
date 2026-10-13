@@ -1,0 +1,291 @@
+<style>
+      #bookmark
+        {
+            color: #FFB84E;
+            font-size: 24px;
+            cursor: pointer;
+        }
+        .page-number{
+      text-align: center;
+      user-select: none;
+    }
+    .page-number li {
+      display: inline-block;
+      margin: 5px;
+    }
+    .page-number li a{
+      text-decoration: none;
+      font-size: 15px;
+      line-height: 25px;
+    }
+    .page-number li:not(.acti) a{
+        color: black;
+    }
+    .previous-page, .next-page{
+      background-color: rgb(11, 175, 240);
+      cursor: pointer;
+    }
+    .pagination{
+      text-align: center;
+      margin: 30px 30px 60px;
+      user-select: none;
+    }
+    .pagination li {
+      display: inline-block;
+      margin: 5px;
+    }
+    .pagination li a{
+      text-decoration: none;
+      font-size: 15px;
+      line-height: 25px;
+    }
+    .acti a{
+        background-color: rgb(161, 159, 159);
+        color: black;
+    }
+    .pagination li:not(.acti) a{
+        color: black;
+    }
+    .current-page, .dots{
+      background: #ccc;
+      cursor: pointer;
+    }
+    .page-number1{
+      text-align: center;
+      user-select: none;
+    }
+    .page-number1 li {
+      display: inline-block;
+      margin: 5px;
+    }
+    .page-number1 li a{
+      text-decoration: none;
+      font-size: 15px;
+      line-height: 25px;
+    }
+    .page-number1 li:not(.acti) a{
+        color: black;
+    }
+    .previous-page1, .next-page1{
+      background-color: rgb(11, 175, 240);
+      cursor: pointer;
+    }
+    .row-parent{
+    display: flex;
+    
+    padding-top: 10px;
+}
+.img-div{
+    height: 200px;
+    width: 200px;
+}
+.shop-image{
+  width: 200px;
+  height: 200px;
+}
+</style>
+
+    <% if(shops.length == 0){%>
+        <center><h4>No Shop Availble </h4></center>
+    <% } %>
+    <div class="panelContainer">
+        <div id="grid" class="tabcontent mt-4">
+            <div class="row" id="main-row" style="display: none;">
+            <% shops.forEach((p) => { %>
+                    <div class="column card-group p-2 shopdiv" style="width:23%; margin-left: 3px">
+                        <a href="/shop_product/<%= p.brands_id %>/<%=p.location_id %>">
+                        <div  class="card card-product-grid" >
+                            <div href="/shop_product/<%= p.brands_id %>/<%=p.location_id %>" style="position: relative;">
+                            <img src="<%= p.brand_logo %>" class="m-auto bg-primary" alt="<%= p.brands_name %>"height="170px" style="max-width:100%; border-radius: 10px 10px 0px 0px;">
+                            <span class="myrate" id="myrate" style="background-color: #FFB84E; font-size: 13px; margin-right: 5px; height: 18px; position: absolute; bottom: 7px; right: 0px;"><%= p.stars %>&nbsp;<i class="bi bi-star-fill ten"></i></span><br>                        
+                          </div>
+
+                            <figcaption class="info-wrap">  
+                                <!-- <div> <i  class="fa fa-bookmark" id="bookmark"></i></div> -->
+                                <a  href="/shop_product/<%= p.brands_id %>/<%=p.location_id %>">
+
+                                <span class="price mt-1" id="shopname" style="font-size: 15px;"> <i class="fa fa-store"></i> <span class="ps-2"><%= p.brands_name %></span></span><br>
+                              <span class="price mt-1 me-2" id="locationname" style="color: rgb(109, 109, 211);font-size: 15px;"><i class="fa fa-map-marker-alt" aria-hidden="true"></i> <span class="ps-2"><%= p.location_name %></span></span><br>
+                                <span class="price fw-normal" style="font-size: 13px;"><i class="fa fa-location-arrow" aria-hidden="true"></i> <%= p.address %></span><br></a>
+                            </figcaption>
+                        </div>
+                        </a>
+                    </div>
+                <% }) %>
+            </div>
+        
+            <div class="fl" style="padding-top: 10px; display: flex; justify-content: space-between;">
+                <div style="padding-left: 30px; margin-top: 15px;" class="append-para">
+                    <p>Showing <span class="numRecord"></span> Records of <span class="totalRecord"></span></p>
+                </div>
+                <div class="page-number" style="margin-right: 20px;"></div>
+            </div>
+        </div>
+
+
+        <div id="list" class="tabcontent">
+          <div class="row mr-5" id="main-row1" style="display: none;">
+          <% shops.forEach((p) => { %>
+            
+              <div class="row-parent" style="border: 1px solid rgb(189, 186, 186); margin-left: 30px; margin-right: 40px; padding-bottom: 20px;" id="row-parent1">
+                 
+                    <div class="col-md-3 img-div" style="padding-bottom: 10px; width: 120px; height: 100px;">
+                          <a href="/shop_product/<%= p.brands_id %>/<%=p.location_id %>" style="width: 100px;">
+                            <img src="<%= p.brand_logo %>" class="m-auto bg-primary" alt="<%= p.brands_name %>"height="100px"style="max-width:100%; border-radius: 10px 10px 0px 0px"> 
+                          </a>
+                      </div>
+
+                      <div class="" style="margin-left: 50px;">                        
+                        <a  href="/shop_product/<%= p.brands_id %>/<%=p.location_id %>" style="margin-top: 20px;">
+                          <span class="price mt-1 me-2" id="shopname"><i class="fa fa-store"></i> <span class="ps-2"><%= p.brands_name %></span></span>
+                          <span class="myrate green" id="myrate"style="font-size: 13px; height: 18px;"><%= p.stars %>&nbsp;<i class="bi bi-star-fill ten"></i></span><br>   
+                          <span class="price mt-1 me-2" id="locationname" style="color: rgb(109, 109, 211);"><i class="fa fa-map-marker-alt" aria-hidden="true"></i> <span class="ps-2"><%= p.location_name %></span></span><br>
+
+                          <span class="price fw-normal" style="font-size: 13px;"><span class="fw-bold"><i class="fa fa-location-arrow" aria-hidden="true"></i> </span><%= p.address %></span><br></a>
+                      </div>
+              </div>
+              <% }) %>
+          </div>
+
+            <div class="pl" style="padding-top: 10px; display: flex; justify-content: space-between;">
+                <div style="padding-left: 30px; margin-top: 15px;" class="append-para1">
+                    <p>Showing <span class="numRecord1"></span> Records of <span class="totalRecord1"></span></p>
+                </div>
+                <div class="page-number1" style="margin-right: 20px;"></div>
+            </div>
+      </div> 
+
+    </div>
+<script >
+                    function getPageList(totalPages, page, maxLength){
+                        function range(start, end){
+                          return Array.from(Array(end - start + 1), (_, i) => i + start);
+                        }
+                        var sideWidth = maxLength < 9 ? 1 : 2;
+                        var leftWidth = (maxLength - sideWidth * 2 - 3) >> 1;
+                        var rightWidth = (maxLength - sideWidth * 2 - 3) >> 1;
+                  
+                        if(totalPages <= maxLength){
+                          return range(1, totalPages);
+                        }
+                  
+                        if(page <= maxLength - sideWidth - 1 - rightWidth){
+                          return range(1, maxLength - sideWidth - 1).concat(0, range(totalPages - sideWidth + 1, totalPages));
+                        }
+                  
+                        if(page >= totalPages - sideWidth - 1 - rightWidth){
+                          return range(1, sideWidth).concat(0, range(totalPages - sideWidth - 1 - rightWidth - leftWidth, totalPages));
+                        }
+                  
+                        return range(1, sideWidth).concat(0, range(page - leftWidth, page + rightWidth), 0, range(totalPages - sideWidth + 1, totalPages));
+                      }
+
+                      $(document).ready(function(){
+                        $(function(){
+                        var numberOfItems = $("#main-row .shopdiv").length;
+                        var limitPerPage = 6;
+                        var totalPages = Math.ceil(numberOfItems / limitPerPage)
+                        var paginationSize = 7;
+                        var currentPage;
+                  
+                        function showPage(whichPage){
+                          if(whichPage < 1 || whichPage > totalPages) return false;
+                  
+                          currentPage = whichPage;
+                  
+                          $("#main-row .shopdiv").hide().removeClass("aaa").slice((currentPage - 1) *  limitPerPage, currentPage * limitPerPage).show().addClass("aaa");
+                          var numItems = $("#main-row .aaa").length
+                          $(".numRecord").text(numItems)
+                          $(".totalRecord").text(numberOfItems)
+                          $(".page-number li").slice(1, -1).remove();
+                  
+                          getPageList(totalPages, currentPage, paginationSize).forEach(item =>{
+                            $("<li>").addClass("page-item").addClass(item ? "current-page" : "dots").toggleClass("acti", item === currentPage).append($("<a>").addClass("page-link").attr({href: "javascript:void(0"}).text(item || "...")).insertBefore(".next-page");
+                          });
+                  
+                          $(".previous-page").toggleClass("disabled", currentPage === 1);
+                          $(".next-page").toggleClass("disabled", currentPage === totalPages)
+                          return true;
+                        }
+                        $(".page-number").append(
+                          $("<li>").addClass("page-item").addClass("previous-page").append($("<a>").addClass("page-link").attr({href: "javascript:void(0)"}).text("Prev")),
+                            $("<li>").addClass("page-item").addClass("next-page").append($("<a>").addClass("page-link").attr({href: "javascript:void(0)"}).text("Next"))
+                          );
+                  
+                          $("#main-row").show();
+                          showPage(1);
+                  
+                          $(document).on("click", ".page-number li.current-page:not(.acti)", function(){
+                            return showPage(+$(this).text());
+                          });
+                  
+                          $(".next-page").on("click", function(){
+                            return showPage(currentPage + 1);
+                          })
+                  
+                          $(".previous-page").on("click", function(){
+                            return showPage(currentPage - 1);
+                          })
+                      })
+                    })
+
+   
+                      $(document).ready(function(){
+                        $(function(){
+                        var numberOfItems = $("#main-row1 #row-parent1").length;
+                        var limitPerPage = 6;
+                        var totalPages = Math.ceil(numberOfItems / limitPerPage)
+                        var paginationSize = 5;
+                        var currentPage;
+                  
+                        function showPage(whichPage){
+                          if(whichPage < 1 || whichPage > totalPages) return false;
+                          currentPage = whichPage;
+                  
+                          $("#main-row1 #row-parent1").hide().removeClass("yyy").slice((currentPage - 1) *  limitPerPage, currentPage * limitPerPage).show().addClass("yyy");
+                          var numItems = $("#main-row1 .yyy").length
+                          $(".numRecord1").text(numItems)
+                          $(".totalRecord1").text(numberOfItems)
+                          $(".page-number1 li").slice(1, -1).remove();
+                  
+                          getPageList(totalPages, currentPage, paginationSize).forEach(item =>{
+                            $(" <li>").addClass("page-item").addClass(item ? "current-page" : "dots").toggleClass("acti", item === currentPage).append($("<a>").addClass("page-link").attr({href: "javascript:void(0"}).text(item || "...")).insertBefore(".next-page1");
+                          });
+                  
+                          $(".previous-page1").toggleClass("disabled", currentPage === 1);
+                          $(".next-page1").toggleClass("disabled", currentPage === totalPages)
+                          return true;
+                        }
+                          $(".page-number1").append(
+                          $("<li>").addClass("page-item").addClass("previous-page1").append($("<a>").addClass("page-link").attr({href: "javascript:void(0)"}).text("Prev")),
+                          $("<li>").addClass("page-item").addClass("next-page1").append($("<a>").addClass("page-link").attr({href: "javascript:void(0)"}).text("Next"))
+                          );
+                  
+                          $("#main-row1").show();
+                          showPage(1);
+                  
+                          $(document).on("click", ".page-number1 li.current-page:not(.acti)", function(){
+                            return showPage(+$(this).text());
+                          });
+                  
+                          $(".next-page1").on("click", function(){
+                            return showPage(currentPage + 1);
+                          })
+                  
+                          $(".previous-page1").on("click", function(){
+                            return showPage(currentPage - 1);
+                          })
+                        })
+                      })
+    var i;
+    function listView() { 
+        for (i = 0; i < elements.length; i++) {
+            elements[i].style.width = "100%";
+        }
+    }
+    function gridView() {
+        for (i = 0; i < elements.length; i++) {
+            elements[i].style.width = "33%";
+        }
+    }
+</script>

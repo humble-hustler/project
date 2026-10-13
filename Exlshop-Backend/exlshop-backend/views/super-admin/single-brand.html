@@ -1,0 +1,108 @@
+<%- include("./partials/header.html") %>
+<%- include("./partials/topnav.html") %>
+<%- include("./partials/sidebar.html") %>
+<script src="//ajax.googleapis.com/ajax/libs/jquery/1.5.1/jquery.js"></script>
+<div class="page">
+    <div class="page-content">
+        <div class="panel panel-primary panel-line">
+                <div class="panel-heading">
+                    <h3 class="panel-title">Shop Information</h3>
+                    <div class="panel-actions">
+                        <label class="form-control-label" for="brand-active">Active</label><br />
+                        <input type="checkbox" name="active" id="brand-active" data-color="#eb6709" checked value="1" />
+                    </div>
+                </div>
+                <div class="panel-body">              
+                    <div class="form-group row">
+                        <div class="col-md-6">
+                            <label class="floating-label" for="brand-name">Shop Name *</label>
+                            <input type="text" class="form-control" id="brand-name" value="<%= brand.name%>" required/>
+                        <div class="modal-body">
+                            <input type="hidden" class="form-control" id="brand-id" name="id" value='<%= brandId%>' />
+                        </div>                        
+                    </div>
+                </div>  
+                  <div class="form-group row">
+                    <div class="col-md-6">
+                        <%- csrf_html %>
+                        <button id="updatebtn" class="btn btn-primary">Update</button>
+                    </div>
+                </div>          
+              </div>
+        </div>
+
+         <div class="panel panel-primary panel-line"> 
+            <div class="panel-heading">
+                <h3 class="panel-title">Live Example</h3>
+                <div class="panel-actions panel-actions-keep">
+                    <button class="btn btn-round btn-primary" data-target="#add-new-location" data-toggle="modal">
+                        <i class="icon fa-plus" aria-hidden="true"></i>
+                        <span class="hidden-sm-down">Add New Location</span>
+                    </button>
+                </div>
+            </div>
+            <div class="panel-body"> 
+                <%= console.log(locations, "888888888888") %>
+
+                <% if(locations.length !== 0) { %>
+                <table class="table table-hover dataTable table-striped w-full mt-10" id="brand-list">
+                    <thead>
+                        <tr>
+                            <th>Location Name</th>
+                            <th>Subscription</th>
+                            <th>Active</th>
+                            <th>View</th>
+                        </tr>
+                    </thead>    
+                    <tbody></tbody>                
+                    <!-- <tbody>
+                        <% locations.forEach((l)=>{ %>
+                        <tr>
+                            <td><%= l.name %></td>
+                            <td><%= l.subcriptionStatus %></td>
+                            <td><%= l.is_active ? 'Active' : 'Inactive' %></td>
+
+                            <td><a class="btn btn-primary btn-outline" href="/super-admin/brands/locations/view/<%= l.id %>"><i class="fa fa-eye"></i></a></td>
+                        </tr>
+                        <% }) %>
+                    </tbody> -->
+                </table>
+                <% } else { %>
+                <div class="text-center">No Locations Yet!</div>
+                <% } %>
+            </div>
+        </div>
+    </div>
+</div>
+<div class="modal fade" id="add-new-location" aria-hidden="false" aria-labelledby="add-new-location" role="dialog" tabindex="-1">
+    <div class="modal-dialog modal-simple">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">×</span>
+                </button>
+                <h4 class="modal-title">New Location</h4>
+            </div>
+            <div class="modal-body">
+                <div class="row">
+                    <div class="form-group col-xl-12">
+                        <input type="text" class="form-control" id="location-name" name="name" placeholder="Location Name" required />
+                    </div>
+                    <div class="form-group col-xl-12">
+                        <%- csrf_html %>
+                        <input type="hidden" id="bid" value="<%= brandId %>" name="brandId" />
+                        <input type="hidden" name="_csrf" value="<%= _csrf %>">
+                        <button id="addbtn" class="btn btn-primary">Add</button>
+                    </div>
+                </div>                
+            </div>            
+    </div>
+</div>
+</div>
+<%- include("./partials/footer.html") %>
+<script type="text/javascript">
+    SINGLE_BRAND.init({
+    _csrf: '<%= _csrf %>',
+    brandId : '<%= brandId %>'
+})
+</script> 

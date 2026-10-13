@@ -1,0 +1,48 @@
+<%- include("./partials/header.html") %>
+<%- include("./partials/topnav.html") %>
+<%- include("./partials/sidebar.html") %>
+<style>
+    #globalproductlist{
+        color: white;
+    }
+    .panel-actions{
+        position: static;
+        display: flex;
+        justify-content: space-between;
+    }
+</style>
+<div class="page">
+    <div class="page-content">
+        <h3 class="panel-title">Products</h3>
+        <div class="panel">            
+            
+            <div class="panel-body">
+                <div class="panel-heading">
+                
+                    <div class="panel-actions text-white"> 
+                        
+                    </div>
+                </div>
+                <table class="table table-hover dataTable table-striped w-full" id="products-list">
+                    <thead>
+                        <tr>
+                            <th>Id</th>
+                            <th>Image</th>
+                            <th>Name</th>
+                            <th>Description</th>                       
+                        </tr>
+                    </thead>                    
+                    <tbody>
+                    </tbody>
+                </table>
+            </div>
+        </div>       
+    </div>
+</div>
+<%- include("./partials/footer.html") %>
+<script type="text/javascript">
+    PRODUCTS_LIST.init({
+        _csrf: '<%= _csrf %>',
+        categoryId: '<%- JSON.stringify(categoryId) %>'
+    })
+</script>

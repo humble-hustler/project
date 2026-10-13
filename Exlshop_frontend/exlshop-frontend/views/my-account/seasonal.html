@@ -1,0 +1,52 @@
+<%- include('../partials/header.html') %>
+<div class="container-fluid bg-white my-3">
+        <h2 class="fw-bolder py-4 text-center">Deals of the day</h2>
+        <div class="row">
+         <% deals_of_the_day.forEach((p) => { %>
+           <% if(p.product_type == 1) { %>
+           <div class="col-md-3">
+               <div class=""></div>
+               <div href="/shop/<%= p.slug %>/<%= p.id %>" class="card card-product-grid">
+                   <a href="/shop/<%= p.slug %>/<%= p.id %>" class="img-wrap">
+                       <% if(p.file_name){ %>
+                       <img src="<%=session.imgURL %><%= p.file_name %>" alt="<%= p.name %>">
+                       <%}else{%>
+                       <img src="<%= coreHostname %>/images/logo.png" alt="<%= p.name %>">
+                       <%}%>
+                   </a>
+                   <figcaption class="info-wrap text-center">                        
+                       <a href="/shop/<%= p.slug %>/<%= p.id %>" class="title" title="<%= p.name %>"><%= p.name %></a>
+                       <div class="myrate green"><%= p.avg_rate%><i class="bi bi-star-fill ps-1 ten"></i></div>
+                       <span class="price mt-1">
+                           Rs. <%= p.regular_price-p.discount_price %><del class="ps-2 information">Rs. <%= p.regular_price %></del>
+                           <p class="text-success"><%=Math.round(p.discount_price*100 /p.regular_price) %>% off</p>
+                       </span>
+                   </figcaption>
+               </div>
+           </div>
+           <% } else { %>
+           <div class="col-md-3">
+               <div href="/shop/<%= p.slug %>/<%= p.id %>" class="card card-product-grid">
+                   <a href="/shop/<%= p.slug %>/<%= p.id %>" class="img-wrap">
+                       
+                       <% if(p.file_name){ %>
+                       <img src="<%=session.imgURL %><%= p.file_name %>">
+                       <%}else{%>
+                       <img class="logo" src="/images/logo.png">
+                       <%}%>
+                   </a>
+                   <figcaption class="info-wrap">                        
+                       <a href="/shop/<%= p.slug %>/<%= p.id %>" class="title"><%= p.name %></a>                        
+                       <span class="price mt-1">
+                       </span>
+                   </figcaption>
+               </div>
+           </div>
+           <% } %>
+           <% }) %>
+        
+
+       </div>
+   </div>    <!--closing of container-->
+
+<%- include('../partials/footer.html') %>

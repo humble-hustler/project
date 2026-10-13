@@ -1,0 +1,219 @@
+<style>
+       .page-number{
+      text-align: center;
+      user-select: none;
+    }
+    .page-number li {
+      display: inline-block;
+      margin: 5px;
+    }
+    .page-number li a{
+      text-decoration: none;
+      font-size: 15px;
+      line-height: 25px;
+    }
+    .page-number li:not(.acti) a{
+        color: black;
+    }
+    .previous-page, .next-page{
+      background-color: rgb(11, 175, 240);
+      cursor: pointer;
+    }
+    .pagination{
+      text-align: center;
+      margin: 30px 30px 60px;
+      user-select: none;
+    }
+    .pagination li {
+      display: inline-block;
+      margin: 5px;
+    }
+    .pagination li a{
+      text-decoration: none;
+      font-size: 15px;
+      line-height: 25px;
+    }
+    .acti a{
+        background-color: rgb(161, 159, 159);
+        color: black;
+    }
+    .pagination li:not(.acti) a{
+        color: black;
+    }
+    .current-page, .dots{
+      background: #ccc;
+      cursor: pointer;
+    }
+</style>
+<% if(orders.length){ %>
+    <header class="mb-4 pb-3"></header>
+        <div class="form-inline">
+            <span class="mr-md-auto"><%= orders.length %> Items found </span>
+        </div>
+        <hr>
+       
+        <div class="orderlist-parent" id="main-row" style="display: none;">
+            <% orders.forEach((o) => { %>
+            <div class="container bg-white mb-3 abab">
+                <div class="row b" id="view-order">
+                    <div class="col-4 aaa">
+                        <input type="hidden" class="order-ID" value="<%= o.id %>">
+                        <div style="margin-top: 10px; font-weight: 400;">
+                                <span> <strong>Order date :- </strong> <%= o.order_date %></span><br>
+                                <span><strong>Order ID:</strong>  <%= o.id %></span><br>
+                                <span class="mb-2"> <strong>Products:- </strong> <%= o.products %></span><br>
+                                <span><strong>Payment mode :- </strong><%= o.payment_mode %></span><br>
+                                <span class="padd"> <strong>Total Amount :-</strong>   <%= o.amount %></span>
+                                <div id="order-<%= o.id %>" class="collapse bg" aria-labelledby="heading-<%= o.id %>" data-parent="#orderList"></div>
+                        </div>
+                    </div>   
+                    <div class="col-5">
+                        <div class="card card-timeline pt-3 pe-5 border-none myd" id="<%= o.order_status %>" my-id="<%= o.order_status %>">
+                            <ul class="bs4-order-tracking" id="track-order">
+                                <li class="  <%= o.order_status === '1'  || o.order_status === '2'  || o.order_status === '3' || o.order_status === '4' || o.order_status === '5' || o.order_status === '7' ? 'step active' : 'step'  %>" id="1" value="1" >
+                                    <div class=""></div> Order Placed
+                                </li>
+                            <% if(o.order_status != 5) { %>
+                                <li class="  <%= o.order_status === '2' || o.order_status === '3' || o.order_status === '4' || o.order_status === '7'  ? 'step active' : 'step'  %>"  id="2" value="2" >
+                                <div class="" style="position: relative;">
+                                    <div class="  <%= o.order_status === '2' || o.order_status === '3' || o.order_status === '4' || o.order_status === '7'  ? 'aaaa' : 'bbbb'  %>" style="width: 53px; height: 2px; margin-top: 12px; left: -52px; position: absolute;"></div>
+                                    </div>shipped
+                                </li>
+                                <% } %>
+                                <% if(o.order_status != 5) { %>
+                                <li class="<%= o.order_status === '3'  || o.order_status === '4' ? 'step active' : 'step' %>" id="3" value="3">
+                                    <div class="">
+                                        <div class="  <%= o.order_status === '3'  || o.order_status === '4'  ? 'aaaa' : 'bbbb'  %>" style="width: 53px; height: 2px; margin-top: 12px; left: -28px; position: absolute;"></div>
+                                    </div> Out for delivery
+                                </li>
+                                <% } %>
+                                <% if(o.order_status != 5) { %>
+                                <li class="<%= o.order_status === '4' ? 'step active' : 'step' %>" id="4" value="4">
+                                    <div class="">
+                                        <div class="  <%= o.order_status === '4'  ? 'aaaa' : 'bbbb'  %>" style="width: 55px; height: 2px; margin-top: 12px; left: -28px; position: absolute;"></div>
+                                    </div> Delivered
+                                </li>
+                                <% } %>
+                                <li class="<%= o.order_status === '5'  ? 'step on' : 'step' %>" id="5" value="5">
+                                    <div class="">
+                                        <div class="  <%= o.order_status === '5'  ? 'xxxx' : 'yyyy'  %>" style="width: 53px; height: 2px; margin-top: 12px; left: -26px; position: absolute;"></div>
+                                    </div> Cancelled
+                                </li>
+                            </ul>
+                        </div> 
+                    </div>
+                    <div class="col-3" style="padding-left: 35px;" id="buttons-group">
+                        <% if(o.order_status === '1') { %>
+                        <a href="/my-account/cancel_order/<%= o.id %>" id="order" class=" myorderbtn mt-2" >Cancel</a> 
+                        <% } %>  
+                        <% if(o.order_status === '4') { %>
+                        <a href="/" id="checkout"  class=" myorderbtn mt-1" > Re-Order</a>
+                        <% } %>  
+                        <% if(o.order_status === '4') { %>
+                        <a href="/my-account/ratereview12/<%= o.id %>" id="rate-product"  class="myorderbtn mt-1" >Review & Rate Product</a>
+                        <% } %> 
+                        <!-- <% if(o.order_status === '4') { %>
+                            <input type="hidden" class="delivery-date" value="<%= o.delivery_date %>">
+                        <a href="/my-account/return_order/<%= o.id %>" id="return" class="myorderbtn  mt-1" >Return</a>
+                    <h6><span class="days-remaining text-danger fw-bold" style="font-size: 12px;"></span></h6>
+                        <% } %>  -->
+                    </div>
+                </div>   
+            </div>   
+            <% }) %>
+        </div>
+
+        <div class="fl" style="padding-top: 10px; display: flex; justify-content: space-between;">
+            <div style="padding-left: 30px; margin-top: 15px;" class="append-para">
+                <p>Showing <span class="numRecord"></span> Records of <span class="totalRecord"></span></p>
+            </div>
+            <div class="page-number" style="margin-right: 20px;"></div>
+        </div>
+<% } %>
+<script type="text/javascript">
+                    function getPageList(totalPages, page, maxLength){
+                        function range(start, end){
+                          return Array.from(Array(end - start + 1), (_, i) => i + start);
+                        }
+                        var sideWidth = maxLength < 9 ? 1 : 2;
+                        var leftWidth = (maxLength - sideWidth * 2 - 3) >> 1;
+                        var rightWidth = (maxLength - sideWidth * 2 - 3) >> 1;
+                  
+                        if(totalPages <= maxLength){
+                          return range(1, totalPages);
+                        }
+                  
+                        if(page <= maxLength - sideWidth - 1 - rightWidth){
+                          return range(1, maxLength - sideWidth - 1).concat(0, range(totalPages - sideWidth + 1, totalPages));
+                        }
+                  
+                        if(page >= totalPages - sideWidth - 1 - rightWidth){
+                          return range(1, sideWidth).concat(0, range(totalPages - sideWidth - 1 - rightWidth - leftWidth, totalPages));
+                        }
+                  
+                        return range(1, sideWidth).concat(0, range(page - leftWidth, page + rightWidth), 0, range(totalPages - sideWidth + 1, totalPages));
+                      }
+
+                      $(document).ready(function(){
+                        $(function(){
+                        var numberOfItems = $("#main-row .abab").length;
+                        var limitPerPage = 10;
+                        var totalPages = Math.ceil(numberOfItems / limitPerPage)
+                        var paginationSize = 7;
+                        var currentPage;
+                  
+                        function showPage(whichPage){
+                          if(whichPage < 1 || whichPage > totalPages) return false;
+                  
+                          currentPage = whichPage;
+                  
+                          $("#main-row .abab").hide().removeClass("xxx").slice((currentPage - 1) *  limitPerPage, currentPage * limitPerPage).show().addClass("xxx");
+                          
+                          var numItems = $("#main-row .xxx").length
+
+                          $(".numRecord").text(numItems)
+                          $(".totalRecord").text(numberOfItems)
+                        
+                          $(".page-number li").slice(1, -1).remove();
+                  
+                          getPageList(totalPages, currentPage, paginationSize).forEach(item =>{
+                            $("<li>").addClass("page-item").addClass(item ? "current-page" : "dots").toggleClass("acti", item === currentPage).append($("<a>").addClass("page-link").attr({href: "javascript:void(0"}).text(item || "...")).insertBefore(".next-page");
+                          });
+                  
+                          $(".previous-page").toggleClass("disabled", currentPage === 1);
+                          $(".next-page").toggleClass("disabled", currentPage === totalPages)
+                          return true;
+                        }
+                        $(".page-number").append(
+                          $("<li>").addClass("page-item").addClass("previous-page").append($("<a>").addClass("page-link").attr({href: "javascript:void(0)"}).text("Prev")),
+                            $("<li>").addClass("page-item").addClass("next-page").append($("<a>").addClass("page-link").attr({href: "javascript:void(0)"}).text("Next"))
+                          );
+                  
+                          $("#main-row").show();
+                          showPage(1);
+                  
+                          $(document).on("click", ".page-number li.current-page:not(.acti)", function(){
+                            return showPage(+$(this).text());
+                          });
+                  
+                          $(".next-page").on("click", function(){
+                            return showPage(currentPage + 1);
+                          })
+                  
+                          $(".previous-page").on("click", function(){
+                            return showPage(currentPage - 1);
+                          })
+                  
+                      })
+
+                      })
+
+    $(document).ready(function (){
+        $('.orderlist-parent .abab').each(function(){
+            $(this).find("#view-order").click(function (){
+                var order_ID = $(this).find(".aaa").find(".order-ID").val()
+                window.location.href=`/my-account/view-order/${order_ID}`;
+            })
+        })
+    })
+</script>

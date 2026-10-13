@@ -1,0 +1,123 @@
+<%- include("./partials/header.html") %>
+<%- include("./partials/topnav.html") %>
+<%- include("./partials/sidebar.html") %>
+
+<div class="page">
+    <div class="page-header">
+        
+    </div>
+    <div class="page-content">
+        <div class="panel">
+            <div class="panel-heading" style="display: flex; justify-content: space-between;">
+                <h3 class="panel-title chat-header">Deals Of the Day</h3>
+                <div>
+                    <button class="btn btn-primary mt-20" style="margin-right: 20px;" data-toggle="modal" data-target="#product-add-deals" id="productRequests">
+                        <span class="hidden-sm-down">Add Product to Deals</span>
+                    </button>
+                </div>
+                
+                <!-- <div class="col-lg-12"><p id="typing">typing...</p></div> -->
+            </div>
+            <div class="panel-body">
+               
+                <table class="table table-hover dataTable table-striped w-full" id="products-list">
+                    <thead>
+                        <tr>
+                            <th><i class="fa fa-image"></i></th>
+                            <th>Name</th>
+                            <th>Brand</th>
+                            <th>Location</th>
+                            <th>Start</th>
+                            <th>End</th>
+                            <th>Action</th>
+                        </tr>
+                    </thead>
+                    <tbody></tbody>
+                </table>
+            <div>
+            </div>
+        </div>
+        </div>
+    </div>
+</div>
+
+<div class="modal fade" id="product-add-deals" aria-hidden="false" aria-labelledby="product-add-deals" role="dialog" tabindex="-1">
+    <div class="modal-dialog modal-lg">
+        <div class="modal-content">
+            <div class="modal-header" >
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">×</span>
+                </button>
+                <h4 class="modal-title" id="add-new-category">Add Product to Deals of The Day</h4>
+            </div>
+            <div class="modal-body">
+                <div class="row">
+                        <div class="col-6 form-group">
+                            <label class="form-control-label">Product Name</label>
+                            <select class="form-control product-btn" id="productselect" name="product" required>
+                                <option disabled selected value> -- select an option -- </option> 
+                                <% products.forEach((p)=>{ %>
+                                    <option value="<%= p.id %>"><%= p.name %></option>
+                                <% }) %>
+                                
+                            </select>
+                        </div>
+                    
+                </div>
+                <div class="row">
+                    <div class="form-group col-md-6">
+                        <label class="form-control-label">Start Date</label>
+                        <input type="date" class="form-control" id="start-date">
+                    </div>
+                    <div class="form-group col-md-6">
+                        <label class="form-control-label">End Date</label>
+                        <input type="date" class="form-control" id="end-date">
+                    </div>
+                </div>
+                <div class="row mt-10" style="justify-content: center;">
+                    <button class="btn btn-primary" id="addproductbtn">Add Product</button>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="modal fade" id="delete-product" aria-hidden="false" aria-labelledby="delete-product" role="dialog" tabindex="-1">
+    <div class="modal-dialog modal-simple">
+        <div class="modal-content" >
+           <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">×</span>
+                </button>
+                <h4 class="modal-title">Delete Product</h4>
+            </div>
+            <div class="modal-body">
+                <div class="row">
+                        
+                    <input type="hidden" name="product-id" id="product-id2"> 
+                    <div class="col-lg-12">
+                        <p>Do you really want to Delete the selected Product ?</p>
+                    
+                    </div>
+                    <div class="form-group col-xl-12">
+                        <button class="btn btn-primary btnSelect" id="delete-product-btn">Delete</button>
+                        <button class="btn btn-dark" data-dismiss="modal" aria-label="Close">Cancel</button>
+                    </div>
+                </div>                
+            </div>            
+        <!-- </form> -->
+
+    </div>
+
+        </div>
+
+</div>
+
+<%- include("./partials/footer.html") %>
+<script src="/global/js/Plugin/socket.io.js"></script>
+<script type="text/javascript">
+    DEALS.init({
+        _csrf: '<%= _csrf %>',
+        session: '<%- JSON.stringify(session) %>',
+    })
+</script>

@@ -1,0 +1,316 @@
+<%- include("./partials/header.html") %>
+<%- include("./partials/topnav.html") %>
+<%- include("./partials/sidebar.html") %>
+<div class="page add-product">
+    <div class="page-content">
+        <div class="row">
+            <div class="col-md-8">
+                <div class="panel panel-bordered">
+                    <div class="panel-heading">
+                        <h3 class="panel-title">Edit Product</h3>
+                        <div class="panel-actions">
+                            <a href="#" class="btn btn-dark btn-xs" data-toggle="modal" data-target="#image-library">Product Images <i class="fa fa-image"></i></a>
+                        </div>
+                    </div>
+                    <div class="panel-body">
+                        <div class="form-group">
+                            <input type="text" class="form-control required" id="product-name" name="product_name" placeholder="Product Name" value="<%= product.name %>" />
+                        </div>
+                        <div class="form-group">
+                            <textarea class="form-control" id="product-description" name="product_description" placeholder="Product Description" rows="10"><%= product.description %></textarea>
+                        </div>
+                        <% if(product.product_type == 1) { %>
+                        <div class="row" id="simple-settings-wrapper">
+                            <div class="form-group col-md-4">
+                                <label class="form-control-label">Regular Price</label>
+                                <input type="number" step="0.01" class="form-control required" id="product-regular-price" name="product_regular_price" value="<%= product.regular_price ? product.regular_price : '' %>" required />
+                            </div>
+                            <div class="form-group col-md-4">
+                                <label class="form-control-label">Discount Price</label>
+                                <input type="number" step="0.01" class="form-control required" id="product-discount-price" name="product_discount_price" value="<%= product.discount_price ? product.discount_price : '' %>" required />
+                            </div>
+                            <div class="form-group col-md-4">
+                                <label class="form-control-label">SKU</label>
+                                <input type="text" class="form-control required" id="product-sku" name="product_sku" value="<%= product.sku %>" required />
+                            </div>                            
+                        </div>
+                        <% } %>
+                    </div>                    
+                </div>
+                <% if(product.product_type == 2) { %>
+                <div class="panel panel-bordered" id="variation-settings-wrapper">
+                    <div class="panel-heading">
+                        <h3 class="panel-title">Variations</h3>                
+                    </div>
+                    <div class="panel-body">
+                        <% if(variations.length) { %>
+                        <table class="table table-striped" id="product-variations">
+                            <thead>
+                                <tr>
+                                    <th>Variation Name</th>
+                                    <th>SKU</th>
+                                    <th>Regular Price</th>
+                                    <th>Discount Price</th>
+                                    <th>Stock</th>
+                                </tr>
+                            </thead>    
+                            <tbody>
+                                <% variations.forEach((v) => { %>
+                                <tr>
+                                    <td><%= v.name %></td>
+                                    <td><%= v.sku %></td>
+                                    <td>Rs. <%= v.regular_price %></td>
+                                    <td>Rs. <%= v.discount_price %></td>
+                                    <td><%= v.inventory_count %> <a href="#" class="variation-inventory-log" data-variation-id="<%= v.id %>"><i class="fa fa-upload"></i></a></td>
+                                </tr>
+                                <% }) %>
+                            </tbody>
+                        </table>
+                        <% } %>
+                        <div class="row">
+                            <div class="form-group col-md-3">
+                                <label class="form-control-label">Name</label>
+                                <input type="text" class="form-control" id="variation-name" name="variation_name" required />
+                            </div>
+                            <div class="form-group col-md-3">
+                                <label class="form-control-label">SKU</label>
+                                <input type="text" class="form-control" id="variation-sku" name="variation_sku" required />
+                            </div>
+                            <div class="form-group col-md-3">
+                                <label class="form-control-label">Regular Price</label>
+                                <input type="number" step="0.01" class="form-control" id="variation-regular-price" name="variation_regular_price" required />
+                            </div>
+                            <div class="form-group col-md-3">
+                                <label class="form-control-label">Discount Price</label>
+                                <input type="number" step="0.01" class="form-control" id="variation-discount-price" name="variation_discount_price" required />
+                            </div>
+                            <div class="col-md-12 text-right">
+                                <button class="btn btn-dark btn-xs" id="add-variation">Add Variation</button>
+                            </div>
+                        </div>
+                    </div>                    
+                </div>
+                <% } %>
+                <% if(product.product_type == 1) { %>
+                <div class="panel panel-bordered" id="inventory-wrapper">
+                    <div class="panel-heading">
+                        <h3 class="panel-title">Inventory</h3>                
+                    </div>
+                    <div class="panel-body">
+                        <% if(inventoryLog.length) { %>
+                        <table class="table table-striped" id="product-inventory-log">
+                            <thead>
+                                <tr>
+                                    <th>Comment</th>
+                                    <th>Count</th>
+                                    <th>Date</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <% inventoryLog.forEach((i) => { %>
+                                <tr>
+                                    <td><%= i.comment %></td>
+                                    <td><%= i.inventory_count %></td>
+                                    <td><%= formatDate(i.created_date, 'Do MMM YYYY hh:mm A') %></td>
+                                </tr>
+                                <% }) %>                                
+                            </tbody>
+                        </table>
+                        <% } %>
+                        <div class="row">
+                            <div class="form-group col-md-6">
+                                <label class="form-control-label">Quantity</label>
+                                <input type="number" step="0.01" class="form-control" id="inventory-qty" name="inventory_qty" />
+                            </div>
+                            <div class="form-group col-md-6">
+                                <label class="form-control-label">Comment</label>
+                                <input type="text" class="form-control" id="inventory-comment" name="inventory_comment"></textarea>
+                            </div>
+                            <div class="col-md-12 text-right">
+                                <button class="btn btn-dark btn-xs" id="update-inventory">Update</button>
+                            </div>
+                        </div>                        
+                    </div>                    
+                </div>
+                <% } %>
+            </div>
+            <div class="col-md-4">
+                <div class="panel panel-bordered">
+                    <div class="panel-heading">
+                        <h3 class="panel-title">Settings</h3>
+                    </div>
+                    <div class="panel-body">
+                        <table class="table" id="product-settings">
+                            <tbody>
+                                <tr>
+                                    <th>Status</th>
+                                    <td>
+                                        <select class="form-control" id="product-status" name="product_status">
+                                            <% status.forEach((s) => { %>
+                                            <option value="<%= s.id %>" <%= product.status_id == s.id ? 'selected' : '' %>><%= s.status %></option>
+                                            <% }) %>
+                                        </select>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <th>Type</th>
+                                    <td>
+                                        <select class="form-control" id="product-type" name="product_type">
+                                            <% types.forEach((t) => { %>
+                                            <option value="<%= t.id %>" <%= product.product_type == t.id ? 'selected' : '' %>><%= t.name %></option>
+                                            <% }) %>
+                                        </select>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <th>Is Service</th>
+                                    <td>
+                                        No
+                                        <input type="checkbox" id="is-service" data-color="#eb6709" class="js-switch" name="is_service" <%= product.is_service ? 'checked' : '' %> />
+                                               Yes
+                                    </td>
+                                </tr>                                                                
+                                <tr>
+                                    <th>Date Created</th>
+                                    <td>
+                                        <%= formatDate(product.created_date, 'Do MMM YYYY hh:mm A') %>
+                                    </td>
+                                </tr>                                                                
+                                <tr>
+                                    <th>Last Updated</th>
+                                    <td>
+                                        <%= formatDate(product.updated_date, 'Do MMM YYYY hh:mm A') %>
+                                    </td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                    <div class="panel-footer">
+                        <div class="row">
+                            <div class="col-md-6 pt-5">
+                                <a href="#" class="text-danger" id="delete-product-btn" data-toggle="modal" data-target="#delete-product">Delete</a>
+                            </div>
+                            <div class="col-md-6 text-right">
+                                <button class="btn btn-primary" id="update-product-btn">Update</button>
+                            </div>
+                        </div>                        
+                    </div>
+                </div>
+                <div class="panel panel-bordered">
+                    <div class="panel-heading">
+                        <h3 class="panel-title">Categories</h3>
+                    </div>
+                    <div class="panel-body">
+                        <% categories.forEach((c) => { %>
+                        <div class="form-group m-0">
+                            <div class="radio-custom radio-primary m-0">                                
+                                <input type="radio" class="categories" id="cat-<%= c.id %>" name="categories" value="<%= c.id %>" />
+                                       <label for="cat-<%= c.id %>"><%= c.name %></label>
+                            </div>
+                        </div>
+                        <% }) %>
+                    </div>
+                </div>                                
+            </div>
+        </div>        
+    </div>
+</div>
+<div class="modal fade" id="image-library" aria-hidden="false" aria-labelledby="image-library" role="dialog" tabindex="-1">
+    <div class="modal-dialog modal-simple">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">×</span>
+                </button>
+                <h4 class="modal-title" id="add-new-team-product">Image Library</h4>
+            </div>
+            <div class="modal-body">
+                <div class="library-images-wrapper">
+                    <% images.forEach((i) => { %>
+                    <div class="single-image">
+                        <img src="<%= i.file_name %>" class="library-image" /><br>
+                        <input type="radio" name="set_featured" class="set-featured" data-image-id="<%= i.id %>" id="image-<%= i.id %>" <%= i.is_featured ? 'checked' : '' %> /> <label for="image-<%= i.id %>">Set Featured</label><br>
+                        <a href="#" class="text-danger delete-image" data-image-id="<%= i.id %>">Delete</a>
+                    </div>
+                    <% }) %>
+                </div>
+                <div class="form-group">
+                    
+                    <form action="/super-admin/shop/add/product-images?_csrf=<%= _csrf %>" method="post" id="product-images" enctype="multipart/form-data">
+                        <input name="file" type="file" id="featured-image-input" class="form-control" multiple />
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<div class="modal fade" id="variation-inventory-log-modal" aria-hidden="false" aria-labelledby="variation-inventory-log-modal" role="dialog" tabindex="-1">
+    <div class="modal-dialog modal-simple">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">×</span>
+                </button>
+                <h4 class="modal-title" id="add-new-team-product">Variation Inventory</h4>
+            </div>
+            <div class="modal-body">
+                <table class="table table-striped" id="variation-inventory-log">
+                    <thead>
+                        <tr>
+                            <th style="width: 33%">Comment</th>
+                            <th style="width: 33%">Count</th>
+                            <th style="width: 33%">Date</th>
+                        </tr>
+                    </thead>
+                    <tbody></tbody>
+                </table>
+                <div class="row">
+                    <div class="form-group col-md-6">
+                        <label class="form-control-label">Quantity</label>
+                        <input type="number" step="0.01" class="form-control" id="inventory-qty" name="inventory_qty" />
+                    </div>
+                    <div class="form-group col-md-6">
+                        <label class="form-control-label">Comment</label>
+                        <input type="text" class="form-control" id="inventory-comment" name="inventory_comment"></textarea>
+                    </div>
+                    <div class="col-md-12 text-right">
+                        <button class="btn btn-dark btn-xs" id="update-variation-inventory" data-variation-id="">Update</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<div class="modal fade" id="delete-product" aria-hidden="false" aria-labelledby="delete-product" role="dialog" tabindex="-1">
+    <div class="modal-dialog modal-simple">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">×</span>
+                </button>
+                <h4 class="modal-title" id="add-new-team-product">Delete Product</h4>
+            </div>
+            <div class="modal-body">
+                <div class="col-lg-12">
+                    <!-- <form action="/api/v1/productlist/delete-products" method="post"> -->
+                    <form action="/app/asset-management/delete" method="post">
+                        <p>Do you want to Delete the Product Permanantly ?</p>
+                        <div class="col-md-12 text-right">
+                            <%- csrf_html %>
+                            <input type="hidden" name="product_id" id="product-id" value="<%= product.id %>">
+                            <button type="submit" class="btn btn-primary" id="">Yes, Delete</button>
+                            <button class="btn btn-secondary " data-dismiss="modal" id="">Cancel</button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<%- include("./partials/footer.html") %>
+<script type="text/javascript">
+    SINGLE_PRODUCT.init({
+        _csrf: '<%= _csrf %>',
+        product: '<%- JSON.stringify(product) %>'
+    })
+</script>

@@ -1,0 +1,899 @@
+<%- include('../partials/header.html') %>
+<style>
+.address-box{
+    box-sizing: border-box;
+}
+.address-form{
+    background-color: #fff;
+}
+.address-form span{
+    color: #2874f0;
+    font-weight: 600;
+    font-size: 14px;
+}
+.address-form button{
+    background: #2874f0;
+    color: #fff;
+    box-shadow: 0 2px 4px 0 rgba(0,0,0,.2);
+    border: none;
+}
+.address-form button{
+    padding: 0px 20px;
+}
+.address-form i{
+    font-size: 25px;
+}
+.address-form p{
+    padding-top: 15px;
+}
+.address-form input{
+    margin: 7px 2px;
+    padding: 7px 10px;
+}
+.address-form select{
+    padding: 6px;
+    margin: 7px 2px;
+}
+.address-form-wrapper span{
+    display: block;
+    padding: 5px 0px;
+}
+.address-box{
+    padding: 15px 0px;
+}
+.manage-address{
+    background-color: #fff;
+}
+.address-form button i{
+    padding-top: 8px;
+}
+#p{
+    padding-left: 20px;
+}
+.card-body{
+    padding: 0px 50px;
+}
+.dots{
+    font-size: 22px;
+}
+.editadd-div{
+    position: absolute;
+    left: 90%;
+    top: 25px;
+}
+#delete-add,#edit-add{
+    cursor: pointer;
+}
+#manageadd{
+    font-weight: bold;
+    color: black;
+    background-color: #ccc;
+}
+.insidemanage{
+    border: 1px solid #ccc;
+}
+.m{
+    margin-left: 66px;
+    margin-right: 66px;
+}
+.p{
+    font-size: 18px;
+}
+.page-number{
+      text-align: center;
+      user-select: none;
+    }
+    .page-number li {
+      display: inline-block;
+      margin: 5px;
+    }
+    .page-number li a{
+      text-decoration: none;
+      font-size: 15px;
+      line-height: 25px;
+    }
+    .page-number li:not(.acti) a{
+        color: black;
+    }
+    .previous-page, .next-page{
+      background-color: rgb(11, 175, 240);
+      cursor: pointer;
+    }
+    .pagination{
+      text-align: center;
+      margin: 30px 30px 60px;
+      user-select: none;
+    }
+    .pagination li {
+      display: inline-block;
+      margin: 5px;
+    }
+    .pagination li a{
+      text-decoration: none;
+      font-size: 15px;
+      line-height: 25px;
+    }
+    .acti a{
+        background-color: rgb(161, 159, 159);
+        color: black;
+    }
+    .pagination li:not(.acti) a{
+        color: black;
+    }
+    .current-page, .dots{
+      background: #ccc;
+      cursor: pointer;
+    }
+</style>
+
+<section class="">
+    <div class="container">
+        <div class="bg-white">
+            <h2 class="ps-3 pt-2">My Account</h2>
+            <hr>
+            <div class="row">
+                <%- include('../partials/my-account-menu.html') %>
+                <main class="col-md-9">
+                    <div class="insidemanage me-2">
+                        <div class="row">
+                            <div class="col">
+                                <section class="manage-address">
+                                    <div>
+                                        <h5 class="pt-3 ps-3 pb-2">MANAGE ADDRESS</h5>
+                                        <hr>
+                                        <div class="d-flex address-box text-dark">
+                                            <button class="ms-3 border-0"><h6 class="py-2 text-dark" data-toggle="modal" data-target="#add-shipping-address"> <i class="bi bi-plus-lg ps-1 text-dark"></i>ADD NEW ADDRESS</h6></button>
+                                        </div>
+                                    </div>
+                                </section>
+                                <div class="modal fade" id="add-shipping-address" tabindex="-1" role="dialog" aria-labelledby="add-shipping-address" aria-hidden="true">
+                                    <div class="modal-dialog" role="document">
+                                        <div class="modal-content">
+                                            <div class="modal-header">
+                                                <h5 class="modal-title twenty">Add Address</h5>
+                                                <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                                            </div>
+                                            <div class="modal-body p-0">
+                                                <div class="row px-3">
+                                                    <div class="pt-2 form-group col-md-12">
+                                                        <label>Address Label</label><span style="color: red; padding-left: 10px;">*</span>
+                                                        <input type="text" id="label1" name="label" class="form-control" placeholder="Eg.Home, Office" required />
+                                                        <input type="hidden" name="lat" id="modal-lat1">
+                                                        <input type="hidden" name="long" id="modal-long1">
+                                                    </div>                        
+                                                </div>
+                                                <div class="row px-3">
+                                                    <div class="form-group col-md-6">
+                                                        <label>Name</label><span style="color: red; padding-left: 10px;">*</span>
+                                                        <input type="text" id="name" name="name" class="form-control" required />
+                                                    </div>
+                                                    <div class="form-group col-md-6">
+                                                        <label>Phone Number</label><span style="color: red; padding-left: 10px;">*</span>
+                                                        <input type="number" maxlength="10" id="phone" name="phone" class="form-control" required />
+                                                    </div>
+                                                </div>
+                                                <div class="row px-3">
+                                                    <div class="form-group col-md-6">
+                                                        <label>Address Line 1</label><span style="color: red; padding-left: 10px;">*</span>
+                                                        <input type="text" id="address_line_1" name="address_line_1" class="form-control" required />
+                                                    </div>
+                                                    <div class="form-group col-md-6">
+                                                        <label>Address Line 2</label>
+                                                        <input type="text" id="address_line_2" name="address_line_2" class="form-control">
+                                                    </div>
+                                                </div>                
+                                                <div class="row px-3">
+                                                    <div class="form-group col-md-4">
+                                                        <label>State</label><span style="color: red; padding-left: 10px;">*</span>
+                                                        <select class="form-control" name="state_id" id="shipping-state" required>
+                                                            <option value="" id="b" selected disabled>Select State</option>
+                                                            <% states.forEach((s) => { %>
+                                                            <option id="sid" value="<%= s.id %>"><%= s.name %></option>
+                                                            <% }) %>
+                                                        </select>
+                                                    </div>
+                                                    <div class="form-group col-md-4">
+                                                        <label>City</label><span style="color: red; padding-left: 10px;">*</span>
+                                                        <select class="form-control" id="shipping-city" required>
+                                                            <option>Select City</option>  
+                                                        </select>
+                                                    </div>
+                                                    <div class="form-group col-md-4">
+                                                        <label>Zip</label>
+                                                        <input type="number" name="zip" maxlength="6" id="zip" class="form-control">
+                                                        <div class="invalid-feedback"></div>
+                                                    </div>
+                                                </div>    
+                                                <div class="row ps-3 text-primary text-center">
+                                                    <a class="eighteen text-primary l" style="cursor: pointer;" onclick="getlocation1()"><i class="text-primary bi bi-geo-alt-fill"></i>Use my current location</a>
+                                                </div>  
+                                                <div id="map" style="height:450px; width:450px; display: none;"></div>
+                                                <hr>          
+                                            </div>
+                                    
+                                            <div class="text-center mb-4">
+                                                <input id="saveadd" type="submit" onclick="getlocation1()" class="btn btn-primary btn-md" value="Save Address" >
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>  
+                        </div> 
+
+                        <div class="row" id="addressList">
+                        <% shippingAddresses.forEach((a) => { %>
+                            <div class="col-md-12 mb-3" id="addressListRow">
+                                <article class="card mx-3">
+                                    <div class="d-flex px-3 sixteen justify-content-between ">
+                                        <input type="hidden" class="order-id" value="<%= a.id %>">
+                                        <h3 class="pt-3 p"><%= a.label %></h3> 
+                                        <div class="mt-3 button-group" ><button class="border-0 edit-modal" id="edit-modal" data-toggle="modal" data-target="#edit-shipping-address">Edit</button>
+                                        <button class="border-0 delete-modal" id="delete-modal" data-toggle="modal" data-target="#delete-shipping-address">Delete</button></div>
+                                    </div>  
+                                    <hr>
+                                    <div class="px-3 sixteen">
+                                        <div class=""><h6><%= a.name %> <span id="p"><%= a.phone %></span></h6></div><br>
+                                        <%= a.address_line_1 %> <br>
+                                        <%= a.address_line_2 %> <br>
+                                        <%= a.city_name %>, <%= a.state_name %> - <%= a.zip %> <br>
+                                        INDIA
+                                    </div>
+                                </article>
+                            </div>
+                        <% }) %>  
+                        
+                        <div class="fl" style="padding-top: 10px; display: flex; justify-content: space-between;">
+                            <div style="padding-left: 30px; margin-top: 15px;" class="append-para">
+                                <p>Showing <span class="numRecord"></span> Records of <span class="totalRecord"></span></p>
+                            </div>
+                            <div class="page-number" style="margin-right: 20px;"></div>
+                        </div>
+
+                        </div>
+                    </div>
+                </main> 
+            </div>
+        </div>
+   </div> 
+</section>
+
+<div class="modal fade" id="edit-shipping-address" tabindex="-1" role="dialog" aria-labelledby="edit-shipping-address" aria-hidden="true">
+    <div class="modal-dialog"  role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <input type="hidden" class="hidden-id">
+                <h5 class="modal-title twenty">Edit Address</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+            </div>
+            <div class="modal-body p-0">
+                <div class="row px-3">
+                    <div class="pt-2 form-group col-md-12">
+                        <label>Address Label</label>
+                        <input type="text" id="edit-label1" name="label" class="form-control" placeholder="Eg.Home, Office" required />
+                        <input type="text" name="lat" id="modal-lat2">
+                        <input type="text" name="long" id="modal-long2">
+                    </div>                        
+                </div>
+                <div class="row px-3">
+                    <div class="form-group col-md-6">
+                        <label>Name</label>
+                        <input type="text" id="edit-name" name="name" class="form-control" required />
+                    </div>
+                    <div class="form-group col-md-6">
+                        <label>Phone Number</label>
+                        <input type="number" maxlength="10" id="edit-phone" name="phone" class="form-control" required />
+                    </div>
+                </div>
+                <div class="row px-3">
+                    <div class="form-group col-md-6">
+                        <label>Address Line 1</label>
+                        <input type="text" id="edit-address_line_1" name="address_line_1" class="form-control" required />
+                    </div>
+                    <div class="form-group col-md-6">
+                        <label>Address Line 2</label>
+                        <input type="text" id="edit-address_line_2" name="address_line_2" class="form-control">
+                    </div>
+                </div>                
+                <div class="row px-3">
+                    <div class="form-group col-md-4">
+                        <label>State</label>
+                        <select class="form-control" name="state_id" id="edit-shipping-state" required>
+                            <% states.forEach((s) => { %>
+                            <option id="edit-sid" value="<%= s.id %>"><%= s.name %></option>
+                            <% }) %>
+                        </select>
+                    </div>
+                    <div class="form-group col-md-4">
+                        <label>City</label>
+                        <select class="form-control" id="edit-shipping-city" >
+                            <option>Select City</option>  
+                        </select>
+                    </div>
+                    <div class="form-group col-md-4">
+                        <label>Zip</label>
+                        <input type="number" name="zip" maxlength="6" id="edit-zip" class="form-control">
+                        <div class="invalid-feedback"></div>
+                    </div>
+                </div>    
+                <div class="row ps-3 text-primary text-center">
+                    <a class="eighteen text-primary l" style="cursor: pointer;" onclick="getlocation2()"><i class="text-primary bi bi-geo-alt-fill"></i>Use my current location</a>
+                </div>  
+                <div id="map2" style="height:450px; width:450px; display: none;"></div>
+                <hr>          
+            </div>
+            <div class="text-center mb-4">
+                <input id="edit-saveadd" type="submit" class="btn btn-primary btn-md" value="Save Address" >
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="modal fade" id="delete-shipping-address" tabindex="-1" role="dialog" aria-labelledby="delete-shipping-address" aria-hidden="true">
+    <div class="modal-dialog"  role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <input type="hidden" class="hidden-id">
+                <h5 class="modal-title twenty">Delete Address</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+            </div>
+            <div class="modal-body p-0">
+                <div class="row px-3 mt-4">
+                    <p>Can you delete this shipping address</p>                     
+                </div>
+            </div>
+            <div class="text-center mb-4">
+                <input id="delete-shipping" type="submit" style="margin-top: 20px" class="btn btn-primary btn-md" value="Delete Address" >
+                <button type="button" class="btn btn-secondary" style="margin-top: 20px" data-dismiss="modal">Cancel</button>
+            </div>
+        </div>
+    </div>
+</div>
+ 
+<%- include('../partials/footer.html') %>
+<script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyDQEmUoo4733HGxaZy6ylbiGHC4WzgHodQ"></script>
+<script type="text/javascript">
+    
+    const mapArea = document.getElementById('map');
+    const mapArea2 = document.getElementById('map2');
+
+    let Gmap;
+    let Gmap1;
+    let Gmarker;
+    let Gmarker1;
+    const __KEY = 'AIzaSyDQEmUoo4733HGxaZy6ylbiGHC4WzgHodQ';
+
+    function getlocation1(){
+        const options = {
+            enableHighAccuracy: true
+        }
+    navigator.geolocation.getCurrentPosition(successfulLookup, console.log, options)  
+    }
+
+    function getlocation2(){
+        const options = {
+            enableHighAccuracy: true
+        }
+    navigator.geolocation.getCurrentPosition(successfulLookup1, console.log, options)  
+    }
+
+    successfulLookup = (position) => {
+        const lat = parseFloat(position.coords.latitude);
+        const lng = parseFloat(position.coords.longitude);
+        const latlong = {lat,lng};
+        showOnMap(latlong, lat, lng);
+        markerOnMap(lat,lng);
+        mapArea.style.display = "block";
+
+        getGeolocation(lat,lng);
+    }
+
+    successfulLookup1 = (position) => {
+        const lat = parseFloat(position.coords.latitude);
+        const lng = parseFloat(position.coords.longitude);
+        const latlong = {lat,lng};
+        showOnMap1(latlong, lat, lng);
+        markerOnMap1(lat,lng);
+        mapArea2.style.display = "block";
+        getGeolocation(lat,lng);
+    }
+
+    showOnMap=(latlong,lat,lng)=>{
+        let mapOptions = {
+            center: latlong,
+            zoom: 17
+        }
+        Gmap = new google.maps.Map(mapArea, mapOptions);
+
+        Gmap.addListener('drag', function () {
+            Gmarker.setPosition(this.getCenter()); // set marker position to map center
+        });
+       
+        Gmap.addListener('dragend', function () {
+            Gmarker.setPosition(this.getCenter()); // set marker position to map center
+        });
+       
+        Gmap.addListener('idle', function () {
+            Gmarker.setPosition(this.getCenter()); // set marker position to map center
+            if (Gmarker.getPosition().lat() !== lat || Gmarker.getPosition().lng() !== lng) {
+                setTimeout(() => {
+                    updatePosition(this.getCenter().lat(), this.getCenter().lng()); // update position display
+                }, 2000);
+            }
+        });
+       
+    }
+
+    showOnMap1=(latlong,lat,lng)=>{
+        let mapOptions = {
+            center: latlong,
+            zoom: 17
+        }
+        Gmap1= new google.maps.Map(mapArea2, mapOptions);
+
+       
+        Gmap1.addListener('drag', function () {
+            Gmarker1.setPosition(this.getCenter()); // set marker position to map center
+        });
+       
+        Gmap1.addListener('dragend', function () {
+            Gmarker1.setPosition(this.getCenter()); // set marker position to map center
+        });
+       
+        Gmap1.addListener('idle', function () {
+            Gmarker1.setPosition(this.getCenter()); // set marker position to map center
+            if (Gmarker1.getPosition().lat() !== lat || Gmarker1.getPosition().lng() !== lng) {
+                setTimeout(() => {
+                    updatePosition1(this.getCenter().lat(), this.getCenter().lng()); // update position display
+                }, 2000);
+            }
+        });
+    }
+
+    function markerOnMap(lat,lng){
+        $("#modal-lat1").val(lat)
+        $("#modal-long1").val(lng)
+        let markerOptions = {
+            position: {lat : parseFloat(lat), lng:parseFloat(lng)},
+            map: Gmap,
+            animation: google.maps.Animation.BOUNCE,
+            clickable: true
+        };
+        Gmarker = new google.maps.Marker(markerOptions);
+    }
+
+    
+    function markerOnMap1(lat,lng){
+        $("#modal-lat2").val(lat)
+        $("#modal-long2").val(lng)
+        let markerOptions = {
+            position: {lat : parseFloat(lat), lng:parseFloat(lng)},
+            map: Gmap1,
+            animation: google.maps.Animation.BOUNCE,
+            clickable: true
+        };
+        Gmarker1 = new google.maps.Marker(markerOptions);
+    }
+
+    getGeolocation = (lat, lng) => {
+        $("#address_line_1").attr('value','');
+        $("#address_line_2").attr('value','');
+        $("#sid").attr('value','');
+        $("#shipping-city").attr('value','');
+        $("#zip").attr('value','');
+        $("#modal-lat1").val(lat)
+        $("#modal-long1").val(lng)
+        fetch(`https://maps.googleapis.com/maps/api/geocode/json?latlng=${lat}+${lng}&key=${__KEY}`)
+        .then(res => res.json())
+        .then(data => getAddress(data.results))
+    }
+
+    getGeolocation1 = (lat, lng) => {
+        $("#edit-address_line_1").attr('value','');
+        $("#edit-address_line_2").attr('value','');
+        $("#edit-sid").attr('value','');
+        $("#edit-shipping-city").attr('value','');
+        $("#edit-zip").attr('value','');
+        $("#modal-lat2").val(lat)
+        $("#modal-long2").val(lng)
+        fetch(`https://maps.googleapis.com/maps/api/geocode/json?latlng=${lat}+${lng}&key=${__KEY}`)
+        .then(res => res.json())
+        .then(data => getAddress1(data.results))
+    }
+
+    updatePosition = (lat, lng) => {
+    getGeolocation(lat, lng);
+    }
+    
+    updatePosition1 = (lat, lng) => {
+    getGeolocation1(lat, lng);
+    }
+
+    getAddress = (resultData) => {
+        resultData = resultData[0]
+        resultData.address_components.map(component => {
+            const types = component.types
+        
+            if (types.includes('premise')) {
+                $("#address_line_1").attr('value',component.long_name);
+            }
+            if(types.includes('sublocality_level_3')) {
+                var input = $("#address_line_1").val()
+                if (!input){
+                    $("#address_line_1").attr('value', component.long_name);
+                }else{
+                    $("#address_line_1").attr('value', input + ', ' + component.long_name);
+                }
+            }
+            if(types.includes('sublocality_level_2')) {
+                var input = $("#address_line_1").val()
+                if (!input){
+                    $("#address_line_1").attr('value', component.long_name);
+                }else{
+                    $("#address_line_1").attr('value', input + ', ' + component.long_name);
+                }
+            }
+            if(types.includes('sublocality_level_1')) {
+                $("#address_line_2").attr('value', component.long_name);
+            }
+            if (types.includes('administrative_area_level_1')) {
+                $("#sid").attr('value',component.long_name);
+            }
+            if (types.includes('administrative_area_level_2')) {
+                $("#shipping-city").attr('value',component.long_name);
+            }
+            if (types.includes('postal_code')) {
+                $("#zip").attr('value',component.long_name);
+            }
+        })
+    }
+     
+    getAddress1 = (resultData) => {
+        resultData = resultData[0]
+        resultData.address_components.map(component => {
+            const types = component.types
+        
+            if (types.includes('premise')) {
+                $("#edit-address_line_1").attr('value',component.long_name);
+            }
+            if(types.includes('sublocality_level_3')) {
+                var input = $("#edit-address_line_1").val()
+                if (!input){
+                    $("#edit-address_line_1").attr('value', component.long_name);
+                }else{
+                    $("#edit-address_line_1").attr('value', input + ', ' + component.long_name);
+                }
+            }
+            if(types.includes('sublocality_level_2')) {
+                var input = $("#edit-address_line_1").val()
+                if (!input){
+                    $("#edit-address_line_1").attr('value', component.long_name);
+                }else{
+                    $("#edit-address_line_1").attr('value', input + ', ' + component.long_name);
+                }
+            }
+            if(types.includes('sublocality_level_1')) {
+                $("#edit-address_line_2").attr('value', component.long_name);
+            }
+            if (types.includes('administrative_area_level_1')) {
+                $("#edit-sid").attr('value',component.long_name);
+            }
+            if (types.includes('administrative_area_level_2')) {
+                $("#edit-shipping-city").attr('value',component.long_name);
+            }
+            if (types.includes('postal_code')) {
+                $("#edit-zip").attr('value',component.long_name);
+            }
+        })
+    }
+     
+    function getPageList(totalPages, page, maxLength){
+        function range(start, end){
+            return Array.from(Array(end - start + 1), (_, i) => i + start);
+        }
+        var sideWidth = maxLength < 9 ? 1 : 2;
+        var leftWidth = (maxLength - sideWidth * 2 - 3) >> 1;
+        var rightWidth = (maxLength - sideWidth * 2 - 3) >> 1;
+                  
+        if(totalPages <= maxLength){
+            return range(1, totalPages);
+        }
+        if(page <= maxLength - sideWidth - 1 - rightWidth){
+            return range(1, maxLength - sideWidth - 1).concat(0, range(totalPages - sideWidth + 1, totalPages));
+        }
+        if(page >= totalPages - sideWidth - 1 - rightWidth){
+            return range(1, sideWidth).concat(0, range(totalPages - sideWidth - 1 - rightWidth - leftWidth, totalPages));
+        }
+            return range(1, sideWidth).concat(0, range(page - leftWidth, page + rightWidth), 0, range(totalPages - sideWidth + 1, totalPages));
+        }
+
+        $(document).ready(function(){
+            
+            $(function(){
+                var numberOfItems = $("#addressList #addressListRow").length;
+                var limitPerPage = 10;
+                var totalPages = Math.ceil(numberOfItems / limitPerPage)
+                var paginationSize = 7;
+                var currentPage;
+                  
+                function showPage(whichPage){
+                    if(whichPage < 1 || whichPage > totalPages) return false;
+                    currentPage = whichPage;
+                  
+                    $("#addressList #addressListRow").hide().removeClass("xxx").slice((currentPage - 1) *  limitPerPage, currentPage * limitPerPage).show().addClass("xxx");
+                    var numItems = $("#addressList .xxx").length
+                    $(".numRecord").text(numItems)
+                    $(".totalRecord").text(numberOfItems)
+                    $(".page-number li").slice(1, -1).remove();
+                  
+                    getPageList(totalPages, currentPage, paginationSize).forEach(item =>{
+                        $("<li>").addClass("page-item").addClass(item ? "current-page" : "dots").toggleClass("acti", item === currentPage).append($("<a>").addClass("page-link").attr({href: "javascript:void(0"}).text(item || "...")).insertBefore(".next-page");
+                    });
+                  
+                    $(".previous-page").toggleClass("disabled", currentPage === 1);
+                    $(".next-page").toggleClass("disabled", currentPage === totalPages)
+                          return true;
+                }
+                    $(".page-number").append(
+                        $("<li>").addClass("page-item").addClass("previous-page").append($("<a>").addClass("page-link").attr({href: "javascript:void(0)"}).text("Prev")),
+                        $("<li>").addClass("page-item").addClass("next-page").append($("<a>").addClass("page-link").attr({href: "javascript:void(0)"}).text("Next"))
+                    );
+                  
+                    $("#addressList").show();
+                        showPage(1);
+                  
+                    $(document).on("click", ".page-number li.current-page:not(.acti)", function(){
+                        return showPage(+$(this).text());
+                    });
+                  
+                    $(".next-page").on("click", function(){
+                        return showPage(currentPage + 1);
+                    })
+                    $(".previous-page").on("click", function(){
+                        return showPage(currentPage - 1);
+                    })
+            })
+        })
+
+
+    $(document).ready(function () {
+        $('#shipping-state').on('change', function () {
+            $.ajax({
+                url: '/get-cities',
+                method: 'POST',
+                data: {
+                    _csrf: '<%= _csrf %>',
+                    stateId: $('#shipping-state').val()
+                    },
+                success: function (data) {
+                    console.log(data)
+                    if (data.success) {
+                        if(data.success && data.cities.length > 0 ){
+                            $('#shipping-city').empty().append('<option value="">Select City</option>');
+                            data.cities.forEach((c) => {
+                                $('#shipping-city').append(`<option value="${c.id}">${c.name}</option>`);
+                            })
+                        }
+                    }
+                }
+            })
+        })
+
+        $("#saveadd").on('click',function(e){
+            e.preventDefault();
+            var label=$("#label1").val();
+            var name=$("#name").val();
+            var phone =$("#phone").val();
+            var addressLine1=$("#address_line_1").val();
+            var addressLine2=$("#address_line_2").val();
+            var stateId=$("#sid").val();
+            var cityId=$("#shipping-city").val();
+            var zip=$("#zip").val();
+            var lat = $("#modal-lat1").val()
+            var long = $("#modal-long1").val()
+
+            if(!label){
+                toastr.error('Please Enter label')
+                return
+            }
+            if(!name){
+                toastr.error('Please Enter Name')
+                return
+            }
+            if(!phone){
+                toastr.error('Please Enter phone')
+                return
+            }
+            if(!addressLine1){
+                toastr.error('Please Enter address line 1')
+                return
+            }
+            if(!stateId){
+                toastr.error('Please Select State')
+                return
+            }
+            if(!cityId){
+                toastr.error('Please Select City')
+                return
+            }
+             
+            $.ajax({
+                url :"/my-account/add-new-address",
+                method: 'POST',					
+                data:{
+                    label:label,
+                    name:name,
+                    phone:phone,
+                    addressLine1:addressLine1,
+                    addressLine2:addressLine2,
+                    stateId:stateId,
+                    cityId:cityId,
+                    zip:zip,
+                    lat:lat,
+                    long:long,
+                    _csrf: '<%= _csrf %>'},	
+                success:function(data) {
+                    if(data.success){
+                        window.location.reload();
+
+                    }else{
+                        toastr.error("Some error occur")
+                    }
+                },
+                
+            });			
+        });	
+
+        $(".button-group").find(".edit-modal").click(function (){
+            var order_Id =  $(this).parent().parent().find(".order-id").val()
+     
+            $.ajax({
+                url :"/my-account/get-address-details",
+                method: "POST",
+                data:{
+                    _csrf: '<%= _csrf %>',	
+                    order_Id
+                },
+                success: function(data){
+                    if(data.success){
+                        var d = data.data
+                        $('.hidden-id').val(d[0].id)
+                        $("#edit-label1").val(d[0].label);
+                        $("#edit-name").val(d[0].name)
+                        $("#edit-phone").val(d[0].phone)
+                        $("#edit-address_line_1").val(d[0].address_line_1)
+                        $("#edit-address_line_2").val(d[0].address_line_2)
+                        $("#edit-shipping-state option:selected").text(d[0].state)
+                        $("#edit-shipping-state option:first-child").val(d[0].state_id)
+                        $("#edit-shipping-city option:selected").text(d[0].city)
+                        $("#edit-shipping-city option:first-child").val(d[0].city_id)
+                        $("#edit-zip").val(d[0].zip)
+                    }else{
+                        alert("something went wrong")
+                    }
+                }
+            })
+        })
+
+        $('#edit-shipping-state').on('change', function () {
+            $.ajax({
+                url: '/get-cities',
+                method: 'POST',
+                data: {
+                    _csrf: '<%= _csrf %>',
+                    stateId: $('#edit-shipping-state').val()
+                },
+                success: function (data) {
+                    if (data.success) {
+                        if(data.success && data.cities.length > 0 ){
+                            $('#edit-shipping-city').empty().append('<option value="">Select City</option>');
+                            data.cities.forEach((c) => {
+                                $('#edit-shipping-city').append(`<option value="${c.id}">${c.name}</option>`);
+                            })
+                        }
+                    }
+                }
+            })
+        })
+
+        $("#edit-saveadd").on('click', function(){
+            var shipping_Id = $('.hidden-id').val()
+            var label = $("#edit-label1").val();
+            var name = $("#edit-name").val()
+            var phone = $("#edit-phone").val()
+            var addressLine1 = $("#edit-address_line_1").val()
+            var addressLine2 = $("#edit-address_line_2").val()
+            var state = $("#edit-shipping-state option:selected").val()
+            var city = $("#edit-shipping-city option:selected").val()
+            var zip = $("#edit-zip").val()
+            var lat = $("#modal-lat2").val()
+            var lng = $("#modal-long2").val()
+            
+            $.ajax({
+                url :"/my-account/update-address-details",
+                method: "POST",
+                data:{
+                    _csrf: '<%= _csrf %>',	
+                    shipping_Id, label, name, phone, addressLine1, addressLine2, state, city, zip, lat, lng
+                },
+                success: function(data){
+                    if(data.success){
+                        window.location='/my-account/shipping-address'
+                    }else{
+                        alert("something went wrong")
+                    }
+                }
+            })
+        })
+        
+        $(".button-group").find("#delete-modal").click(function () {
+            var shipping_Id =  $(this).parent().parent().find(".order-id").val()
+          
+            $("#delete-shipping").click(function (){
+                $.ajax({
+                    url :"/my-account/delete-address-details",
+                    method: "POST",
+                    data:{
+                        _csrf: '<%= _csrf %>',	
+                        shipping_Id
+                    },
+                    success: function(data){
+                        if(data.success){
+                            window.location='/my-account/shipping-address'
+                        }else{
+                            alert("something went wrong")
+                        }
+                    }
+                })
+            })
+        })
+
+    })
+
+    $(document).ready(function(){
+        $('.address-form').hide();
+        $(".address-box").click(function(){
+        $('.address-form').toggle();
+        });
+    });
+
+    function abc() {
+        var regAddress = /^[a-zA-Z0-9\s,.'-]{3,}$/;
+        var name1 = document.getElementById('address_line_1').value;
+        if(!regAddress.test(name1)){
+           alert('Please enter your address correctly');
+            document.getElementById('address_line_1').focus();
+            return false;
+        }else{
+            return true;
+        }
+
+        var regAddress1 = /^[a-zA-Z0-9\s,.'-]{3,}$/;
+        var name2 = documnet.getElementById('address_line_2').value;
+        if(!regAddress1.text(name2)){
+            alert("fill the address fields ")
+            document.getElementById('addres_line_2').focus();
+            return false;
+        } else {
+            return true;
+        }
+        
+        var regName = /^[a-zA-Z]+$/;
+        var name = document.getElementById('name').value;
+        if(!regName.test(name)){
+           alert('Please enter your name');
+            document.getElementById('name').focus();
+            return false;
+        }else{
+           alert('Name is Valid');
+            return true;
+        }
+
+        var phone = document.getElementById('phone').value;
+        $element = $(this);
+        if ($element.val().length !== 10) {
+            $element.removeClass('is-valid').addClass('is-invalid').next('.invalid-feedback').text('Please enter a valid 10 digit phone number')
+            $('#saveadd').attr('disabled', true);
+            return
+        }
+    }
+</script>

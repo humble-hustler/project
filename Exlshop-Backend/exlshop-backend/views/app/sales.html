@@ -1,0 +1,29 @@
+<%- include("./partials/header.html") %>
+<%- include("./partials/topnav.html") %>
+<%- include("./partials/sidebar.html") %>
+<div class="page" id="sales-cart-wrapper"></div>
+
+
+<%- include("./partials/footer.html") %>
+<script type="text/javascript">
+    function refreshCartBlock() {
+        $('#cart-loader').show();
+        $.ajax({
+            url: '/app/sales/refresh-cart',
+            method: 'POST',
+            data: {
+                _csrf: '<%= _csrf %>',
+                clear: true
+            },
+            success: function (data) {
+                if (data.success === false) {
+                    alert('Some error occurred')
+                } else {
+                    $('#cart-loader').hide();
+                    $('#sales-cart-wrapper').empty().append(data)
+                }
+            }
+        });
+    }
+    refreshCartBlock()
+</script>

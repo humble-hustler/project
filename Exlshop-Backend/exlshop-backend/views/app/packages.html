@@ -1,0 +1,108 @@
+<%- include("./partials/header.html") %>
+<%- include("./partials/topnav.html") %>
+<%- include("./partials/sidebar.html") %>
+<div class="page">
+    <div class="page-header">
+        <h1 class="page-title">Packages</h1>
+        <div class="page-header-actions">
+            <button class="btn btn-round btn-primary" data-target="#add-new-package" data-toggle="modal">
+                <i class="icon fa-plus" aria-hidden="true"></i>
+                <span class="hidden-sm-down">Add New Package</span>
+            </button>
+        </div>
+    </div>
+    <div class="page-content">
+        <% if(messages.success) { %>
+        <div class="alert alert-success"><strong>Success!</strong> <%= messages.success %></div>
+        <% } %>
+        <% if(messages.error) { %>
+        <div class="alert alert-danger"><strong>Error!</strong> <%= messages.error %></div>
+        <% } %>
+        <div class="panel">            
+            <div class="panel-body">
+                <table class="table table-hover dataTable table-striped w-full" id="packages-list">
+                    <thead>
+                        <tr>
+                            <th>Name</th>
+                            <th>Validity (# of Days)</th>
+                            <th>Price</th>
+                            <th>Personal Trainer</th>
+                            <th>Tax Included</th>
+                            <th>Status</th>
+                            <th>Action</th>
+                        </tr>
+                    </thead>                    
+                    <tbody></tbody>
+                </table>
+            </div>
+        </div>       
+    </div>
+</div>
+<div class="modal fade" id="add-new-package" aria-hidden="false" aria-labelledby="add-new-package" role="dialog" tabindex="-1">
+    <div class="modal-dialog modal-simple">
+        <form class="modal-content" action="/app/packages/add" method="POST" autocomplete="off">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">×</span>
+                </button>
+                <h4 class="modal-title">Add Package</h4>
+            </div>
+            <div class="modal-body">
+                <div class="row">
+                    <div class="form-group col-xl-6">
+                        <input type="text" class="form-control" id="package-name" name="name" placeholder="Name" required />
+                    </div>
+                    <div class="form-group col-xl-6">
+                        <input type="number" class="form-control" id="package-validity" name="validity" placeholder="Validity (In Days)" required />
+                    </div>
+                    <div class="form-group col-xl-6">
+                        <input type="number" step="0.01" class="form-control" id="package-price" name="price" placeholder="Price (Excluding Taxes)" required />
+                    </div>
+                    <div class="form-group col-xl-6">
+                        <input type="checkbox" class="js-switch" id="is-pt" name="is_pt" value="1" />
+                        <label class="form-control-label" for="is-pt">Includes Personal Trainer</label>
+                    </div>
+                    <div class="form-group col-xl-12">
+                        <%- csrf_html %>
+                        <button class="btn btn-primary" id="add-new-package-btn">Add</button>
+                    </div>
+                </div>                
+            </div>            
+        </form>
+    </div>
+</div>
+
+<div class="modal fade" id="delete-package" aria-hidden="false" aria-labelledby="delete-package" role="dialog" tabindex="-1">
+    <div class="modal-dialog modal-simple">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">×</span>
+                </button>
+                <h4 class="modal-title">Delete Package</h4>
+            </div>
+            <div class="modal-body">
+                <form action="/app/packages/delete" method="POST">
+                    <input type="hidden" name="package_id" value="" >
+                    <%- csrf_html %>
+                    <div class="row">
+                        <div class='col-md-12'>
+                            <p>Are you sure you want to DELETE this Package ?</span></p>
+                        </div>                    
+                    </div>
+                    <div class="row">
+                        <div class='col-md-12'>
+                            <button type="submit" class="btn btn-primary"> Delete</button>
+                        </div>                    
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+<%- include("./partials/footer.html") %>
+<script type="text/javascript">
+    VIEW_PACKAGES.init({
+        _csrf: '<%= _csrf %>'
+    })
+</script>

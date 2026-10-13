@@ -1,0 +1,642 @@
+<%- include("./partials/header.html") %>
+<%- include("./partials/topnav.html") %>
+<%- include("./partials/sidebar.html") %>
+<style>
+.input-group {
+    position: relative;
+    display: table;
+    width: 100%;
+    border-collapse: separate;
+}
+.input-group-addon:not(:last-child) {
+    border-right: 0;
+    border-top-right-radius: 0;
+    border-bottom-right-radius: 0;
+}
+.input-group-addon {
+    font-size: 1rem;
+    font-weight: 400;
+    line-height: 1.571429;
+    margin-bottom: 0;
+    padding: 0.429rem 0.929rem;
+    text-align: center;
+    color: #757575;
+    border: 1px solid #e0e0e0;
+    border-radius: 0.215rem;
+    background-color: #eee;
+}
+.input-group-addon{
+    vertical-align: middle;
+    white-space: nowrap;
+}
+.input-group-addon {
+    display: table-cell;
+}
+.input-group .form-control {
+    position: relative;
+    z-index: 2;
+    float: left;
+    width: 100%;
+    margin-bottom: 0;
+}
+.required {
+    position: absolute;
+    margin-top: -50px;
+    color: #FB0000;
+    font-size: 15px;
+}
+input:required:valid {
+    border-color: green;
+}
+.counter-number1 {
+    font-size: 25px;
+    color: #37474f;
+}
+.amount-distance {
+    display: flex;
+    justify-content: end;
+    align-items: baseline;
+    text-align: right;
+    margin: 0px 0px 10px 0px;
+}
+</style>
+<div class="page">
+    <% let endDate = new Date(session.user.currentLocation.end_date) %>
+    <% endDate.setDate(endDate.getDate() + 1) %>
+    <div class="page-content container-fluid">
+        <div class="page-content container-fluid" style="padding: 0px 0px;">
+            <% if(session.user.role_name === 'brand-admin' || session.user.role_name === 'manager') { %>
+                <div class="row">
+                    <div class="col-12">
+                        <%if(new Date() > endDate){ %>
+                            <div class="pearls row">
+                                <div class="pearl addprduct col-4 <%= shopProducts ? 'current' : '' %>" style="pointer-events: none; opacity: 0.5;">
+                                  <div class="pearl-icon"><a href="/app/asset-management"><i class="icon fa-archive" aria-hidden="true"></i></a></div>
+                                  <span class="pearl-title">Add Product to Shop</span>
+                                </div>
+                                <div class="pearl addmember col-4 <%= getDeliveryOption == '1' || getDeliveryOption == '2' ? 'current' : '' %>" style="pointer-events: none; opacity: 0.5;">
+                                  <div class="pearl-icon"><a href="/app/orders/addShippingCharges"><i class="icon fa-truck" aria-hidden="true"></i></a></div>
+                                  <span class="pearl-title">Select Delivery Option</span>
+                                </div>
+                                <div class="pearl  addpayment col-4 <%= bankDetails ? 'current' : '' %>" style="pointer-events: none; opacity: 0.5;">
+                                  <div class="pearl-icon"><a href="/app/settings"><i class="icon fa-credit-card" aria-hidden="true"></i></a></div>
+                                  <span class="pearl-title">Add Shop & Bank Details</span>
+                                </div>
+                              </div>
+                        <% } else{ %>
+                            <div class="pearls row">
+                                <div class="pearl addprduct col-4 <%= shopProducts ? 'current' : '' %>" >
+                                  <div class="pearl-icon"><a href="/app/asset-management"><i class="icon fa-archive" aria-hidden="true"></i></a></div>
+                                  <span class="pearl-title">Add Product to Shop</span>
+                                </div>
+                                <div class="pearl addmember col-4 <%= getDeliveryOption == '1' || getDeliveryOption == '2' ? 'current' : '' %>">
+                                  <div class="pearl-icon"><a href="/app/orders/addShippingCharges"><i class="icon fa-truck" aria-hidden="true"></i></a></div>
+                                  <span class="pearl-title">Select Delivery Option</span>
+                                </div>
+                                <%= console.log(bankDetails, "bankDetails") %>
+                                <div class="pearl addpayment col-4 <%= bankDetails.length ? 'current' : '' %>">
+                                  <div class="pearl-icon"><a href="/app/settings"><i class="icon fa-credit-card" aria-hidden="true"></i></a></div>
+                                  <span class="pearl-title">Add Shop & Bank Details</span>
+                                </div>
+                              </div>
+                        <% } %>
+                    </div>
+                </div>
+            <% } %>     
+        </div>
+        <% if(session.user.role_id == 9){ %>
+        <div class="row" style="justify-content: end;">
+            <div class="col-lg-2 float-right">
+                <div class="input-group">
+                    <span class="input-group-addon">
+                        <i class="icon md-calendar" aria-hidden="true"></i>
+                    </span>
+                    <input type='text' class='form-control' data-plugin="datepicker" id='start_date' value='<%= (typeof startDate != 'undefined')?(startDate):("") %>' placeholder='From Date'>
+                </div>
+            </div>
+            <div class="col-lg-2 float-right">
+                <div class="input-group">
+                    <span class="input-group-addon">
+                        <i class="icon md-calendar" aria-hidden="true"></i>
+                    </span>
+                    <input type='text' class='form-control' data-plugin="datepicker" id='end_date' value='<%= (typeof endDate != 'undefined')?(endDate):("") %>' placeholder='To Date'>
+                </div>
+            </div>
+            <div class="col-lg-1 float-right">
+                <button  class='btn btn-primary' id='refresh'><i class="fa fa-refresh"></i></button>
+            </div>
+        </div>
+        <br>
+        <div class="row">
+            <div class="col-lg-3">
+                <div class="card card-block p-25 bg-blue-600">
+                    <div class="counter counter-lg counter-inverse">
+                        <div class="counter-label text-uppercase">
+                            <a href="#" target="_blank" class="text-white">
+                                <i class="icon fa fa-th-list mr-5"></i>
+                                Assigned Orders
+                            </a>
+                        </div>
+                        <span class="counter-number"><%= totalOrder %></span>
+                    </div>
+                </div>
+            </div>
+            <div class="col-lg-3">
+                <div class="card card-block p-25 bg-purple-600">
+                    <div class="counter counter-lg counter-inverse">
+                        <div class="counter-label text-uppercase">
+                            <a href="#" target="_blank" class="text-white">
+                                <i class="icon fa fa-file-invoice mr-5"></i>
+                                Orders Completed
+                            </a>
+                        </div>
+                        <div class="counter-number-group">
+                            <% var newCount = 0 %>
+                            <% ordersCount.forEach((o) => { %>
+                                <% if(o.order_status == 4) { %>
+                                <%      newCount = newCount + o.count %>
+                                <% } %>
+                            <% }) %>
+                            <span class="counter-number"><%= newCount %></span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="col-lg-3">
+                <div class="card card-block p-25 bg-orange-600">
+                    <div class="counter counter-lg counter-inverse">
+                        <div class="counter-label text-uppercase">
+                            <a href="#" target="_blank" class="text-white">
+                                <i class="icon fa fa-archive mr-5"></i>
+                                Orders Pending
+                            </a>
+                        </div>
+                        <div class="counter-number-group">
+                            <% var newCount = 0 %>
+                            <% ordersCount.forEach((o) => { %>
+                                <% if(o.order_status !=4 && o.order_status !=5 && o.order_status !=6) { %>
+                                <%      newCount = newCount + o.count %>
+                                <% } %>
+                            <% }) %>
+                            <span class="counter-number"><%= newCount %></span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="col-lg-3">
+                <div class="card card-block p-25 bg-red-600">
+                    <div class="counter counter-lg counter-inverse">
+                        <div class="counter-label text-uppercase">
+                            <a href="#" target="_blank" class="text-white">
+                                <i class="icon fa fa-trash mr-5"></i>
+                                Orders Cancelled
+                            </a>
+                        </div>
+                        <div class="counter-number-group">
+                            <% var newCount = 0 %>
+                            <% ordersCount.forEach((o) => { %>
+                                <% if(o.order_status == 5) { %>
+                                <%      newCount = newCount + o.count %>
+                                <% } %>
+                            <% }) %>
+                            <span class="counter-number"><%= newCount %></span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <% }else{ %>
+        <div class="row">
+            <div class="col-lg-6" style="display: flex; align-items: center; text-align: end;">
+                <label class="col-lg-3 form-control-label" for="orderamt">Minimum Order Amount</label>
+                <%if(new Date() > endDate){ %> 
+                    <input class="col-lg-3 form-control edit-data" type="number"  id="orderamt" name="minimum_order_amount" placeholder="₹. Amount" value="<%= orderOptions.minimum_order_amount %>" disabled> 
+                <% } else {%>
+                    <input class="col-lg-3 form-control edit-data" type="number"  id="orderamt" name="minimum_order_amount" placeholder="₹. Amount" value="<%= orderOptions.minimum_order_amount %>"> 
+                <% } %>
+                <label class="col-lg-3 form-control-label" for="orderamt">Maximum Order Distance</label>
+                <%if(new Date() > endDate){ %>
+                    <input class="col-lg-3 form-control edit-data" type="number"  id="orderdist" name="maximum_order_distance" placeholder="In KM." value="<%= orderOptions.maximum_order_distance %>" disabled> 
+                <% } else{%>
+                    <input class="col-lg-3 form-control edit-data" type="number"  id="orderdist" name="maximum_order_distance" placeholder="In KM." value="<%= orderOptions.maximum_order_distance %>"> 
+                <% } %>
+            </div>
+            <div class="col-lg-6" style="display: flex; align-self: center;">
+                <div class="col-lg-5">
+                    <div class="input-group">
+                        <span class="input-group-addon">
+                            <i class="icon md-calendar" aria-hidden="true"></i>
+                        </span>
+                        <input type='text' class='form-control' data-plugin="datepicker" id='start_date' value='<%= (typeof startDate != 'undefined')?(startDate):("") %>' placeholder='From Date'>
+                    </div>
+                </div>
+                <div class="col-lg-5">
+                    <div class="input-group">
+                        <span class="input-group-addon">
+                            <i class="icon md-calendar" aria-hidden="true"></i>
+                        </span>
+                        <input type='text' class='form-control' data-plugin="datepicker" id='end_date' value='<%= (typeof endDate != 'undefined')?(endDate):("") %>' placeholder='To Date'>
+                    </div>
+                </div>
+                <div class="col-lg-2">
+                    <button  class='btn btn-primary' id='refresh'><i class="fa fa-refresh"></i></button>
+                </div>
+            </div>
+        </div>
+        <br>
+        <div class="row">
+            <div class="col-xl-6 col-lg-12">
+                <div class="row">
+                    <div class="col-lg-6">
+                        <div class="card card-block p-25" style="  background-color: thistle">
+                            <div class="counter counter-lg">
+                                <span class="counter-number"><%= totalOrder %></span>
+                                <div class="counter-label text-uppercase">
+                                    <a href="/app/orders/orders" target="_blank" class="text-gray">
+                                        <i class="icon fa fa-users mr-5"></i>
+                                        Total Orders
+                                    </a>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-lg-6">
+                        <div class="card card-block p-25" style="background-color: thistle;">
+                            <div class="counter counter-lg">
+                                <span class="counter-number"><%= staffTotal %></span>
+                                <div class="counter-label text-uppercase">
+                                    <a href="/app/users" target="_blank" class="text-gray">
+                                        <i class="icon fa fa-users mr-5"></i>
+                                        Total Staff
+                                    </a>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                  
+                </div>
+            </div>
+            <div class="col-xl-6 col-lg-12">
+                <div class="row">
+                    <div class="col-lg-6">
+                        <div class="card card-block p-25" style="background-color: thistle;">
+                            <div class="counter counter-lg">
+                                <span class="counter-number"> <%= saleTotal %></span>
+                                <div class="counter-label text-uppercase">
+                                    <a target="_blank" class="text-gray">
+                                        <i class="fa fa-rupee mr-5"></i>
+                                        Total Sales
+                                    </a>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-lg-6">
+                        <div class="card card-block p-25" style="background-color: thistle;">
+                            <div class="counter counter-lg">
+                                <span class="counter-number"> <%= paymentReceived %></span>
+                                <div class="counter-label text-uppercase">
+                                    <a target="_blank" class="text-gray">
+                                        <i class="fa fa-rupee mr-5"></i>
+                                        payment received
+                                    </a>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-xl-6 col-lg-6">
+                <div class="row">
+                    <div class="col-lg-6">
+                        <div class="card card-block p-25" style="background-color: rgb(216, 211, 191);">
+                            <div class="counter counter-lg">
+                                <% if(subscribedPlan && subscribedPlan.status == 1 && new Date() < endDate){ %>
+                                    <span class="counter-number">Yes</span>
+                                <% } else { %>
+                                    <span class="counter-number">No</span>
+                                <% } %>
+                                <div class="counter-label text-uppercase">
+                                    <a target="_blank" class="text-gray">
+                                        <i class="fa fa-cart-plus mr-5"></i>
+                                        Subscribed Plan
+                                    </a>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                <% if(subscribedPlan && subscribedPlan.status == 1) { %>
+                    <div class="col-lg-6">
+                        <div class="card card-block p-25" style="background-color: rgb(216, 211, 191);">
+                            <div class="counter counter-lg">
+                                
+                                
+                                <% if(new Date() > endDate){ %>
+                                    <!-- <span class="counter-number" style="font-size: unset; color: #c57000;">Renew in <%= subscribedPlan.remaining_days %> Days</span> -->
+                                    <div class="counter-label text-uppercase">
+                                        <a href="#" style="color: red;" class="text-gray">
+                                            <i class="fa fa-cart-plus mr-5"></i>
+                                            Plan Expired On
+                                        </a>
+                                        <span class="counter-number" style="font-size: xx-large;"><%= subscribedPlan.end_date %></span>
+                                    </div>
+                                <% } else{ %>
+                                    <div class="counter-label text-uppercase">
+                                        <a href="#" class="text-gray">
+                                            <i class="fa fa-cart-plus mr-5"></i>
+                                            Plan Expires On
+                                        </a>
+                                        <span class="counter-number" style="font-size: xx-large; color: #37474f;"><%= subscribedPlan.end_date %></span>
+                                        <span class="counter-number" style="font-size: unset; color: #c57000;">Renew in <%= subscribedPlan.remaining_days %> Days</span>
+
+                                    </div>
+                                <% } %>
+                               
+                            </div>
+                        </div>
+                    </div>
+                <% } %>
+                </div>
+            </div>
+            <% if(subscribedPlan && subscribedPlan.status == 1 && new Date() < endDate) { %>
+            <div class="col-xl-6 col-lg-6">
+                <div class="row">
+                    <div class="col-lg-12">
+                        <div class="card card-block p-25" style="background-color: rgb(216, 211, 191);">
+                            <div class="counter counter-lg">
+                                <span class="counter-number"><%= subscribedPlan.plan_name %> -- </span>
+                                <span class="counter-number">₹ <%= subscribedPlan.amount %></span><br>
+                                <div class="counter-label text-uppercase">
+                                    <a href="/app/subscriptionrequest/subscription" class="text-gray">
+                                        <i class="fa fa-cart-plus mr-5"></i>
+                                        Plan Details
+                                    </a>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <% } %>
+        </div>
+        <br>
+        <br>
+        <div class="row">
+            <div class="col-md-12">
+                <div class="panel ">
+                    <div class="panel-heading">
+                        <h3 class="panel-title">Recent Orders </h3>
+                    </div>
+                    <div class="panel-body">
+                        <table class="table table-hover table-striped w-full" id="renewals">
+                            <thead>
+                                <tr>
+                                    <th>Customer Name</th>
+                                    <th>Shipping Addr.</th>
+                                    <th>Total Amount</th>
+                                    <th>Payment Mode</th>
+                                    <th>Razorpay_Id</th>
+                                    <th>Order Id</th>
+                                    
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <% recentorders.forEach((r)=>{ 
+                                    %>
+                                <tr id="gf">
+                                    <td class ='orderlist' sid="<%=r.id %>" id="rowid">
+                                        <a style="color: blue; cursor: pointer;"><i class="fa fa-bars" id="orderid" value="<%=r.id %>"></i> </a> 
+                                        <%=r.user_name %> 
+                                    </td>
+                                    <td><%=r.address_line_1 + r.address_line_2 %> </td>
+                                    <td><%=r.amount %> </td>
+                                    <td><%=r.payment_mode %> </td>
+                                    <td><%=r.razorpay_order_id %> </td>
+                                    <td><%=r.id %> </td>
+                                   
+                                </tr>
+                                <tr id="abc" class="cll" style="text-align: center;">
+                                    <td colspan="6">
+                                    <table class="table table-hover table-striped w-full" id="renewals">
+                                        <thead>
+                                            <tr>
+                                                <th>Product Id</th>
+                                                <th>Product Name</th>
+                                                <th>Regular Price</th>
+                                                <th>Selling Price</th>
+                                                <th>Quantity</th>
+                                                <th>Amount</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody class="hiderow" style="text-align: center;">
+                                            <% recentordersproducts.forEach((p) => { %>
+                                                <% if (p.id == r.id) { %>
+                                                    <tr class="hidden-row">
+                                                        <td><%=p.productId %> </td>
+                                                        <td><%=p.products %> </td>
+                                                        <td>₹ <%=p.regularPrice %> </td>
+                                                        <td>₹ <%=p.regularPrice - p.discountPrice %> </td>
+                                                        <td><%=p.quantity %> </td>
+                                                        <td>₹ <%=(p.regularPrice - p.discountPrice)*p.quantity %> </td>
+                                                    </tr>
+                                                <% } %>
+                                            <% }) %>
+                                        </tbody>
+                                    </table>
+                                </td>
+                                </tr>
+                                <% })%>
+                            </tbody>
+                        </table>
+                        <div class="modal fade" id="delete-order" aria-hidden="false" aria-labelledby="delete-order" role="dialog" tabindex="-1">
+                            <div class="modal-dialog modal-simple">
+                                <div class="modal-content" >
+                                   <div class="modal-header">
+                                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                            <span aria-hidden="true">×</span>
+                                        </button>
+                                        <h4 class="modal-title">Delete Order</h4>
+                                    </div>
+                                    <div class="modal-body">
+                                        <div class="row">
+                                                
+                                                <input type="hidden" name="location-id" id="location-id"> 
+                                            <div class="col-lg-12">
+                                                <p>Do you really want to Delete the selected Order ?</p>
+                                            
+                                            </div>
+                                            <div class="form-group col-xl-12">
+                                                <button class="btn btn-round btnSelect" id="delete-branch-btn" value="">Delete</button>
+                                            </div>
+                                        </div>                
+                                    </div>            
+                                <!-- </form> -->
+                        
+                            </div>
+                        
+                                </div>
+                        
+                        </div>
+                        <div class="modal fade" id="update-order" aria-hidden="false" aria-labelledby="update-order" role="dialog" tabindex="-1">
+                            <div class="modal-dialog modal-simple">
+                                <div class="modal-content">
+                                    <div class="modal-header">
+                                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                            <span aria-hidden="true">×</span>
+                                        </button>
+                                        <h4 class="modal-title">Update Orders</h4>
+                                    </div>
+                                    <div class="modal-body">
+                                        <form action="/app/marketing/leads/update" method="POST">
+                                            <div class="row">
+                                                <div class="form-group col-xl-6">
+                                                    <input type="hidden" name="location-id" id="location-id">
+                                                    <input type="text" id="location-name" class="form-control" name="location-name" placeholder="Location Name"
+                                                        value="" required /><br>
+                                                    <input type="text" class="form-control" id="udyog_card_no1" name="udyogcard_no" placeholder="udyog card no."
+                                                        required /><br>
+                                                    <input type="text" class="form-control" id="pan_card_no1" name="pancard_no" pattern="[A-Z]{5}[0-9]{4}[A-Z]{1}" placeholder="pancard no."
+                                                        required /><br>
+                                                </div>
+                                                <div class="form-group col-xl-6">
+                                            
+                                                    <input type="text" class="form-control" id="address_line11" name="addressline11" placeholder="address line1"
+                                                        value="" required /><br>
+                                                    <input type="text" class="form-control" id="address_line22" name="addressline22" placeholder="address line2"
+                                                        value="" required /><br>
+                                                    <!-- <input type="text" class="form-control" id="state_id" name="state" placeholder="state Name"required/><br> -->
+                                                    
+                                                    <!-- <input type="text" class="form-control" id="city_id" name="city" placeholder="city Name"required/><br> -->
+                                                    <input type="text" class="form-control" id="pincode_id1" name="pincode1" pattern="^[1-9][0-9]{5}$" placeholder="pincode" value=""
+                                                        required /><br>
+                                                </div>
+                                            
+                                                
+                                                <div class="form-group col-xl-12">
+                                                    <%- csrf_html %>
+                                                        <button class="btn btn-primary" id="update-branch-btn">Update Orders</button>
+                                                </div>
+                                            </div>
+                                        </form>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>            
+        </div>
+        <div class="row">
+            <div class="col-md-6">
+                <div class="panel ">
+                    <div class="panel-heading">
+                        <h3 class="panel-title">Top 10 Most Ordered Product </h3>
+                    </div>
+                    <div class="panel-body">
+                        <table class="table table-hover table-striped w-full" id="renewals">
+                            <thead>
+                                <tr>
+                                    <th>Name</th>
+                                    <th style="text-align: center;">No. of Orders</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <% mostorderProducts.forEach((m) => { %>
+                                <tr>
+                                    <td><%= m.productName %> </td>
+                                    <td style="text-align: center;"><%= m.pcount %> </td>
+                                </tr>
+                                <% }) %>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>   
+            <div class="col-md-6">
+                <div class="panel ">
+                    <div class="panel-heading">
+                        <h3 class="panel-title">Top 10 Most Ordered Category </h3>
+                    </div>
+                    <div class="panel-body">
+                        <table class="table table-hover table-striped w-full" id="renewals">
+                            <thead>
+                                <tr>
+                                    <th>Category</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <% mostorderProducts.forEach((m) => { %>
+                                <tr>
+                                    <td><%= m.category %></td>
+                                </tr>
+                                <% }) %>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>            
+        </div>
+        <div class="row">
+            <div class="col-md-12">
+                <div class="panel ">
+                    <div class="panel-heading">
+                        <h3 class="panel-title">Birthday & Anniversary <small class="font-size-12">(<%= formatDate(new Date(), 'MMMM YYYY') %>)</small></h3>
+                    </div>
+                    <div class="panel-body">                        
+                        <table class="table table-hover dataTable table-striped w-full" id="events">
+                            <thead>
+                                <tr>
+                                    <th>Staff</th>
+                                    <th>Phone</th>
+                                    <th>Birthday</th>
+                                    <th>Anniversary</th>
+                                    <!-- <th>Status</th> -->
+                                </tr>
+                            </thead>
+                            <tbody>                                
+                                <% eventLogs.forEach((e) => { %>
+                                <tr>
+                                    <td><%= e.fname %> <%= e.lname %></td>
+                                    <td><%= e.phone %></td>
+                                    <td><%= formatDate(e.birth_date, 'Do MMM') %></td>
+                                    <td><%= formatDate(e.anniversary_date, 'Do MMM') %></td>
+                                    <!-- <td><%- e.is_active ? '<span class="badge badge-success">Active</span>' : '<span class="badge badge-default">Inactive</span>' %></td> -->
+                                </tr>
+                                <% }) %>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
+       <% } %>
+    </div>
+</div>
+<!-- End Page -->
+<%- include("./partials/footer.html") %>
+<script type="text/javascript">
+
+$('#refresh').on('click', function(){
+    if($('#start_date').val() || $('#end_date').val()){
+        window.location.href = '/app/dashboard/?from_date='+$('#start_date').val()+'&to_date='+$('#end_date').val()
+    } 
+})
+jQuery(document).ready(function() {
+    jQuery("[required]").after("<span class='required'>*</span>");
+    $('tr.cll').hide();
+});
+$('td.orderlist').on('click', function fun(){
+    data = document.querySelector('#rowid')
+        orederid = data.getAttribute('sid')
+        var newField =$(this).closest("tr").next("tr")
+        newField.toggle()
+    })
+        
+
+    APP_DASHBOARD.init({
+        _csrf: '<%= _csrf %>',
+        userSession: '<%- JSON.stringify(session.user) %>'
+    })
+</script>

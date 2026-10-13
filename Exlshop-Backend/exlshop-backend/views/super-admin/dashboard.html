@@ -1,0 +1,94 @@
+<%- include("./partials/header.html") %>
+<%- include("./partials/topnav.html") %>
+<%- include("./partials/sidebar.html") %>
+<style>
+    #dashboard
+    {
+        color: white;
+    }
+</style>
+<div class="page">
+    <div class="page-content container-fluid">
+        <div class="row">
+            <!-- First Row -->
+      
+            <div class="col-xl-3 col-md-6 info-panel">
+                <div class="card card-shadow">
+                    <div class="card-block bg-white p-20">
+                        <button type="button" class="btn btn-floating btn-sm btn-success">
+                            <i class="icon fa-bullseye"></i>
+                        </button>
+                        <a href="/super-admin/shop/orders"  class="text-gray">
+                        <span class="ml-15 font-weight-400">ORDERS</span>
+                        </a>
+                        <div class="content-text text-center mb-0">                            
+                            <span class="font-size-40 font-weight-100"><%= totalOrder%></span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="col-xl-3 col-md-6 info-panel">
+                <div class="card card-shadow">
+                    <div class="card-block bg-white p-20">
+                        <button type="button" class="btn btn-floating btn-sm btn-warning">
+                            <i class="icon fa-building-o"></i>
+                        </button>
+                        <a href="/super-admin/brands" class="text-gray">
+                        <span class="ml-15 font-weight-400">SHOPS</span>
+                        </a>
+                        <div class="content-text text-center mb-0">
+                            <span class="font-size-40 font-weight-100"><%= totalShops %></span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="col-xl-3 col-md-6 info-panel">
+                <div class="card card-shadow">
+                    <div class="card-block bg-white p-20">
+                        <button type="button" class="btn btn-floating btn-sm btn-danger">
+                            <i class="icon fa-users"></i>
+                        </button>
+                        <a href="/super-admin/brands/team"  class="text-gray">
+                        <span class="ml-15 font-weight-400">USERS</span>
+                        </a>
+                        <div class="content-text text-center mb-0">
+                            <span class="font-size-40 font-weight-100"><%= totalCustomers%></span>
+                        </div>
+                    </div>
+                </div>
+            </div>            
+            <div class="col-xl-3 col-md-6 info-panel">
+                <div class="card card-shadow">
+                    <div class="card-block bg-white p-20">
+                        <button type="button" class="btn btn-floating btn-sm btn-primary">
+                            <i class="icon fa-bullhorn"></i>
+                        </button>
+                        <a href="/super-admin/settings/sales"  class="text-gray">
+                        <span class="ml-15 font-weight-400">SALES</span>
+                        </a>
+                        <div class="content-text text-center mb-0">                            
+                            <span class="font-size-40 font-weight-100"><%= totalSales%></span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="col-xl-3 col-md-6 info-panel">
+                <div class="card card-shadow">
+                    <div class="card-block bg-white p-20">
+                        <button type="button" class="btn btn-floating btn-sm btn-primary">
+                            <i class="icon fa-bullhorn"></i>
+                        </button>
+                        <a href="/super-admin/shop/subscription" class="text-gray">
+                        <span class="ml-15 font-weight-400">SUBSCRIPTION</span>
+                        </a>
+                        <div class="content-text text-center mb-0">                            
+                            <span class="font-size-40 font-weight-100"><%= totalSubscription%></span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>        
+    </div>
+</div>
+<!-- End Page -->
+<%- include("./partials/footer.html") %>

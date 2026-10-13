@@ -1,0 +1,143 @@
+
+
+
+
+:root
+{
+    --bg-grey:#F0F0F0;
+    --color-green:#388E3C;
+    --nav-bck:#F24A72;
+    --log-bck:#fff;
+    --cart-color:#fff;
+    --txt-color:#0000;
+   
+}
+
+
+ .slider div
+ {
+     width: 100vw;
+     height: 100vh;
+ }
+ .slider img
+ {
+     height: 100%;
+     width: 100%;
+ }
+ .slides
+ {
+     bottom:-2%;
+     right: 45%;
+ }
+ .slides1
+ {
+      bottom:17%;
+      right: 45%;
+ }
+ .nokia
+ {
+     overflow-y: hidden;
+     overflow-x: auto;
+ }
+ .slides div,.slides1 div
+ {
+     height: 25px;
+     width: 25px;
+     border-radius: 50%;
+     background-color: white;
+ }
+ .sec-slider
+ {
+     /* height: 700px; */
+ }
+ .slider,.slider1
+ {
+     width: 100vw;
+     height: 60vh;
+     overflow: hidden;
+ }
+ body
+ {
+     overflow-x: hidden;
+     
+ }
+.seasonal
+{
+    height: 300px;
+    flex-wrap: nowrap !important;
+    background-color: white;
+    overflow-x: hidden;
+}
+.seasonal:hover
+{
+    overflow-x: scroll;
+    scrollbar-width:thin;
+    border-radius: 5px; 
+}
+.offer
+{
+    color: var(--color-green);
+}
+
+.seasonal img
+{
+    height: 157px;
+}
+.rounded-circle
+{
+    height: 80px;
+    width: 80px;
+    background-color: blue;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+#my-list ul
+{
+    list-style-type: none;
+}
+#usernm
+{
+    cursor: pointer;
+}
+
+/* new */
+#my-heading {
+  
+  color: white;
+  /* padding: 20px; */
+  font-size: 20px;
+  border: none;
+
+}
+.navigation
+{
+    box-sizing: border-box;
+}
+#usernm {
+  position: relative;
+  /* display: inline-block; */
+}
+ul.no-bullets
+{
+    list-style-type: none;
+}
+
+.dropdown-content a {
+  color: black;
+  padding: 12px 16px;
+  text-decoration: none;
+  display: block;
+}
+#usernm:hover #my-list
+{
+    display: block;
+}
+.dropdown-content a:hover {background-color: #ddd;}
+
+#usernm:hover .dropdown-content {display: block;}
+#my-list a
+{
+    text-align: left;
+}

@@ -1,0 +1,102 @@
+<style>
+    #overview
+    {
+        font-weight: bolder;
+        color: blue;
+    }
+    .abc
+    {
+        width: 90%;
+        margin: 0px auto;
+    }
+    .seeall
+    {
+        background-color: #FBA11B;
+        padding: 8px 16px;
+        color: black;
+    }
+</style>
+<%- include('../partials/header.html') %>
+<section class="section-content padding-y">
+    <div class="abc bg-white">
+        <h2 class="ps-3 pt-3">My account</h2>
+        <div><hr></div>
+        <div class="row">
+           
+            <%- include('../partials/my-account-menu.html') %>
+            
+            <main class="col-md-9">
+                <article class="card mb-3">
+                    <div class="card-body">
+                        <figure class="icontext">
+                            <div class="icon">
+                                <img class="rounded-circle img-sm border" src="/images/male-avatar.svg">
+                            </div>
+                            <div class="text">
+                                <strong> <%= session.user.fname %> <%= session.user.lname %></strong> <br> 
+                                <%= session.user.email %> <br> 
+                                <%= session.user.phone %> <br>
+                            </div>
+                        </figure>
+                        <hr>
+                        <article class="card-group">
+                            <figure class="card bg">
+                                <div class="p-3">
+                                    <h5 class="card-title"><%= orderCount %></h5>
+                                    <div>Orders</div>
+                                </div>
+                            </figure>                            
+                            <figure class="card bg">
+                                <div class="p-3">
+                                    <h5 class="card-title"><%= awaitingOrder %></h5>
+                                    <div>Awaiting delivery</div>
+                                </div>
+                            </figure>
+                            <figure class="card bg">
+                                <div class="p-3">
+                                    <h5 class="card-title"><%=deliverItem %></h5>
+                                    <div>Delivered items</div>
+                                </div>
+                            </figure>
+                        </article>
+                    </div> 
+                </article>
+                <% if(recentOrderData){ %>
+                <article class="card  mb-3">
+                    <div class="card-body">
+                        <h4 class="card-title mb-4">Recent Order</h4>
+                        <h5 class="card-title mb-4">Order #<%= recentOrderData.id %> <br>
+                            <time class="text-muted small"><i class="fa fa-calendar-alt"></i> <%= formatDate(recentOrderData.created_date, 'Do MMM YYYY HH:mm A') %></time></h5>
+                        <div class="row">
+                            <% recentOrderItems.forEach((o) => { %>
+                            <div class="col-md-6">
+                                <figure class="itemside  mb-3">
+                                    <div class="aside">
+                                        <a href="/shop/<%= o.slug %>/<%= o.id %>" title="<%= o.product_name %>">
+                                         
+                                            <img src="<%=session.imgURL %><%= o.file_name %>" alt="<%= o.product_name %>" class="border img-sm">
+                                        </a>
+                                    </div>
+                                    <figcaption class="info">
+                                        <p>
+                                            <a href="/shop/<%= o.slug %>/<%= o.id %>" title="<%= o.product_name %>" class="title text-dark">
+                                                <%= o.product_name %>
+                                            </a>                                            
+                                        </p>
+                                        <span class="text-muted text-uppercase small"><%= o.slug %></span> <br>
+                                        <span class="text-muted small">Quantity: <%= o.quant %></span> <br>
+                                    </figcaption>
+                                </figure>
+                            </div>
+                            <% }) %>
+                        </div>
+                        
+                        <button class="seeall border-0"><a href="/my-account/orders" class="text-dark "> See all orders  </a></button>
+                    </div> 
+                </article> 
+                <% } %>
+            </main> 
+        </div>
+    </div> 
+</section>
+<%- include('../partials/footer.html') %>

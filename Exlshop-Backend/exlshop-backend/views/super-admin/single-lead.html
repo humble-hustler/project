@@ -1,0 +1,191 @@
+<%- include("./partials/header.html") %>
+<%- include("./partials/topnav.html") %>
+<%- include("./partials/sidebar.html") %>
+<div class="page">
+    <div class="page-content">
+        <div class="panel">
+            <div class="panel-body nav-tabs-animate nav-tabs-horizontal">
+                <ul class="nav nav-tabs nav-tabs-line tabs-line-top mb-10" role="tablist">
+                    <li class="nav-item" role="presentation"><a class="nav-link active" data-toggle="tab" href="#details" aria-controls="details" role="tab">Details</a></li>
+                    <li class="nav-item" role="presentation"><a class="nav-link" data-toggle="tab" href="#contacts" aria-controls="contacts" role="tab">Contact Details</a></li>
+                    <li class="nav-item" role="presentation"><a class="nav-link" data-toggle="tab" href="#followup" aria-controls="followup" role="tab">Followup History</a></li>  
+                </ul>
+
+                <div class="tab-content">
+                    <div class="tab-pane active" id="details" role="tabpanel">
+                        <div class="row">
+                            <div class="form-group col-md-6">
+                                <label class="form-control-label" for="fname">Brand Name</label>
+                                <input type="text" class="form-control edit-data" id="brand_name" name="brand_name" value="<%= leadData.brand_name %>">
+                            </div>
+                            <div class="form-group col-md-3">
+                                <label class="form-control-label" for="user-active-switch">Status</label><br>
+                                Inactive
+                                <input type="checkbox" id="user-active-switch" data-color="#eb6709" class="js-switch edit-data" name="is_active" <%= leadData.is_active ? 'checked' : '' %> />
+                                Active
+                            </div>
+                            <div class="form-group col-md-3">
+                                <label class="form-control-label" for="user-demo-switch">Demo Given</label><br>
+                                Not Yet.
+                                <input type="checkbox" id="user-demo-switch" data-color="#eb6709" class="js-switch edit-data" name="is_demo_given" <%= leadData.is_demo_given ? 'checked' : '' %> />
+                                Yes. 
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="form-group col-xl-4">
+                                <label class="form-control-label">Status</label>
+                                <select class="form-control edit-data" name="status_id" required>
+                                    <option value="">Select Status</option>
+                                    <% status.forEach((s) => { %>
+                                    <option value="<%= s.id %>" <%= s.id == leadData.status_id ? 'selected' : '' %>><%= s.status %></option>
+                                    <% }) %>
+                                </select>
+                            </div>
+                            <div class="form-group col-xl-4">
+                                <label class="form-control-label">Source</label>
+                                <select class="form-control edit-data" name="source_id" required>
+                                    <option value="">Select Source</option>
+                                    <% sources.forEach((s) => { %>
+                                    <option value="<%= s.id %>" <%= s.id == leadData.source_id ? 'selected' : '' %>><%= s.source %></option>
+                                    <% }) %>
+                                </select>
+                            </div>
+                            <div class="form-group col-xl-4">
+                                <label class="form-control-label">Owner</label>
+                                <select class="form-control edit-data" name="owner_id" id="owner-id" required>
+                                    <option value="">Select Lead Owner</option>
+                                </select>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="form-group col-xl-12">
+                                <label class="form-control-label">Remark</label>
+                                <textarea class="form-control edit-data" id="remark" name="remark"><%= leadData.remark %></textarea>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="tab-pane " id="contacts" role="tabpanel">
+                        <form action="/super-admin/marketing/leads/add/contact" method="POST" id="contact-form">
+                            <div class="row">
+                                <input type="hidden" name="lead_id" value="<%= leadData.id %>">
+                                <input type="hidden" name="lead_contact_id" id='lead-contact-id'>
+                                <div class="form-group col-md-4">
+                                    <label>First Name</label>
+                                    <input type="text" class="form-control " id="fname" name="fname" placeholder="" required>
+                                </div>
+                                <div class="form-group col-md-4">
+                                    <label>Last Name</label>
+                                    <input type="text" class="form-control " id="lname" name="lname" placeholder="">
+                                </div>
+                                <div class="form-group col-md-4">
+                                    <label>Email</label>
+                                    <input type="text" class="form-control " id="email" name="email" placeholder="" required>
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="form-group col-md-4">
+                                    <label>Phone</label>
+                                    <input type="text" class="form-control " id="phone" name="phone" placeholder="" required>
+                                </div>
+                                <div class="form-group col-md-4">
+                                    <label>Designation</label>
+                                    <input type="text" class="form-control " id="designation" name="designation" placeholder="">
+                                </div>
+                                <div class="form-group col-md-4">
+                                    <label>Address</label>
+                                    <textarea class="form-control " id="address" name="address" placeholder=""></textarea>
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="form-group col-md-4">
+                                    <%- csrf_html %>
+                                    <button class="btn btn-primary" id="add-contact">Submit</button>
+                                </div>
+                            </div>
+                        </form>
+                        <hr />
+                        <table class="table table-hover dataTable table-striped w-full" id="contact-list">
+                            <thead>
+                                <tr>
+                                    <th>Name</th>
+                                    <th>Email</th>
+                                    <th>Phone</th>
+                                    <th>Designation</th>
+                                    <th>Address</th>
+                                    <th>Action</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <% leadContacts.forEach(function(lc){ %>
+                                <tr contact_id="<%= lc.id %>">
+                                    <td><%= lc.fname +' '+lc.lname%></td>
+                                    <td><%= lc.email %></td>
+                                    <td><%= lc.phone %></td>
+                                    <td><%= lc.designation %></td>
+                                    <td><%= lc.address %></td>
+                                    <td>
+                                        <a class="edit_contact"><i class="fa fa-pencil"></i></a>
+                                    </td>
+                                </tr>
+                                <% }) %>
+                            </tbody>
+                        </table>
+                    </div>
+                    <div class="tab-pane" id="followup" role="tabpanel">
+                        <form action="/super-admin/marketing/leads/add/followup" method="POST" id="followup-form">
+                            <input type="hidden" name="leadId" value="<%= leadData.id %>">
+                            <input type="hidden" name="followup_id">
+                            <div class="row">
+                                <div class="form-group col-md-12">
+                                    <label class="form-control-label mr-10" for="trial_date_time">Remark</label>
+                                    <textarea class="form-control edit-followup-data" id="text" name="text" ></textarea>
+                                </div>
+                                <div class="form-group col-md-4">
+                                    <input type="text" class="form-control edit-followup-data" id="followup_date_time" name="followup_date_time" placeholder="Next Followup Date Time">
+                                </div>
+                                <div class="form-group col-md-4">
+                                    <select class="form-control" name="followup_user" id="followup-user">
+                                        <option value="">Followup Done By</option>
+                                    </select>
+                                </div>
+                                <div class="col-md-4">
+                                    <%- csrf_html %>
+                                    <button class="btn btn-primary" id="add-followup-data">Submit</button>
+                                </div>
+                            </div>                            
+                        </form>
+                        <hr>
+                        <table class="table table-hover table-striped w-full">
+                            <thead>
+                                <tr>
+                                    <th>Remark</th>
+                                    <th>Next Followup On</th>
+                                    <th>Followup Done By</th>
+                                    <th>Followup Date</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <%followup.forEach(function(f){%>
+                                <tr>
+                                    <td><%= f.text %></td>
+                                    <td><%= formatDate(f.followup_date_time,'DD-MM-YYYY hh:mm A') %></td>
+                                    <td><%= f.fname %> <%= f.lname %></td>
+                                    <td><%= formatDate(f.created_date,'DD-MM-YYYY hh:mm A') %></td>
+                                </tr>
+                                <%})%>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<%- include("./partials/footer.html") %>
+<script type="text/javascript">
+    SINGLE_LEAD.init({
+        _csrf: '<%= _csrf %>',
+        leadData: '<%- JSON.stringify(leadData) %>',
+        leadContacts: '<%- JSON.stringify(leadContacts) %>'
+    })
+</script>

@@ -1,0 +1,127 @@
+<%- include("./partials/header.html") %>
+<%- include("./partials/topnav.html") %>
+<%- include("./partials/sidebar.html") %>
+<style>
+    #users
+    {
+        color: white;
+    }
+    .page-header-actions
+    {
+        position: static;
+        margin-left: auto;
+    }
+</style>
+<div class="page">
+    <div class="page-header">
+        <h1 class="page-title">Users</h1>        
+        
+    </div>
+
+    <div class="page-content">
+        <div class="panel">            
+            <div class="panel-body">
+                <div class="page-header-actions">
+                    <button class="btn btn-round btn-primary" data-target="#add-new-user" data-toggle="modal"  id="add-new-su-user-btn">
+                        <i class="icon fa-plus" aria-hidden="true"></i>
+                        <span class="hidden-sm-down">Add New User</span>
+                    </button>
+                </div>
+                <table class="table table-hover dataTable table-striped w-full" id="user-list">
+                    <thead>
+                        <tr>
+                            <th>ID</th>
+                            <th>Name</th>
+                            <th>Username</th>
+                            <th>Phone</th>    
+                            <th>Shop Name</th>                      
+                            <th>Action</th>
+                        </tr>
+                    </thead>                    
+                    <tbody></tbody>
+                </table>
+            </div>
+        </div>       
+    </div>
+</div>
+<div class="modal fade" id="add-new-user" aria-hidden="false" aria-labelledby="add-new-user" role="dialog" tabindex="-1">
+    <div class="modal-dialog modal-simple">
+        <!-- action="/super-admin/settings/user/add" -->
+        <div class="modal-content">
+        <!-- <form class="modal-content" action="/api/v1/user1/user-add" method="POST" autocomplete="off" id="user-form"> -->
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">×</span>
+                </button>
+                <h4 class="modal-title" id="add-new-user">Add New User</h4>
+            </div>
+            <div class="modal-body">
+                <input type="hidden" id="update-user-id" name="update_user_id">
+                <div class="row ">
+                    <div class="form-group col-xl-6">
+                        <input type="text" class="form-control form-elements" id="user-fname" name="user_fname" placeholder="First Name" required />
+                        <div class="invalid-feedback"></div>
+                    </div>
+                    <div class="form-group col-xl-6">
+                        <input type="text" class="form-control form-elements" id="user-lname" name="user_lname" placeholder="Last Name" required />
+                        <div class="invalid-feedback"></div>
+                    </div>
+                    <div class="form-group col-xl-6">
+                        <input type="text" class="form-control form-elements" id="user-email" name="user_email" placeholder="Email" required />
+                        <div class="invalid-feedback"></div>
+                    </div>
+                    <div class="form-group col-xl-6">
+                        <input type="text" class="form-control form-elements" id="user-phone" name="user_phone" placeholder="Phone" required />
+                        <div class="invalid-feedback"></div>
+                    </div>
+                    <div class="form-group col-xl-6">
+                        <input type="password" class="form-control form-elements" id="user-password" name="user_password" placeholder="Password" autocomplete="new-password" required />
+                    </div>
+                    <div class="form-group col-xl-6">
+                        <input type="password" class="form-control form-elements" id="user-confirm-password" name="user_confirm_password" placeholder="Confirm Password" autocomplete="new-password" required />
+                        <div class="invalid-feedback" id="password-mismatch">Passwords do not match</div>
+                    </div>
+                    <div class="form-group col-xl-12">
+                        <%- csrf_html %>
+                        <button class="btn btn-primary" id="add-new-user-btn">Add</button>
+                        <button class="btn btn-primary display-hidden" id="update-user-btn">Update</button>
+                    </div>
+                </div>                
+            </div>            
+        <!-- </form> -->
+    </div>
+    </div>
+</div>
+<div class="modal fade" id="delete-user" aria-hidden="false" aria-labelledby="delete-user" role="dialog" tabindex="-1">
+    <div class="modal-dialog modal-simple">
+        <div class="modal-content">
+        <!-- <form class="modal-content" action="/super-admin/settings/user/delete" method="POST" autocomplete="off"> -->
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">×</span>
+                </button>
+                <h4 class="modal-title">Delete User</h4>
+            </div>
+            <div class="modal-body">
+                <div class="row">
+                    <input type="hidden" name="user_id" id="user-id">
+                    <div class="col-lg-12">
+                        <p>Do you really want to Delete the selected User ?</p>
+                    </div>
+                    <input type="hidden" name="user_id" id="user_id">
+                    <div class="form-group col-xl-12">
+                        <%- csrf_html %>
+                        <button class="btn btn-primary" id="delete-tax-btn">Delete</button>
+                    </div>
+                </div>                
+            </div>            
+        <!-- </form> -->
+    </div>
+    </div>
+</div>
+<%- include("./partials/footer.html") %>
+<script type="text/javascript">
+    USERS.init({
+        _csrf: '<%= _csrf %>'
+    })
+</script>

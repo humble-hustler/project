@@ -1,0 +1,160 @@
+<style>
+         .page-number{
+      text-align: center;
+      user-select: none;
+    }
+    .page-number li {
+      display: inline-block;
+      margin: 5px;
+    }
+    .page-number li a{
+      text-decoration: none;
+      font-size: 15px;
+      line-height: 25px;
+    }
+    .page-number li:not(.acti) a{
+        color: black;
+    }
+    .previous-page, .next-page{
+      background-color: rgb(11, 175, 240);
+      cursor: pointer;
+    }
+    .pagination{
+      text-align: center;
+      margin: 30px 30px 60px;
+      user-select: none;
+    }
+    .pagination li {
+      display: inline-block;
+      margin: 5px;
+    }
+    .pagination li a{
+      text-decoration: none;
+      font-size: 15px;
+      line-height: 25px;
+    }
+    .acti a{
+        background-color: rgb(161, 159, 159);
+        color: black;
+    }
+    .pagination li:not(.acti) a{
+        color: black;
+    }
+    .current-page, .dots{
+      background: #ccc;
+      cursor: pointer;
+    }
+</style>
+<%- include('../partials/header.html') %>
+<section class="section-content" id="order-history">
+    <div class="container">
+        <div class="row">
+            <%- include('../partials/my-account-menu.html') %>
+            <main class="col-md-9 mb-3">
+                <div class="accordion" id="orderList" style="display: none;">
+                    <h2 class="ms-3">Deliver Orders</h2>
+                    <% deliver_orders.forEach((o) => { %>
+                    <article class="card shadow-sm mt-3 wishlist-row">
+                        <header class="card-header" id="heading-<%= o.id %>">
+                            <h2 class="mb-0">
+                                <button class="btn btn-link text-dark order-btn" data-order-id="<%= o.order_id %>" type="button" data-toggle="collapse" data-target="#order-<%= o.id %>" aria-expanded="false" aria-controls="order-<%=o.order_id %>" style="text-align: left;"><br>
+                                    <span class="d-inline-block mb-2"><strong>Order ID :- </strong> <%= o.order_id %></span><br>
+                                    <span class="d-inline-block mb-2"><strong>Order Date :- </strong> <%= formatDate(o.created_date, 'Do MMM YYYY HH:mm A') %></span><br>
+                                    <span class="d-inline-block mb-2"><strong>Delivered To :- </strong> <%= o.label %></span><br>
+                                    <span class="d-inline-block mb-2"><strong>Product Name :- </strong><%= o.product_name %></span><br>
+                                   <span><strong>Product Price :- ₹ </strong><%= o.price %></span> 
+                                </button></br>
+                            </h2>
+                        </header>
+                        <div id="order-<%= o.id %>" class="collapse bg" aria-labelledby="heading-<%= o.id %>" data-parent="#orderList"></div>
+                    </article>
+                    <% }) %>
+                </div>     
+                 
+                 <div class="fl" style="padding-top: 10px; display: flex; justify-content: space-between;">
+                    <div style="padding-left: 30px; margin-top: 15px;" class="append-para">
+                        <p>Showing <span class="numRecord"></span> Records of <span class="totalRecord"></span></p>
+                    </div>
+            
+                    <div class="page-number" style="margin-right: 20px;"></div>
+                </div>
+            </main>   
+        </div>
+    </div> 
+</section>
+<%- include('../partials/footer.html') %>
+<script type="text/javascript">
+                    function getPageList(totalPages, page, maxLength){
+                        function range(start, end){
+                          return Array.from(Array(end - start + 1), (_, i) => i + start);
+                        }
+                        var sideWidth = maxLength < 9 ? 1 : 2;
+                        var leftWidth = (maxLength - sideWidth * 2 - 3) >> 1;
+                        var rightWidth = (maxLength - sideWidth * 2 - 3) >> 1;
+                  
+                        if(totalPages <= maxLength){
+                          return range(1, totalPages);
+                        }
+                  
+                        if(page <= maxLength - sideWidth - 1 - rightWidth){
+                          return range(1, maxLength - sideWidth - 1).concat(0, range(totalPages - sideWidth + 1, totalPages));
+                        }
+                  
+                        if(page >= totalPages - sideWidth - 1 - rightWidth){
+                          return range(1, sideWidth).concat(0, range(totalPages - sideWidth - 1 - rightWidth - leftWidth, totalPages));
+                        }
+                  
+                        return range(1, sideWidth).concat(0, range(page - leftWidth, page + rightWidth), 0, range(totalPages - sideWidth + 1, totalPages));
+                      }
+
+                      $(document).ready(function(){
+                        $(function(){
+                        var numberOfItems = $("#orderList .wishlist-row").length;
+                        var limitPerPage = 10;
+                        var totalPages = Math.ceil(numberOfItems / limitPerPage)
+                        var paginationSize = 7;
+                        var currentPage;
+                  
+                        function showPage(whichPage){
+                          if(whichPage < 1 || whichPage > totalPages) return false;
+                  
+                          currentPage = whichPage;
+                  
+                          $("#orderList .wishlist-row").hide().removeClass("xxx").slice((currentPage - 1) *  limitPerPage, currentPage * limitPerPage).show().addClass("xxx");
+                          
+                          var numItems = $("#orderList .xxx").length
+                          $(".numRecord").text(numItems)
+                          $(".totalRecord").text(numberOfItems)
+                          $(".page-number li").slice(1, -1).remove();
+                  
+                          getPageList(totalPages, currentPage, paginationSize).forEach(item =>{
+                            $("<li>").addClass("page-item").addClass(item ? "current-page" : "dots").toggleClass("acti", item === currentPage).append($("<a>").addClass("page-link").attr({href: "javascript:void(0"}).text(item || "...")).insertBefore(".next-page");
+                          });
+                  
+                          $(".previous-page").toggleClass("disabled", currentPage === 1);
+                          $(".next-page").toggleClass("disabled", currentPage === totalPages)
+                          return true;
+                        }
+                        $(".page-number").append(
+                          $("<li>").addClass("page-item").addClass("previous-page").append($("<a>").addClass("page-link").attr({href: "javascript:void(0)"}).text("Prev")),
+                            $("<li>").addClass("page-item").addClass("next-page").append($("<a>").addClass("page-link").attr({href: "javascript:void(0)"}).text("Next"))
+                          );
+                  
+                          $("#orderList").show();
+                          showPage(1);
+                  
+                          $(document).on("click", ".page-number li.current-page:not(.acti)", function(){
+                            return showPage(+$(this).text());
+                          });
+                  
+                          $(".next-page").on("click", function(){
+                            return showPage(currentPage + 1);
+                          })
+                  
+                          $(".previous-page").on("click", function(){
+                            return showPage(currentPage - 1);
+                          })
+                  
+                      })
+                    })
+</script>

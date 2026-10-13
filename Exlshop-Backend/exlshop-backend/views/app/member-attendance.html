@@ -1,0 +1,46 @@
+<%- include("./partials/header.html") %>
+<%- include("./partials/topnav.html") %>
+<%- include("./partials/sidebar.html") %>
+<div class="page">
+    <div class="page-content">
+        <div class="panel">            
+            <div class="panel-body">
+                <div class="form-group">
+                    <select class="form-control" id="customer-search"></select>                    
+                </div>
+                <div class="row">
+                    <div class="col-md-6">
+                        <table class="table" id="member-details">
+                            <thead>
+                                <tr class="text-center">
+                                    <th colspan="2">Member Details</th>
+                                </tr>
+                                <tr>
+                                    <th>Name</th>
+                                    <th>Phone</th>
+                                </tr>
+                            </thead>
+                            <tbody></tbody>
+                        </table>
+                        <div class="col-md-6" id="camera-container"></div>
+                        <div class="col-md-6" id="results"></div>
+                        <div class="text-center">
+                            <button class="btn btn-primary" id="capture">Capture</button>
+                        </div>
+                        <img src="" id="queryImg" />
+                    </div>
+                    <div class="col-md-6">
+                        <img src="" id="refImg" width="100%" />
+                    </div>
+                </div>                
+                <img src="" id="queryImg" />                
+            </div>
+        </div>       
+    </div>
+</div>
+<%- include("./partials/footer.html") %>
+<script type="text/javascript">
+    ATTENDANCE.init({
+        _csrf: '<%= _csrf %>'
+    })
+</script>

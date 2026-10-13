@@ -1,0 +1,11 @@
+<%- include("./partials/header.html") %>
+<%- include("./partials/topnav.html") %>
+<%- include("./partials/sidebar.html") %>
+
+<%- include("./partials/footer.html") %>
+<script type="text/javascript">
+    SINGLE_LEAD.init({
+        _csrf: '<%= _csrf %>',
+        leadData: '<%- JSON.stringify(leadData) %>'
+    })
+</script>

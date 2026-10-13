@@ -1,0 +1,230 @@
+<%- include("./partials/header.html") %>
+<%- include("./partials/topnav.html") %>
+<%- include("./partials/sidebar.html") %>
+<div class="page">
+    <div class="page-header">
+        <h1 class="page-title">Team</h1>        
+        <div class="page-header-actions">
+            <button class="btn btn-round btn-primary" data-target="#add-new-team-member" data-toggle="modal"  id="add-team-member-btn">
+                <i class="icon fa-plus" aria-hidden="true"></i>
+                <span class="hidden-sm-down">Add Team Member</span>
+            </button>
+        </div>
+    </div>
+
+    <div class="page-content">
+        <div class="panel">            
+            <div class="panel-body">
+                <table class="table table-hover dataTable table-striped w-full" id="team-list">
+                    <thead>
+                        <tr>
+                            <th>ID</th>
+                            <th>Name</th>
+                            <th>Username</th>
+                            <th>Phone</th>
+                            <th>Role</th>  
+                            <th>Location</th>                          
+                            <th>Action</th>
+                        </tr>
+                    </thead>                    
+                    <tbody></tbody>
+                </table>
+            </div>
+        </div>       
+    </div>
+</div>
+<div class="modal fade" id="add-new-team-member" aria-hidden="false" aria-labelledby="add-new-team-member" role="dialog" tabindex="-1">
+    <div class="modal-dialog modal-simple">
+        <div class="modal-content" >
+        <!-- <form class="modal-content" action="/super-admin/brands/locations/team/add-new-member" method="POST" autocomplete="off" id="team-member-form"> -->
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">×</span>
+                </button>
+                <h4 class="modal-title" id="add-new-team-member">Team Member</h4>
+            </div>
+            <div class="modal-body">
+                <input type="hidden" id="update-team-member-id" name="update_team_member_id">
+                <div class="row">
+                    <div class="form-group col-xl-6 form-body">
+                        <input type="text" class="form-control" id="user-fname" name="user_fname" placeholder="First Name" required />
+                    </div>
+                    <div class="form-group col-xl-6 form-body">
+                        <input type="text" class="form-control" id="user-lname" name="user_lname" placeholder="Last Name" required />
+                    </div>
+                    <div class="form-group col-xl-6 form-body">
+                        <input type="text" class="form-control" id="user-email" name="user_email" placeholder="Email" required />
+                        <div class="invalid-feedback"></div>
+                    </div>
+                    <div class="form-group col-xl-6 form-body">
+                        <input type="text" class="form-control" id="user-phone" name="user_phone" placeholder="Phone" required />
+                        <div class="invalid-feedback"></div>
+                    </div>
+                    <div class="form-group col-xl-6 form-body">
+                        <input type="password" class="form-control" id="user-password" name="user_password" placeholder="Password" autocomplete="new-password" required />
+                    </div>
+                    <div class="form-group col-xl-6 form-body">
+                        <input type="password" class="form-control" id="user-confirm-password" name="user_confirm_password" placeholder="Confirm Password" autocomplete="new-password" required />
+                        <div class="invalid-feedback" id="password-mismatch">Passwords do not match</div>
+                    </div>
+                    <div class="form-group col-xl-6 form-body">
+                        <select class="form-control" id="role" name="role_id" required>
+                            <option>Select Role</option>
+                            <% roles.forEach(function (r){%>
+                            <option value="<%= r.id %>"><%= r.name %></option>
+                            <% }) %>
+                        </select>
+                    </div>
+                    <div class="form-group col-xl-6 form-body">
+                        <select class="form-control" id="location" name="location_id" required>
+                            <option>Select Locations</option>
+                        </select>
+                    </div>
+                    <div class="form-group col-xl-12">
+                        <%- csrf_html %>
+                        <button class="btn btn-primary" id="add-new-team-member-btn">Add</button>
+                        <button class="btn btn-primary display-hidden" id="update-team-member-btn">Update</button>
+                    </div>
+                </div>                
+            </div>            
+        <!-- </form> -->
+        </div>
+    </div>
+    </div>
+</div>
+
+<div class="modal fade" id="delete-team-member" aria-hidden="false" aria-labelledby="delete-team-member" role="dialog" tabindex="-1">
+    <div class="modal-dialog modal-simple">
+        <div class="modal-content" >
+        <!-- action="/super-admin/brands/locations/team/delete-team-member" -->
+        <!-- <form class="modal-content" action="/api/v1/branduserteam/delete-team-member" method="POST" autocomplete="off"> -->
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">×</span>
+                </button>
+                <h4 class="modal-title">Delete Team Member</h4>
+            </div>
+            <div class="modal-body">
+                <div class="row">
+                    <input type="hidden" name="team_member_id" id="team-member-id">
+                    <div class="col-lg-12">
+                        <p>Do you really want to Delete the selected Team Member ?</p>
+                    </div>
+                    <div class="form-group col-xl-12">
+                        <%- csrf_html %>
+                        <button class="btn btn-round" id="delete-tax-btn">Delete</button>
+                    </div>
+                </div>                
+            </div>            
+        <!-- </form> -->
+
+    </div>
+
+        </div>
+
+    </div>
+</div>
+<%- include("./partials/footer.html") %>
+<script type="text/javascript">
+    TEAMS.init({
+        _csrf: '<%= _csrf %>'
+    })
+</script>
+
+<script>
+
+    $(function(){				
+         $("#update-team-member-btn").click(function(e){
+             var id = $(this).attr('value');
+             var uid =$("#update-team-member-id").val();
+             var fname=$("#user-fname").val();  
+             var lname=$("#user-lname").val();
+             var email=$("#user-email").val();
+             var phone=$("#user-phone").val();
+             var role = $("#role").val(); 
+          var lid= $("#location").val(); 
+              alert(fname)            
+             $.ajax({
+                 url: "/super-admin/brands/locations/team/update-team-member",
+                // "url":"/api/v1/user1/update-member",
+                 data:{
+                     uid:uid,
+                     fname:fname,
+                     lname:lname,
+                     email:email,
+                     phone:phone,
+                     role:role,
+                    lid:lid,
+                       _csrf: '<%= _csrf %>'},	
+                       method: 'POST',					
+                       success: function(data) {
+                        // alert("successfully")
+                        window.location.reload();
+                        // = "/super-admin/brands/team";                  
+                        },
+                       error: function(data,status,error) {
+                        // alert("not successfull")
+                        }
+             });			
+         });				
+     });
+   $(function(){				
+         $("#add-new-team-member-btn").click(function(e){
+             var fname=$("#user-fname").val();  
+             var lname=$("#user-lname").val();
+             var email=$("#user-email").val();
+             var phone=$("#user-phone").val();
+             var password= $("#user-password").val();
+             var cpassword=$("#user_confirm_password").val();
+             var role = $("#role").val(); 
+           var lid= $("#location").val(); 
+            //  alert(lid)            
+             $.ajax({
+               //  url: "/api/v1/branduserteam/add-team-member",
+                url: "/super-admin/brands/locations/team/add-new-member",
+                 data:{
+                     fname:fname,
+                     lname:lname,
+                     email:email,
+                     phone:phone,
+                     password:password,
+                     cpassword:cpassword,
+                     role:role,
+                    lid:lid,
+                       _csrf: '<%= _csrf %>'},	
+                       method: 'POST',					
+                       success: function(data) {
+                        // alert("successfully")
+                        window.location = "/super-admin/brands/team";                  
+                        },
+                       error: function(data,status,error) {
+                        // alert("not successfull")
+                        }
+             });			
+         });				
+    
+         $("#delete-tax-btn").click(function(e){
+             var team_member_id=$("#team-member-id").val();  
+            //  alert(team_member_id)            
+             $.ajax({
+                 url: "/api/v1/branduserteam/delete-team-member",
+                 data:{
+                   team_member_id:team_member_id,
+                       _csrf: '<%= _csrf %>'},	
+                       method: 'POST',					
+                       success: function(data) {
+                        // alert("successfully")
+                        //window.location = "/api/v1/branduserteam/view-all"; 
+                        window.location="/super-admin/brands/team"                 
+                        },
+                       error: function(data,status,error) {
+                        // alert("not successfull")
+                        }
+             });			
+         });				
+      
+       });
+    
+   </script>
+   
+

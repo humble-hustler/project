@@ -1,0 +1,250 @@
+<%- include("./partials/header.html") %>
+<%- include("./partials/topnav.html") %>
+<%- include("./partials/sidebar.html") %>
+<div class="page">
+    <div class="page-content">
+        <div class="panel panel-primary panel-line">
+            <div class="panel-heading">
+                <h3 class="panel-title">Location Information</h3>
+                <div class="panel-actions" id="panel-action">
+                    <input type="checkbox" name="is_active" id="brand-active" class="js-switch" data-plugin="switchery" activestatus ="<%= locationInfo.is_active %>" <%= locationInfo.is_active ? 'checked' : '' %> />
+                    <% if( locationInfo.is_active === 1 ) { %>   
+                    <label class="form-control-label" for="brand-active">Active</label><br />
+                    <% } else { %>
+                    <label class="form-control-label" for="brand-active">Inactive</label><br />
+                    <% } %>
+                </div>
+            </div>
+            <div class="panel-body">
+                <form id="location-information" action="" method="POST" autocomplete="off">
+                    <div class="form-group">
+                        <label class="form-control-label" for="location-name">Company Name</label>
+                        <input type="text" class="form-control" id="location-name" name="name" value="<%= locationInfo.name %>" />
+                    </div>
+                    <div class="row">
+                        <div class="form-group col-md-6">
+                            <label class="form-control-label" for="location-phone">Phone</label>
+                            <input type="text" class="form-control" id="location-phone" name="phone" value="<%= locationInfo.phone %>" />
+                            <div class="invalid-feedback"></div>
+                        </div>
+                        <div class="form-group col-md-6">
+                            <label class="form-control-label" for="location-email">Email</label>
+                            <input type="text" class="form-control" id="location-email" name="email" value="<%= locationInfo.email %>" />
+                        </div>
+                    </div>                    
+                    <div class="form-group">
+                        <label class="form-control-label" for="gstin">GSTIN</label>
+                        <input type="text" class="form-control" id="gstin" name="gstin" value="<%= locationInfo.gstin %>" />
+                        <div class="invalid-feedback"></div>
+                    </div>
+                    <div class="row">
+                        <div class="form-group col-md-6">
+                            <label class="form-control-label" for="address-1">Address Line 1</label>
+                            <input type="text" class="form-control" id="address-1" name="address_line_1" value="<%= locationInfo.address_line_1 %>" />
+                        </div>
+                        <div class="form-group col-md-6">
+                            <label class="form-control-label" for="address-1">Address Line 2</label>
+                            <input type="text" class="form-control" id="address-2" name="address_line_2" value="<%= locationInfo.address_line_2 %>" />
+                        </div>
+                    </div>                    
+                    <div class="row">
+                        <div class="form-group col-md-4">
+                            <label class="form-control-label" for="country">State</label>
+                            <select class="form-control" id="state" name="state_id" >
+                                <option>Select State</option>
+                                <% states.forEach((s)=>{ %>
+                                <option value="<%= s.id %>" <%= s.id === locationInfo.state_id ? 'selected' : '' %>><%= s.name %></option>
+                                <% }) %>
+                            </select>
+                        </div>
+                        <div class="form-group col-md-4">
+                            <label class="form-control-label" for="state">City</label>
+                            <select class="form-control" id="city" name="city_id" >
+                                <option>Select City</option>
+                                <% cities.forEach((c)=>{ %>
+                                <option value="<%= c.id %>" <%= c.id === locationInfo.city_id ? 'selected' : '' %>><%= c.name %></option>
+                                <% }) %>
+                            </select>
+                        </div>
+                        <div class="form-group col-md-4">
+                            <div class="form-group">
+                                <label class="form-control-label" for="pin-code">Pin Code</label>
+                                <input type="text" class="form-control" id="pin-code" name="zip" value="<%= locationInfo.zip %>" />
+                                <div class="invalid-feedback"></div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="form-group col-md-6">
+                            <label class="form-control-label" for="lat">Latitude</label>
+                            <input type="number" class="form-control" id="address-lat" name="lat" value="<%= locationInfo.lat %>" />
+                            <div class="invalid-feedback"></div>
+                        </div>
+                        <div class="form-group col-md-6">
+                            <label class="form-control-label" for="long">Longitude</label>
+                            <input type="number" class="form-control" id="address-long" name="lng" value="<%= locationInfo.lng %>" />
+                            <div class="invalid-feedback"></div>
+                        </div>
+                    </div>  
+
+                </form>
+            </div>
+        </div>
+        <div class="panel panel-primary panel-line">
+            <div class="panel-heading">
+                <h3 class="panel-title">Uploaded Documents</h3>
+            </div>
+            <div class="panel-body">
+                <% if(documents.length){ %>
+                    <div class="row" style="text-align: center;">
+                        <div class="col-6">
+                            <h5>Pan Document</h5>
+                            <img src="<%= documents[0].pan_file %>" style="width: 250px;">
+                        </div>
+    
+                        <div class="col-6">
+                            <h5>GST Document</h5>
+                            <img src="<%= documents[0].gst_file %>" style="width: 250px;">
+                        </div>
+                    </div>
+                <% } else {%>
+                    <div style="color: gray; text-align: center; font-weight: 500; font-size: 17px;">No Documents Uploaded</div>
+                <% } %>
+            </div>
+        </div>
+        <div class="panel panel-primary panel-line">
+            <div class="panel-heading">
+                <h3 class="panel-title">Team Members</h3>
+                <div class="panel-actions panel-actions-keep">
+                    <button class="btn btn-round btn-primary" data-target="#add-new-team-member" data-toggle="modal"  id="add-team-member-btn">
+                        <i class="icon fa-plus" aria-hidden="true"></i>
+                        <span class="hidden-sm-down">Add Team Member</span>
+                    </button>
+                </div>
+            </div>
+            <div class="panel-body">
+                <table class="table table-hover dataTable table-striped w-full mt-10" id="team-member-list">
+                    <thead>
+                        <tr>
+                            <th>ID</th>
+                            <th>Name</th>
+                            <th>Email</th>
+                            <th>Phone</th>
+                            <th>Role</th>  
+                            
+                        </tr>
+                    </thead>          
+                    <% if(users.length){ %>          
+                        <tbody>
+                            <% users.forEach((u) => { %>
+                            <tr>
+                                <td><%= u.users_id %></td>
+                                <td><%= u.fname %> <%= u.lname %></td>
+                                <td><%= u.email %></td>
+                                <td><%= u.phone %></td>
+                                <td><%= u.name %></td>
+                            </tr>
+                            <%})%>   
+                        </tbody>
+                    <% } else { %>
+                        <tbody>
+                            <tr >
+                            <td></td>
+                            <td></td>
+                            <td style="font-size: 25px; font-weight: 500;" colspan="3">No Members</td>
+                            </tr>
+                        </tbody>
+                    <% } %>
+                </table>
+            </div>
+        </div>
+    </div>
+</div>
+<div class="modal fade" id="add-new-team-member" aria-hidden="false" aria-labelledby="add-new-team-member" role="dialog" tabindex="-1">
+    <div class="modal-dialog modal-simple">
+        <div class="modal-content" >
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">×</span>
+                </button>
+                <h4 class="modal-title" id="add-new-team-member">New Team Member</h4>
+            </div>
+            <div class="modal-body">
+                <input type="hidden" id="update-team-member-id" name="update_team_member_id">
+                <div class="row">
+                    <div class="form-group col-xl-6">
+                        <% users.forEach((u1)=>{ %>
+                             <input type="hidden" id="id" name="id" value="<%= u1.id %>">
+                        <% }) %>
+                        <input type="text" class="form-control" id="user-fname" name="user_fname" placeholder="First Name" required />
+                    </div>
+                    <div class="form-group col-xl-6">
+                        <input type="text" class="form-control" id="user-lname" name="user_lname" placeholder="Last Name" required />
+                    </div>
+                    <div class="form-group col-xl-6">
+                        <input type="text" class="form-control" id="user-email" name="user_email" placeholder="Email" required />
+                        <div class="invalid-feedback"></div>
+                    </div>
+                    <div class="form-group col-xl-6">
+                        <input type="text" class="form-control" id="user-phone" name="user_phone" placeholder="Phone" required />
+                        <div class="invalid-feedback"></div>
+                    </div>
+                    <div class="form-group col-xl-6">
+                        <input type="password" class="form-control" id="user-password" name="user_password" placeholder="Password" autocomplete="new-password" required />
+                    </div>
+                    <div class="form-group col-xl-6">
+                        <input type="password" class="form-control" id="user-confirm-password" name="user_confirm_password" placeholder="Confirm Password" autocomplete="new-password" required />
+                        <div class="invalid-feedback" id="password-mismatch">Passwords do not match</div>
+                    </div>
+                    <div class="form-group col-xl-12">
+                        <select class="form-control" id="role" name="role_id" requried>
+                            <option>Select Role</option>
+                            <% roles.forEach((r)=>{ %>
+                            <option value="<%= r.id %>"><%= r.verbose %></option>
+                            <% }) %>
+                        </select>
+                    </div>
+                    <div class="form-group col-xl-12">
+                        <%- csrf_html %>
+                        <input type="hidden" id="lid" value="<%= locationInfo.id %>" name="location_id" />
+                        <button class="btn btn-primary" id="add-new-team-member-btn">Add</button>
+                        <button class="btn btn-primary display-hidden" id="update-team-member-btn">Update</button>
+                    </div>
+                </div>                
+            </div>            
+    </div>
+    </div>
+</div>
+
+<div class="modal fade" id="delete-team-member" aria-hidden="false" aria-labelledby="delete-team-member" role="dialog" tabindex="-1">
+    <div class="modal-dialog modal-simple">
+        <form class="modal-content" action="/super-admin/brands/locations/team/delete-team-member" method="POST" autocomplete="off">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">×</span>
+                </button>
+                <h4 class="modal-title">Delete Team Member</h4>
+            </div>
+            <div class="modal-body">
+                <div class="row">
+                    <input type="hidden" name="team_member_id" id="team-member-id">
+                    <div class="col-lg-12">
+                        <p>Do you really want to Delete the selected Team Member ?</p>
+                    </div>
+                    <input type="hidden" id="delete-tax-id" name="tax_id">
+                    <div class="form-group col-xl-12">
+                        <%- csrf_html %>
+                        <button class="btn btn-primary" id="delete-tax-btn">Delete</button>
+                    </div>
+                </div>                
+            </div>            
+        </form>
+    </div>
+</div>
+<%- include("./partials/footer.html") %>
+<script type="text/javascript">
+    SINGLE_LOCATION.init({
+        _csrf: '<%= _csrf %>',
+        locationInfo: '<%- JSON.stringify(locationInfo) %>'
+    })  
+</script>

@@ -1,0 +1,690 @@
+<div id="cart-loader">
+    <span>Loading</span>
+</div>
+<div class="page-content container-fluid">
+    <div class="row">
+        <div class="col-md-9">
+            <div class="panel panel-bordered mb-10">
+                <div class="panel-body p-20">
+                    <div class="form-group">
+                        <div class="input-group input-group-icon">
+                            <div class="input-group-prepend">
+                                <button type="button" class="btn btn-warning" data-target="#add-new-package" data-toggle="modal"><i class="fa fa-cart-plus"></i></button>
+                            </div>
+                            <input type="text" class="form-control" id="package-search" placeholder="Enter Package Name">
+                            <div class="dropdown-menu fullwidth" id="package-search-result"></div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <% var expiry_date = 'none', ptPackageAllowed1=1;;
+            if(typeof ptPackagesAllowed != 'undefined' && membershipLogs.length>0){
+                if(ptPackagesAllowed){
+                    var expiry_date = formatDate(new Date(), 'YYYY-MM-DD');
+                    membershipLogs.forEach(function(ml){
+                        if(expiry_date < formatDate(ml.expiry_date, 'YYYY-MM-DD')){
+                            expiry_date = formatDate(ml.expiry_date, 'YYYY-MM-DD');
+                        }   
+                    })
+                }   
+            } %>
+            <div class="panel panel-bordered paper-cut no-box-shadow">
+                <div class="panel-body p-0" id="sales-items-table-wrapper">
+                    <div class=" pt-5">
+                        <table class="table m-0" data-role="content" data-plugin="selectable" data-row-selectable="true">
+                            <thead class="bg-blue-grey-100">
+                                <tr>
+                                    <th class="text-center" colspan="2">Package</th>
+                                    <th class="text-center" colspan="2">Price</th>
+                                    <th class="text-center">Subtotal</th>
+                                    <th class="text-center">Tax</th>
+                                    <th class="text-center">Total</th>
+                                    <th></th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <% if(!cart){ %>
+                                <tr>
+                                    <td colspan="9" class="text-center">No Package Selected</td>
+                                </tr>
+                                <% } else { %>
+                                <% session.cart.line.forEach((c) => { %>
+                                <tr>
+                                    <td class="text-center" colspan="2">
+                                        <%= c.name %> (Price: Rs. <%= c.cost_price %>)
+                                        <% if(c.is_pt){ %>
+                                        <select class="form-control trainer-id" data-package-id="<%= c.id %>" data-line-id="<%= c.lineId %>">
+                                            <option value="">Select Trainer</option>
+                                            <% trainers.forEach((t) => { %>
+                                            <option value="<%= t.id %>" <%= c.trainer_id == t.id ? 'selected' : '' %>><%= t.fname %> <%= t.lname %></option>
+                                            <% }) %>
+                                        </select>
+                                        <% } %>
+                                    </td>
+                                    <td class="text-center" colspan="2">
+                                        <% var price = 0; %>   
+                                        <%  if(c.tax_included) { %>
+                                        <% price = c.priceExludingTax.toFixed(2) %>
+                                        <% } else { %>
+                                        <% price = c.price.toFixed(2) %>
+                                        <% } %>
+                                        <div class="form-group">
+                                            <div class="input-group">
+                                                <div class="input-group-prepend">
+                                                    <span class="input-group-text pl-2 pr-2">Rs.</span>
+                                                </div>
+                                                <input type="number" min="0" max="100" class="form-control text-center set-price pl-1 pr-1" data-package-id="<%= c.id %>" data-line-id="<%= c.lineId %>" value="<%= c.price %>">                                                
+                                            </div>
+                                        </div>
+                                    </td>                                   
+                                    <td class="text-center">
+                                        Rs. <%= c.subTotal.toFixed(2) %>
+                                    </td>
+                                    <td class="text-center">
+                                        <% if(c.tax && c.tax.length > 0) { %>
+                                        <ul class="list-unstyled">
+                                            <% c.tax.forEach((t) => { %>
+                                            <li><%= t.label %>: Rs. <%= t.amount.toFixed(2) %></li>
+                                            <% }) %>
+                                        </ul>
+                                        <% } else { %>
+                                        Rs. 0
+                                        <% } %>
+                                    </td>
+                                    <td class="text-center">
+                                        Rs. <%= c.total.toFixed(2) %>
+                                    </td>
+                                    <td class="text-center">
+                                        <a class="remove-package" data-line-id="<%= c.lineId %>" data-package-id="<%= c.id %>" data-toggle="tooltip" title="Remove Item"><i class="fa fa-trash-o text-danger"></i></a>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td colspan="2" style="border-top: none; padding-bottom: 20px">
+                                        <label class="form-control-label">Sold By</label>
+                                        <select class="form-control sold-by" data-line-id="<%= c.lineId %>" data-package-id="<%= c.id %>">
+                                            <option value="">Sold By</option>
+                                            <% team.forEach((t) => { %>
+                                            <option value="<%= t.id %>" <%= c.soldBy == t.id ? 'selected' : '' %>><%= t.user_name %></option>
+                                            <% }) %>
+                                        </select>
+                                    </td>
+                                    <td colspan="2" style="border-top: none; padding-bottom: 20px">
+                                        <label class="form-control-label">Time Slots</label>
+                                        <select class="form-control slot-id" data-package-id="<%= c.id %>" data-line-id="<%= c.lineId %>">
+                                            <option value="">Select Time Slot</option>
+                                            <% if(c.is_pt && c.trainer_id){ %>
+                                                <% ptTimeSlots.forEach((t) => { %>
+                                                <option value="<%= t.slot_id %>" <%= c.slotId == t.slot_id ? 'selected' : '' %>><%= t.start_time%> - <%= t.end_time %></option>
+                                                <% }) %>
+                                            <% }else{ %>
+                                                <% timeSlots.forEach((t) => { %>
+                                                <option value="<%= t.id %>" <%= c.slotId == t.id ? 'selected' : '' %>><%= t.start_time%> - <%= t.end_time %></option>
+                                                <% }) %>
+                                            <% } %>
+                                        </select>
+                                        <% if(c.is_pt && c.trainer_id){ %>
+                                        <a href="#" data-toggle='modal' data-target='#booked_slots' class='view_booked_slots'><i class="fa fa-eye" aria-hidden="true"></i> View Trainers Booked Slots</a>
+                                        <% } %>
+                                    </td>
+                                    <td colspan="2" style="border-top: none; padding-bottom: 20px;position:relative">
+                                        <label class="form-control-label">Membership Start Date</label>
+                                        <input type="text" class="form-control membership-date start-date" data-line-id="<%= c.lineId %>" data-package-id="<%= c.id %>" data-date-type="start" value="<%= formatDate(c.start, 'DD-MM-YYYY') %>"/>
+                                    </td>
+                                    <td colspan="2" style="border-top: none; padding-bottom: 20px;position:relative">
+                                        <label class="form-control-label">Membership End Date</label>
+                                        <input type="text" class="form-control membership-date" data-line-id="<%= c.lineId %>" data-package-id="<%= c.id %>" data-date-type="expiry" value="<%= formatDate(c.expiry, 'DD-MM-YYYY') %>" />
+                                    </td>
+                                </tr>
+
+                                <% if(c.is_pt && ( !ptPackagesAllowed || (expiry_date != 'none' && expiry_date < formatDate(c.expiry, 'YYYY-MM-DD')))){
+                                ptPackageAllowed1 = 0;
+                                %>
+                                <tr>
+                                    <td colspan="7" class="text-danger"><center>Need to have a membership to have a Package with PT</center></td>
+                                </tr>
+                                <% } %>
+                                <% }) %>
+                                <tr>
+                                    <td colspan="7" class="text-right"><button id="clear-cart" class="btn btn-danger text-white btn-xs">Clear Cart</button></td>
+                                </tr>
+                                <% } %>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-3">
+            <div class="panel panel-bordered mb-10">
+                <div class="panel-body p-0">
+                    <div class="form-group p-20 mb-0">
+                        <div class="input-group">
+                            <div class="input-group-prepend">
+                                <button type="button" class="btn btn-warning" data-target="#add-new-member" data-toggle="modal"><i class="fa fa-user-plus"></i></button>
+                            </div>
+                            <input type="text" class="form-control" id="search-customer" placeholder="Search Customer...">
+                            <div class="dropdown-menu fullwidth" id="customer-search-result"></div>                            
+                        </div>
+                    </div>
+                    <% if(session.cart && session.cart.memberId) { %>
+                    <ul class="list-group">
+                        <li class="list-group-item pt-0">
+                            <span class="sales-options-key font-size-15"><a href="#" data-toggle="tooltip" title="Detach"><i class="fa fa-trash-o text-danger" id="detach-member"></i></a> <%= session.cart.memberDetails.fname %></span>
+                            <span class="sales-options-value font-size-15"><%= session.cart.memberDetails.phone %></span>
+                        </li>
+                        <li class="list-group-item pt-0">
+                            <span class="sales-options-key font-size-15 "><a data-target="#member_packages" data-toggle="modal" class="color-gray"><i class="fa fa-eye" aria-hidden="true"></i> View Previous Packages</a></span>
+                        </li>
+                    </ul>
+                    <% } %>
+                </div>
+            </div>
+            <% if(cart) { %>
+            <div class="panel panel-bordered paper-cut no-box-shadow">
+                <div class="panel-body p-0" id="amount-block-wrapper">
+                    <ul class="list-group">
+                        <li class="list-group-item list-group-item-success border-radius-0">
+                            <span class="sales-options-key"><strong>Sub Total:</strong></span>
+                            <span class="sales-options-value">Rs. <%= session.cart.subTotal ? session.cart.subTotal.toFixed(2) : '0.00' %></span>
+                        </li>
+                        <% session.cart.taxLineTotal.forEach((t) => { %>
+                        <li class="list-group-item pb-0 pt-0">
+                            <span class="sales-options-key"><%= t.label %>: </span>
+                            <span class="sales-options-value">Rs. <%= t.amount.toFixed(2) %></span>
+                        </li>
+                        <% }) %>
+                        <li class="list-group-item border-radius-0 pb-0">
+                            <span class="sales-options-key"><strong>Total Tax:</strong></span>
+                            <span class="sales-options-value">Rs. <%= session.cart.taxTotalAmount ? session.cart.taxTotalAmount.toFixed(2) : '0.00' %></span>
+                        </li>                        
+                    </ul>
+                    <div class="amount-block">
+                        <div class="total amount clearfix">
+                            <div class="side-heading">
+                                Total
+                            </div>
+                            <div class="amount total-amount clearfix">
+                                Rs. <%= session.cart.totalAmount ? session.cart.totalAmount.toFixed(2) : '0.00' %>
+                            </div>
+                        </div>
+                        <div class="total amount-due clearfix">
+                            <div class="side-heading">
+                                Amount Due
+                            </div>
+                            <div class="amount ">
+                                Rs. <span id="due_amount"><%= session.cart.dueAmount ? session.cart.dueAmount.toFixed(2) : '0.00' %></span>
+                            </div>
+                        </div>
+                    </div>
+                    <% if(typeof paymentMethods !== 'undefined' && session.cart.memberId) { %>
+                    <% if(session.cart.paymentLines.length > 0) { %>
+                    <div class="payment-lines pt-2 pb-2">
+                        <ul class="list-group mb-0">
+                            <% session.cart.paymentLines.forEach((p) => { %>
+                            <li class="list-group-item pb-1 pt-0">                                
+                                <span class="sales-options-key"><a href="#" class="remove-payment" data-payment-id="<%= p.id %>" data-toggle="tooltip" title="Remove Payment"><i class="fa fa-trash-o text-danger"></i></a> <%= p.method %></span>
+                                <span class="sales-options-value">Rs. <%= p.amount.toFixed(2) %></span>
+                            </li>
+                            <% }) %>                            
+                        </ul>
+                    </div>
+                    <% } %>                    
+                    <div class="payment-type-block pl-20 pr-20 pb-20 pt-10">
+                        <div class="side-heading">
+                        </div>
+                        <div class="payment-methods">
+                                                      
+                        </div>
+                        <div class="form-group mb-0 mt-10">
+                            <button data-target='#add-sale-payment' data-toggle='modal' class="btn btn-primary" id="add-payment-btn">Add Payment</button>
+                           <!--  <div class="input-group">
+                                <input type="text" class="form-control" id="payment-amount" value="<%= session.cart.dueAmount.toFixed(2) %>">
+                                <span class="input-group-append">
+                                    <button type="submit" class="btn btn-primary" id="" <%= (ptPackageAllowed1 ==0 ||ptPackageAllowed1 == 0)?('disabled'):('') %>>Add Payment</button>
+                                </span>
+                            </div> -->
+                        </div>
+                        <div class="form-group mb-0 mt-10">
+                            <button type="submit" class="btn btn-primary" id="complete-sale" <%= (ptPackageAllowed1 ==0 ||ptPackageAllowed1 == 0)?('disabled'):('') %> >Complete Sale</button> 
+                        </div>
+                        <div class="form-group mb-0 mt-10">
+                            <label class="form-control-label">Comments:</label>
+                            <textarea class="form-control" id="sale-comment"><%= session.cart.comment ? session.cart.comment : ''%></textarea>
+                        </div>
+                        <% } %>
+                    </div>
+                    <div class="change-sale-date-block pl-20 pr-20 pb-20 pt-10">
+                        <div class="form-check mb-10">
+                            <input type="checkbox" id="change-sale-date-check" class="form-check-input " <%= session.cart.saleDate ? 'checked' : '' %>/>
+                            <label class="form-check-label" for="change-sale-date-check">Change Sale Date</label>
+                        </div>
+                        <div id="change-sale-date-input" class=<%= session.cart.saleDate ? 'form-group' : 'hidden form-group' %> >
+                            <div class="input-group input-group-icon">
+                                <div class="input-group-prepend">
+                                    <button type="button" class="btn btn-default"><i class="fa fa-calendar"></i></button>
+                                </div>
+                                <input type="text" class="form-control" id="change-sale-date-text" value="<%= formatDate(session.cart.saleDate, 'DD-MM-YYYY hh:mm a') %>">
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <% } %>
+        </div>        
+    </div>
+</div>
+<div class="modal fade" id="add-new-member" aria-hidden="false" aria-labelledby="add-new-member" role="dialog" tabindex="-1">
+    <div class="modal-dialog modal-lg">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">×</span>
+                </button>
+                <h4 class="modal-title" id="add-new-team-member">Add New Member</h4>
+            </div>
+            <div class="modal-body">
+                <div class="row">
+                    <div class="form-group col-xl-4">
+                        <input type="text" class="form-control" id="user-fname" name="user_fname" placeholder="First Name" required />
+                    </div>
+                    <div class="form-group col-xl-4">
+                        <input type="text" class="form-control" id="user-lname" name="user_lname" placeholder="Last Name" required />
+                    </div>
+                    <div class="form-group col-xl-4">
+                        <input type="text" class="form-control" id="user-email" name="user_email" placeholder="Email" required />
+                        <div class="invalid-feedback"></div>
+                    </div>
+                    <div class="form-group col-xl-4">
+                        <input type="text" class="form-control" id="user-phone" name="user_phone" placeholder="Phone" required />
+                        <div class="invalid-feedback"></div>
+                    </div>
+                    <div class="form-group col-xl-4">
+                        <input type="text" class="form-control" id="user-dob" name="user_dob" placeholder="DOB" required />
+                        <div class="invalid-feedback"></div>
+                    </div>
+                    <div class="form-group col-xl-4">
+                        <input type="text" class="form-control" id="user-anniversary" name="user_anniversary" placeholder="Anniversary Date" required />
+                        <div class="invalid-feedback"></div>
+                    </div>
+                    <div class="form-group col-xl-6">
+                        <label class="form-control-label">Gender</label>
+                        <div>
+                            <div class="radio-custom radio-primary radio-inline">
+                                <input type="radio" class="gender-radio" id="gender-male" name="gender" value="M">
+                                <label for="gender-male">Male</label>
+                            </div>
+                            <div class="radio-custom radio-primary radio-inline">
+                                <input type="radio" class="gender-radio" id="gender-female" name="gender" value="F">
+                                <label for="gender-female">Female</label>
+                            </div>
+                        </div>                        
+                    </div>
+                    <div class="form-group col-xl-6">
+                        <label class="form-control-label">Marital Status</label><br>
+                        <div>
+                            <div class="radio-custom radio-primary radio-inline">
+                                <input type="radio" class="marital-status-radio" id="marital-status-married" name="marital_status" value="1">
+                                <label for="marital-status-married">Married</label>
+                            </div>
+                            <div class="radio-custom radio-primary radio-inline">
+                                <input type="radio" class="marital-status-radio" id="marital-status-single" name="marital_status" value="2">
+                                <label for="marital-status-single">Single</label>
+                            </div>
+                        </div> 
+                    </div>
+                    <div class="form-group col-xl-6">
+                        <input type="text" class="form-control" id="address-1" name="address_line_1" placeholder="Address Line 1" required />
+                        <div class="invalid-feedback"></div>
+                    </div>
+                    <div class="form-group col-xl-6">
+                        <input type="text" class="form-control" id="address-2" name="address_line_2" placeholder="Address Line 2" required />
+                        <div class="invalid-feedback"></div>
+                    </div>
+                    <div class="form-group col-xl-4">
+                        <input type="text" class="form-control " id="emergency-contact-name" name="emergency_contact_name" placeholder="Emergency Contact Name" >
+                    </div>
+                    <div class="form-group col-xl-4">
+                        <input type="text" class="form-control " id="emergency-contact-number" name="emergency_contact_number" placeholder="Emergency Contact Phone">
+                    </div>
+                    <div class="form-group col-xl-4">
+                        <select class="form-control edit-data" id="blood-group" name="blood_group" placeholder="Blood Group">
+                            <option value="">--Select Blood Group--</option>
+                            <option >A+ve</option>
+                            <option >A-ve</option>
+                            <option >B+ve</option>
+                            <option >B-ve</option>
+                            <option >AB+ve</option>
+                            <option >AB-ve</option>
+                            <option >O+ve</option>
+                            <option >O-ve</option>
+                        </select>
+                    </div>
+                    <div class="form-group col-xl-4">
+                        <select class="form-control" id="state-select" name="user_state">
+                            <option value="">Select State</option>
+                            <% states.forEach((s)=>{ %>
+                            <option value="<%= s.id %>"><%= s.name %></option>
+                            <% }) %>
+                        </select>
+                        <div class="invalid-feedback"></div>
+                    </div>
+                    <div class="form-group col-xl-4">
+                        <select class="form-control" id="city-select" name="user_city">
+                            <option value="">Select City</option>                            
+                        </select>
+                        <div class="invalid-feedback"></div>
+                    </div>
+                    <div class="form-group col-xl-4">
+                        <input type="text" class="form-control" id="user-zip" name="user_zip" placeholder="ZIP Code" required />
+                        <div class="invalid-feedback"></div>
+                    </div>
+                    <div class="form-group col-xl-12">
+                        <%- csrf_html %>
+                        <button class="btn btn-primary" id="add-member-btn">Add Member</button>
+                    </div>
+                </div>                
+            </div>            
+        </div>
+    </div>
+</div>
+<div class="modal fade" id="add-new-package" aria-hidden="false" aria-labelledby="add-new-package" role="dialog" tabindex="-1">
+    <div class="modal-dialog modal-simple">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">×</span>
+                </button>
+                <h4 class="modal-title">Add New Package</h4>
+            </div>
+            <div class="modal-body">
+                <div class="row">
+                    <div class="form-group col-xl-6">
+                        <input type="text" class="form-control" id="package-name" name="name" placeholder="Name" required />
+                    </div>
+                    <div class="form-group col-xl-6">
+                        <input type="number" class="form-control" id="package-validity" name="validity" placeholder="Validity (In Days)" required />
+                    </div>
+                    <div class="form-group col-xl-6">
+                        <input type="number" step="0.01" class="form-control" id="package-price" name="price" placeholder="Price (Excluding Taxes)" required />
+                    </div>
+                    <div class="form-group col-xl-6">
+                        <input type="checkbox" class="js-switch" id="is-pt" name="is_pt" />
+                        <label class="form-control-label" for="is-pt">Includes Personal Trainer</label>
+                    </div>
+                    <div class="form-group col-xl-12">
+                        <%- csrf_html %>
+                        <button class="btn btn-primary" id="add-new-package-btn">Add</button>
+                    </div>
+                </div>                
+            </div>            
+        </div>
+    </div>
+</div>
+<div class="modal fade" id="clear-cart-modal" aria-hidden="true" aria-labelledby="clear-cart-modal" role="dialog" tabindex="-1" data-dismiss="modal">
+    <div class="modal-dialog modal-simple modal-center">
+        <div class="modal-content">
+            <div class="modal-header danger">
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">×</span>
+                </button>
+                <h4 class="modal-title">Clear Cart</h4>
+            </div>
+            <div class="modal-body">
+                <p>Are you sure you want to clear this sale? All items will cleared.</p>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-default" data-dismiss="modal">Cancel</button>
+                <button type="button" class="btn btn-primary" id="clear-cart-confirm">OK</button>
+            </div>
+        </div>
+    </div>
+</div>
+<div class="modal fade" id="complete-sale-modal" aria-hidden="true" aria-labelledby="clear-cart-modal" role="dialog" tabindex="-1" data-dismiss="modal">
+    <div class="modal-dialog modal-simple modal-center">
+        <div class="modal-content">
+            <div class="modal-header danger">
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">×</span>
+                </button>
+                <h4 class="modal-title">Confirm Sale</h4>
+            </div>
+            <div class="modal-body">
+                <p>Are you sure you want to complete this sale? This action cannot be undone.</p>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-default" data-dismiss="modal" id="complete-sale-cancel">Cancel</button>
+                <button type="button" class="btn btn-primary" id="complete-sale-confirm">OK</button>
+            </div>
+        </div>
+    </div>
+</div>
+<div class="modal fade" id="member_packages" aria-hidden="false" aria-labelledby="member-packages" role="dialog" tabindex="-1">
+    <div class="modal-dialog modal-simple">
+        <form class="modal-content" action="/app/packages/add" method="POST" autocomplete="off">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">×</span>
+                </button>
+                <h4 class="modal-title">Customer Packages</h4>
+            </div>
+            <div class="modal-body">
+                <div class="">
+                    <table class="table m-0" data-role="content" data-plugin="selectable" data-row-selectable="true">
+                        <thead class="bg-blue-grey-100">
+                            <tr>
+                                <th class="text-center">Package Name</th>
+                                <th class="text-center">Package Start</th>
+                                <th class="text-center">Package End</th>
+                                <th class="text-center">Trainer</th>
+                                <th class="text-center">Status</th>
+                                <th></th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <% if(!membershipLogs || membershipLogs.length == 0){ %>
+                            <tr>
+                                <td colspan="7" class="text-center">No Packages Available</td>
+                            </tr>
+                            <% } else { %>
+                                <% membershipLogs.forEach((m) => { %>
+                                <tr>
+                                    <td><%= m.package_name %></td>
+                                    <td><%= formatDate(m.start_date, 'Do MMM YYYY') %></td>
+                                    <td><%= formatDate(m.expiry_date, 'Do MMM YYYY') %></td>
+                                    <td><%= m.trainer_fname %> <%= m.trainer_lname %></td>
+                                    <td>
+                                        <% var status = ''%>
+                                        <% if(new Date() < m.start_date ) { %>
+                                        <span class="badge badge-warning">To Start</span>
+                                        <% } else if (new Date() > m.expiry_date) { %>
+                                        <span class="badge badge-default">Expired</span>
+                                        <% }else if(m.is_transferred){%>
+                                        <span class="badge badge-default">Transferred to <%= m.transferred_to_member_name %></span>
+                                        
+                                        <% } else { %>
+                                        <span class="badge badge-success">Active</span>
+                                        <% } %>
+                                       
+                                    </td>
+                                </tr>
+                                <% }) %>
+                            <% } %>
+                        </tbody>
+                    </table>
+                </div>        
+            </div>            
+        </form>
+    </div>
+</div>
+<div class="modal fade" id="add-sale-payment" aria-hidden="false" aria-labelledby="add-sale-payment" role="dialog" tabindex="-1">
+    <div class="modal-dialog modal-simple">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">×</span>
+                </button>
+                <h4 class="modal-title" id="add-new-team-member">Add Payment</h4>
+            </div>
+            <div class="modal-body">
+                <div class="row">
+                    <div class="form-group col-lg-12">
+                        <label></label>
+                        <select id="payment-method" name="payment-method" class="form-control">
+                            <option value="">--Select Payment Method--</option>
+                            <% paymentMethods.forEach((m, i) => { %>
+                            <option value="<%= m.id %>"><%= m.label %></option>
+                            <% }) %>   
+                        </select>
+                    </div>
+                </div> 
+                <div class="row display-hidden" id="card">
+                    <div class="form-group col-lg-6">
+                        <label>Card Type</label><br>
+                        <input type="radio" name ='card-type' value='credit'> Credit
+                        <input type="radio" name ='card-type' value='debit'> Debit
+                    </div>
+                    <div class="form-group col-lg-6">
+                        <label>Last 4 Digits on card</label>
+                        <input type="text"  class="form-control" name="card-number" id="card-number">
+                    </div>
+                    <div class="form-group col-lg-4">
+                        <label>Name On card</label>
+                        <input type="text"  class="form-control" name="card-name" id="card-name">
+                    </div>
+                    <div class="form-group col-lg-4">
+                        <label>Phone No</label>
+                        <input type="text"  class="form-control" name="card-phone" id="card-phone">
+                    </div>
+                    <div class="form-group col-lg-4">
+                        <label>Amount</label>
+                        <input type="text"  class="form-control" name="card-amount" id="card-amount">
+                        <div class="invalid-feedback"></div>
+                    </div>
+                </div> 
+                <div class="row display-hidden" id="neft">
+                    <div class="form-group col-lg-6">
+                        <label>Bank Name</label>
+                        <input type="text"  class="form-control" name="bank-name" id="bank-name">
+                    </div>
+                    <div class="form-group col-lg-6">
+                        <label>Amount</label>
+                        <input type="text"  class="form-control" name="neft-amount" id="neft-amount">
+                        <div class="invalid-feedback"></div>
+                    </div>
+                    <div class="form-group col-lg-6">
+                        <label>Date</label>
+                        <input type="text"  class="form-control" name="neft-date" id="neft-date">
+                    </div>
+                    <div class="form-group col-lg-6">
+                        <label>UTF/ Ref No.</label>
+                        <input type="text"  class="form-control" name="ref-no" id="ref-no">
+                    </div>
+                </div>
+                <div class="row display-hidden" id="cash">
+                    <div class="form-group col-lg-6">
+                        <label>Total cash Amount</label>
+                        <input type="text"  class="form-control" name="total-cash-amount" id="total-cash-amount">
+                        <div class="invalid-feedback"></div>
+                    </div>
+                </div>
+                <div class="row display-hidden" id="razorpay">
+                    <div class="form-group col-lg-6">
+                        <label>Amount</label>
+                        <input type="number"  class="form-control" name="razorpay-amount" id="razorpay-amount">
+                        <div class="invalid-feedback"></div>
+                    </div>
+                    <div class="form-group col-lg-6">
+                        <label>Transaction ID</label>
+                        <input type="text"  class="form-control" name="razorpay-transaction-id" id="razorpay-transaction-id">
+                    </div>
+                </div> 
+                <div class="row display-hidden" id="cheque">
+                    <div class="form-group col-lg-6">
+                        <label>Bank Name</label>
+                        <input type="text"  class="form-control" name="cheque-bank-name" id="cheque-bank-name">
+                    </div>
+                    <div class="form-group col-lg-6">
+                        <label>Cheque No</label>
+                        <input type="text"  class="form-control" name="cheque-no" id="cheque-no">
+                    </div>
+                    <div class="form-group col-lg-6">
+                        <label>Cheque Date</label>
+                        <input type="text"  class="form-control" name="cheque-date" id="cheque-date">
+                    </div>
+                    <div class="form-group col-lg-6">
+                        <label>Amount</label>
+                        <input type="text"  class="form-control" name="cheque-amount" id="cheque-amount">
+                        <div class="invalid-feedback"></div>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="form-group col-xl-12">
+                        <%- csrf_html %>
+                        <button class="btn btn-primary" id="add-payment">Add Payment</button>
+                    </div>    
+                </div>           
+            </div>            
+        </div>
+    </div>
+</div>
+
+<div class="modal fade" id="booked_slots" aria-hidden="false" aria-labelledby="booked_slots" role="dialog" tabindex="-1">
+    <div class="modal-dialog modal-lg">
+        <form class="modal-content" action="/app/packages/add" method="POST" autocomplete="off">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">×</span>
+                </button>
+                <h4 class="modal-title">Booked Slots</h4>
+            </div>
+            <div class="modal-body">
+                <div class="">
+                    <table class="table m-0" data-role="content" data-plugin="selectable" data-row-selectable="true">
+                    <thead class="bg-blue-grey-100">
+                        <tr>
+                            <th class="text-center">Slot Timing</th>
+                            <th class="text-center">Week Days Available</th>
+                            <th class="text-center">Member Booking Logs</th>
+                            <th></th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <% ptTimeSlots.forEach(function(pt){ %>
+                        <tr>
+                            <td><%= pt.start_time%> - <%= pt.end_time %></td>
+                            <td>
+                                <% var arr = ['Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday', 'Sunday']; 
+                                var week_str = '';%>
+                                <% if(pt.week_days == 'all'){ %>
+                                    All Days a Week
+                                <% }else{ 
+                                    var week_arr = pt.week_days.split(",");
+                                    week_arr.forEach(function(w){
+                                        week_str+= ((week_str)?(', '+arr[w]):(arr[w])) ;
+                                    })
+                                } %>
+                                <%= week_str; %>
+                            </td>
+                            <td>
+                                <% trainerBookingLog.forEach(function(bl){ %>
+                                <% if(bl.slot_id == pt.slot_id){ %>
+                                <%= bl.member_name%> (<%= formatDate(bl.start_date, 'DD-MM-YYYY') %> - <%= formatDate(bl.expiry_date, 'DD-MM-YYYY') %>)
+                                <% } %>
+                                <% })%>
+                            </td>
+                        </tr>
+                        <% }) %>
+                    </tbody>
+                </table>
+                </div>        
+            </div>            
+        </form>
+    </div>
+</div>
+<script type="text/javascript">
+    SALES.init({
+        _csrf: '<%= _csrf %>',
+        cart: '<%- JSON.stringify(session.cart) %>',
+        minDate: '<%= minDate %>'
+    })
+</script>

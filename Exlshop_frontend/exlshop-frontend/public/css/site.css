@@ -1,0 +1,143 @@
+#sign-in-modal .card, #register-modal .card {
+    border: none;
+    /*width: 350px;*/
+}
+
+::placeholder { /* Chrome, Firefox, Opera, Safari 10.1+ */
+    opacity: 0.4 !important;
+}
+
+:-ms-input-placeholder { /* Internet Explorer 10-11 */
+    opacity: 0.4 !important;
+}
+
+::-ms-input-placeholder { /* Microsoft Edge */
+    opacity: 0.4 !important;
+}
+
+.section-pagetop {
+    padding: 5px 0 !important;
+}
+
+#show-now {
+    width: 30%;
+    margin: 0 auto;
+}
+
+.empty-cart-image {
+    width: 15%;
+    margin: 20px auto;
+}
+
+.order-btn {
+    text-decoration: none !important;
+}
+
+.img-wrap img{
+    object-fit: fill!important;
+}
+
+.text-small {
+    font-size: 0.9rem;
+}
+
+.messages-box,
+.chat-box {
+    height: 510px;
+    overflow-y: scroll;
+}
+
+.rounded-lg {
+    border-radius: 0.5rem;
+}
+
+input::placeholder {
+    font-size: 0.9rem;
+    color: #999;
+}
+
+#chat-list, #chat-window{
+    position: fixed;
+    bottom: 0;
+    right: 0;
+    z-index: 999;
+    height: 78vh;
+    border: 1px solid #eee;
+}
+
+.display-hidden{
+    display:none;
+}
+
+.color-white{
+    color:#fff;
+}
+
+.message-header{
+    background-color: #666666!important;
+}
+
+.messages-box::-webkit-scrollbar {
+    width: 3px;
+}
+
+/* Track */
+.messages-box::-webkit-scrollbar-track {
+    background: #fff; 
+}
+ 
+/* Handle */
+.messages-box::-webkit-scrollbar-thumb {
+    background: #eee; 
+}
+
+/* Handle on hover */
+.messages-box::-webkit-scrollbar-thumb:hover {
+    background: #555; 
+}
+
+#chat-window{
+    width: 35%
+}
+
+#chat-window header{
+    background-color: #3867eb;
+    padding:10px;
+    color:#fff;
+}
+
+#chat-window header .media img{
+    height: 40px;
+}
+
+.chat-box{
+    height: 70%;  
+    min-height:70%;
+}
+
+.float-right{
+    float:right;
+}
+
+.close-chat{
+    cursor: pointer;
+}
+
+.message-list-count{
+    position: inherit!important;
+}
+
+.btn-outline-primary:focus, .btn-outline-primary:hover{
+    color: #ffffff!important;
+    border-color: #3167eb!important;
+    background-color: #3167eb;
+}
+.btn-outline-primary{
+    color: #fff;
+    background-color: #3167eb
+}
+
+footer{margin-top: 7%;}
+.pm-btn{
+    font-size: 1.2rem;
+}

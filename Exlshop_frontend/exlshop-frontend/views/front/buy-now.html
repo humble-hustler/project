@@ -1,0 +1,617 @@
+<style>
+.p{
+    padding-left: 18px;
+}
+.info,.paymentheading{
+    padding-left: 20px;
+}
+.price-outer,.billing,dl,.shiftleft{
+    padding-left: 20px;
+}
+.billing{
+    padding-top: 20px;
+}
+.l{
+    cursor: pointer;
+}
+.finalorder{
+    width: 150px;
+    height: 38px;
+    background-color: #FBA11B;
+    border: none;
+    display: inline-block;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    color: black;
+}
+.form-group label{
+    font-size: 18px;
+}
+#savebtn{
+    width: 125px;
+    height: 38px;
+}
+.info{
+    padding-left: 60px;
+}
+#a{
+    padding-left: 60px;
+}
+#map {
+    height: 50%;
+  }
+</style>
+<%- include('../partials/header.html') %>
+
+<section class="section-content ">
+    <div class="container pt-3">
+        <div class="row">
+            <main class="col-9 pr-1">
+                <% if(shippingAddresses) { %>
+                <div class="card  bg-white" id="shipping-address-list-wrap">
+                    <div class="card-body border-0 pb-3">
+                        <h6 class="twenty pb-3">Select Address</h6>                 
+                        <select class="select-shipping">
+                            <option class="option1">select an address</option>
+                            <% shippingAddresses.forEach((s) => { %>
+                            <option value="<%= s.id %>"><%= s.label %></option>
+                            <% }) %>     
+                        </select>    
+                    </div>
+                </div>
+                <% } %>
+                <div class="bg-white pt-3 pt-2 ps-3 text-start border-0">
+                    <a href="#" class="text-dark eighteen" data-toggle="modal" data-target="#add-shipping-address"> <i class="fa fa-plus"></i> Add New Address</a>
+                </div>
+                
+                <div class="card mt-2">
+                    <h6 class="pt-3 ps-3 twenty bg-white">Order Details:</h6>
+                    <hr>
+                    <div class="card-body">                        
+                        <div class="card border-0">
+                            <table class="table table-borderless table-shopping-cart">
+                                <thead class="text-muted">
+                                    <tr class="small text-uppercase"></tr>
+                                </thead>
+                                <tbody class="" id="buyItem">
+                                    <% products.forEach((p) => { %>
+                                        <input type="hidden" id="buy-minimum-order-amount" value="<%= p.minimum_order_amount%>">
+                                    <tr product_id="<%= p.p_id %>" variation_id="<%= p.variation_id %>">
+                                        <input type="hidden" class="buy-product-id" value="<%= p.p_id %>">
+                                        <td>
+                                            <figure class="itemside">
+                                                <div class="aside">
+                                                    <a href="/shop/<%= p.slug %>/<%= p.p_id %>" alt="<%= p.name %>" class="title text-dark">
+                                                        <% if(p.file_name){%>
+                                                            <img src="<%=session.imgURL %><%= p.file_name %>" alt="<%= p.name %>" class="img-sm">
+                                                        <%}else{%>
+                                                            <img src="<%= coreHostname %>/images/logo.png" class="img-sm">
+                                                        <%}%>
+                                                    </a>
+                                                </div>
+                                                <figcaption class="info" id="a">
+                                                    <a href="/shop/<%= p.slug %>/<%= p.p_id %>" title="<%= p.product_name %>" class="title text-dark" id="pid" customval="<%= p.p_id %>"><%= p.name %></a>
+                                                    <p class="text-muted text-uppercase small"><%= p.slug %></p>
+                                                    <p class="location_name text-muted small mb-0"><%= p.location_name %></p>
+                                                    <input type="hidden" class="shop_lat" value="<%=p.lat%>">
+                                                    <input type="hidden" class="shop_long" value="<%=p.lng%>">
+                                                    <input type="hidden" class="vendor-id" value="<%= p.brand_locations_id %>">
+                                                    <input type="hidden" class="delivery-choice" value="<%= p.delivery_choice %>">
+                                                    
+                                                    <div class="price-wrap"> 
+                                                        <small class="text-muted single-price" delChr="<%= locals.deliveryCharge %>" single-item-discount-price="<%= p.product_type == 2 ? p.variation_regular_price-p.discount_price : p.regular_price-p.discount_price  %>" single-item-price="<%= p.product_type == 2 ? p.variation_regular_price : p.regular_price %>" single-item-discount="<%= p.discount_price  %>">  </small> 
+                                                        <span class="price mt-1">₹ <%= (p.regular_price) - (p.discount_price)  %><del class="ps-3 information">₹ <%= p.regular_price %></del>
+                                                            <p class="d-inline text-success ps-3"><%=p.discount_percentage %>% off</p>
+                                                        </span>
+                                                        <small class="text-muted single-price" id="single-item-price" value="<%=  p.regular_price %>"> ₹ <%=  p.regular_price  %> Each</small> 
+                                                    </div>
+                                                        
+                                                    <div class="d-flex align-items-center">
+                                                        <div><h5 class="fourteen">Quantity:</h5></div>
+                                                        <div class="input-group mb-3 ps-4 pt-2 input-spinner">
+                                                            <div class="input-group-append">
+                                                                <button class="btn btn-light button-minus" type="button"> − </button>
+                                                            </div>
+                                                            <input type="text" class="form-control quantity" value="<%= productQuantity%>"  id="quantityval">
+                                                            <div class="input-group-prepend">
+                                                                <button class="btn btn-light button-plus" type="button"> + </button>                                                  
+                                                            </div>
+                                                        </div>
+                                                        <div>
+                                                            <div  id="remove" style="display: flex; margin-left: 30px; cursor: pointer;">
+                                                                <p style="color: black; margin-top: 2px;"><i class="fa fa-times"></i></p>                                                                     <p style="color: black; margin-left: 5px;">REMOVE</p>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                </figcaption>
+                                            </figure>
+                                        </td>
+                                        <td class="text-end">Delivery by within 3 - 7 working days</td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>      
+                </div> 
+
+                <div class="container m-0 p-0 payment">
+                    <div class="container mt-2 p-0">
+                        <div class="bg-white">
+                            <h5 class="ps-3 m-0 pt-3 paymentheading twenty">Select payment method:</h5>
+                            <hr>
+                            <div class="shiftleft">
+                                <div class="paymentMethod eighteen">
+                                    <input  type="radio" value="COD" name="paymet-method" class="me-3" >Cash On Delivery
+                                    <br>
+                                    <input  type="radio" value="ONLINE" name="paymet-method" class="me-3" >Online Payment 
+                                </div> 
+                            </div>  
+                            <hr>
+                            <div class="d-flex justify-content-end my-2 me-2">
+                                <a href="#" class="place-order finalorder mb-3 fw-bold eighteen" id="checkout">PLACE ORDER</a>
+                            </div>
+                        </div>
+                    </div>
+                </div>   
+            </main>
+             
+            <aside class="col-3 pr-0">
+                <div class="border border-1 mb-3 bg-white">
+                    <h6 class="pt-3 price-outer bg-white twenty ps-3">Price Details</h6>
+                    <hr>
+                    <div class=" billing">
+                        <div class="d-flex justify-content-between">
+                            <p class="text-dark">Price(1 item)</p>
+                            <p style="color: black;  padding-right: 10px;"> <span>₹</span> <span id="calc_amount"><%= (p.regular_price) * productQuantity%></span> </p>
+                        </div>
+                        <div class="d-flex justify-content-between">
+                            <p class="text-dark">Discount Amount</p>
+                            <p style="color: green"><span>₹</span>  <span id="disc_price" style="  padding-right: 10px;"><%=(p.discount_price) * productQuantity%></span></p> 
+                        </div>
+                        <div class="d-flex justify-content-between">
+                            <p class="text-dark">Delivery Charges</p> 
+                            <p style="color: black;  padding-right: 10px;" class="del_charge"><span>₹</span> <span id="deliveryCharge">200</span></p>
+                        </div>
+                    </div>
+                    <hr>
+                    <dl class="d-flex  justify-content-between dlist-align twenty">
+                        <dt class="w-50"><strong>Total Amount:</strong></dt>
+                        <input class="text-right h5 d-none "  value="<%=p.regular_price-p.discount_price+100 %>" id="single-amount"> 
+                        <dt style="font-weight: bold; padding-left: 10px;"> <span>₹</span>  <span id="total_amount"  class="amount"></span></dt>
+                    </dl>
+                </div>
+                <% }) %>
+            </aside>
+        </div>
+    </div>
+</section>
+
+<div class="modal fade" id="add-shipping-address" tabindex="-1" role="dialog" aria-labelledby="add-shipping-address" aria-hidden="true">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title twenty">Add New Address</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+            </div>
+            <div class="modal-body">
+                <div class="row">
+                    <div class="form-group col-md-12">
+                        <label>Address Label</label>
+                        <input type="text" id="label" name="label" class="form-control" placeholder="Eg.Home, Office" required />
+                        <input type="hidden" name="lat" id="modal-lat">
+                        <input type="hidden" name="long" id="modal-long">
+                    </div>                        
+                </div>
+                <div class="row">
+                    <div class="form-group col-md-6">
+                        <label>Name</label>
+                        <input type="text" id="name" name="name" class="form-control" required />
+                    </div>
+                    <div class="form-group col-md-6">
+                        <label>Phone Number</label>
+                        <input type="text"  id="phone" name="phone" class="form-control" required />
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="form-group col-md-6">
+                        <label>Address Line 1</label>
+                        <input type="text" id="address_line_1" name="address_line_1" class="form-control" required />
+                    </div>
+                    <div class="form-group col-md-6">
+                        <label>Address Line 2</label>
+                        <input type="text" id="address_line_2" name="address_line_2" class="form-control">
+                    </div>
+                </div>                
+                <div class="row">
+                    <div class="form-group col-md-4">
+                        <label>State</label>
+                        <select class="form-control" name="state_id" id="shipping-state" required>
+                            <option value="" id="b" selected disabled>Select State</option>
+                            <% states.forEach((s) => { %>
+                            <option id="sid" value="<%= s.id %>"><%= s.name %></option>
+                            <% }) %>
+                        </select>
+                    </div>
+                    <div class="form-group col-md-4">
+                        <label>City</label>
+                        <select class="form-control" name="city" id="shipping-city" >
+                            <option value="">Select City</option>                            
+                        </select>
+                    </div>
+                    <div class="form-group col-md-4">
+                        <label>Zip</label>
+                        <input type="text" name="zip" id="zip" class="form-control" required />
+                        <div class="invalid-feedback"></div>
+                    </div>
+                </div>    
+                <div class="row text-primary text-center">
+                    <a class="eighteen text-primary l" onclick="getlocation()"><i class="bi bi-geo-alt-fill"></i>Use my current location</a>
+                </div>
+                <div id="map" style="height:450px; width:450px; display: none;"></div>
+                <hr>          
+            </div>
+            <div class="text-center mb-4">
+                <button id="savebtn" type="submit" class="btn btn-primary" value="Save Address">Save Address</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<%- include('../partials/footer.html') %>
+<script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyDQEmUoo4733HGxaZy6ylbiGHC4WzgHodQ"></script>
+<script type="text/javascript"> 
+
+    var calc_amount = parseInt($('#calc_amount').text())
+    var dis_price = parseInt( $('#disc_price').text());
+    var DeliveryCharge = parseInt( $('#deliveryCharge').text())
+    $("#total_amount").text((calc_amount - dis_price + DeliveryCharge))
+    var Total_Amount = calc_amount - dis_price + DeliveryCharge
+
+    $(".select-shipping").on('change',function (){
+        var delivery_choice = $(".delivery-choice").val()
+        if(delivery_choice == 2){
+            var shippingId = $(this).val()
+            var shop_lat = $(".shop_lat").val()
+            var shop_long = $(".shop_long").val()
+            var shop_location = $(".vendor-id").val()
+                            
+            $.ajax({
+                url: `/getShippingDetails`,
+                method: "POST",
+                data:{
+                    _csrf:'<%= _csrf %>',
+                    shippingId,
+                    shop_location,
+                    shop_lat,
+                    shop_long
+                },
+                success: function(data){
+                    if(data.success){
+                        if(data.a){
+                            $(".del_charge").find('span').remove()
+                            $(".del_charge").append(`<span>₹</span> <span id="deliveryCharge">${data.a} </span>`)
+                            var total = parseInt($('#calc_amount').text())
+                            var disc =   parseInt( $('#disc_price').text());
+                            var delivery = parseInt( $('#deliveryCharge').text())
+                            var calculate =  parseInt($("#total-amount").text())
+                            $('.single-price').removeAttr("delChr")
+                            $('.single-price').attr('delChr', delivery)
+                            var calculateAmount = (total-disc)+delivery
+                            $("#total_amount").text(calculateAmount)   
+                        }
+                    }else{
+                        alert("wronggggg")
+                    }
+                }
+            })
+        }else{
+            $(".del_charge").find('span').remove()
+            $(".del_charge").append(`<span>₹</span> <span id="deliveryCharge"> 50 </span>`)
+            var total = parseInt($('#calc_amount').text())
+            var disc =   parseInt( $('#disc_price').text());
+            var delivery = parseInt( $('#deliveryCharge').text())
+            var calculate =  parseInt($("#total-amount").text())
+            $('.single-price').removeAttr("delChr")
+            $('.single-price').attr('delChr', delivery)
+            var calculateAmount = (total-disc)+delivery
+            $("#total_amount").text(calculateAmount)
+        }  
+    })
+         
+    $("#remove").click(function(){
+        window.history.back()
+    });
+
+    $("#checkout").click(function(){
+        var delivery_choice = $(".delivery-choice").val()
+        var locations_name= [];
+        var locations = $('.location_name').text();
+        var calculateAmt = parseInt($(".amount").text())
+        var delChr = parseInt($("#deliveryCharge").text())
+        var productId = parseInt($(".buy-product-id").val())
+        var quantityval = parseInt($("#quantityval").val())
+
+        for(var i = 0; i < locations.length; i++){
+            var data = locations[i].innerText;
+            locations_name.push(data)
+        }
+
+        var location_budget =  parseInt($("#buy-minimum-order-amount").val());
+          var order_total = parseInt($(".twenty").find("#total_amount").text())
+        if(location_budget >= order_total){
+            $(".place-order").css("background-color", "#fdc167")
+            $(".place-order").css("color", "rgb(109, 108, 108)")
+            toastr.error('Total order amount must be greater than' + " " + location_budget)
+        }else{
+            $(".place-order").css("background-color", "#fcaa2f")
+            $(".place-order").css("color", "black")
+
+        if(locations_name.every( (val, i, arr) => val === arr[0] ) ){
+            if ($(".select-shipping").find("option:selected").text() !== 'select an address') {
+                $('#shipping-address-list-wrap').removeClass('border-danger')
+                var demovalue = $("input:radio[name=paymet-method]:checked").val();
+                    if(demovalue != undefined){
+                        $.ajax({
+                            url: '/order/request-payment',
+                            method: 'POST',
+                            data: {
+                                _csrf : '<%= _csrf %>',
+                                demovalue:demovalue,
+                                calculateAmt,
+                                delChr,
+                                // paymentResponse: response,
+                                delivery_choice : delivery_choice,
+                                // shop_payment_request_id: data.orderDataId.insertId,
+                                productId,
+                                quantityval,
+                                shippingId: $(".select-shipping").find("option:selected").val(),
+                                shippingadd:$("input:radio[name=shipping]:checked").text(),
+                                purpose: "Exlshop order booking",
+                                redirect_url: location.origin + '/order/buyconfirm0',
+                                amount: parseFloat(calculateAmt)
+                            },
+                            success: function (data) {
+                                if (data.success) {
+                                    const orderData = data;
+                                    if(demovalue=="ONLINE"){
+                                        var options = {
+                                            "key": data.key,
+                                            "name": "Exlshop",
+                                            "description": "",
+                                            "image": "/images/logo.png",
+                                            "order_id": data.orderId,
+                                            "handler": function (response) {
+                                                $.ajax({
+                                                    url: '/order/buyconfirm0',
+                                                    method: 'POST',
+                                                    dataType: 'json',
+                                                    data: {
+                                                        _csrf : '<%= _csrf %>',
+                                                       
+                                                       
+                                                    },
+                                                    success: function (data) {
+                                                        if (data){
+                                                            location.href = `/my-account/orderconfirm/${(data.order_id.order_id)}/${delChr}`
+                                                        }else{
+                                                            toastr.error('Some error occurred. Please contact support')
+                                                        }
+                                                    }
+                                                })
+                                            }
+                                         };
+                                         const longurl = data.payment_request.longurl;
+                                            window.location.href = longurl; 
+                                    }else{
+                                        $.ajax({
+                                            url: '/order/buyconfirm1',
+                                            method: 'POST',
+                                            dataType: 'json',
+                                            data: {
+                                                _csrf : '<%= _csrf %>',
+                                                shop_payment_request_id: data.orderDataId.insertId,
+                                                productId,
+                                                delivery_choice:delivery_choice,
+                                                quantityval,
+                                                shippingId: $(".select-shipping").find("option:selected").val(),
+                                                shippingadd: $("input:radio[name=shipping]:checked").text(),
+                                            },
+                                            success: function (data) {
+                                                if (data) {
+                                                    location.href = `/my-account/orderconfirm/${data.order_id.order_id}/${delChr}`
+                                                }else{
+                                                    alert('Some error occurred. Please contact support')
+                                                }
+                                            }
+                                         })
+                                    }
+                                }else{
+                                    alert('Some error occurred. Please try again later')
+                                }
+                            }
+                        })
+                    }else{
+                        toastr.error('Please select payment mode')
+
+                    }
+            } else {
+                toastr.error('Please select shipping address')
+                $('#shipping-address-list-wrap').addClass('border-danger')
+            }
+        }else{
+            toastr.error('Please select Products from same shop..')
+        }
+        }
+    })
+
+    var location_budget =  parseInt($("#buy-minimum-order-amount").val());
+       var order_total = parseInt($(".twenty").find("#total_amount").text())
+        if(location_budget >= order_total){
+            $(".place-order").css("background-color", "#fdc167")
+            $(".place-order").css("color", "rgb(109, 108, 108)")
+            toastr.error('Total order amount must be greater than' + " " + location_budget)
+        }else{
+            $(".place-order").css("background-color", "#fcaa2f")
+            $(".place-order").css("color", "black")
+        }
+
+    const mapArea = document.getElementById('map');
+    let Gmap;
+    let Gmarker;
+    const __KEY = 'AIzaSyDQEmUoo4733HGxaZy6ylbiGHC4WzgHodQ';
+
+    function getlocation(){
+        const options = {
+            enableHighAccuracy: true
+        }
+    navigator.geolocation.getCurrentPosition(successfulLookup, console.log, options)  
+    }
+    successfulLookup = (position) => {
+        const lat = parseFloat(position.coords.latitude);
+        const lng = parseFloat(position.coords.longitude);
+        const latlong = {lat,lng};
+        showOnMap(latlong, lat, lng);
+        markerOnMap(lat,lng);
+        mapArea.style.display = "block";
+        getGeolocation(lat,lng);
+    }
+
+    showOnMap=(latlong,lat,lng)=>{
+        let mapOptions = {
+            center: latlong,
+            zoom: 17
+        }
+        Gmap = new google.maps.Map(mapArea,mapOptions);
+        Gmap.addListener('drag', function () {
+            Gmarker.setPosition(this.getCenter()); // set marker position to map center
+        });
+        Gmap.addListener('dragend', function () {
+            Gmarker.setPosition(this.getCenter()); // set marker position to map center
+        });
+        Gmap.addListener('idle', function () {
+            Gmarker.setPosition(this.getCenter()); // set marker position to map center
+            if (Gmarker.getPosition().lat() !== lat || Gmarker.getPosition().lng() !== lng) {
+                setTimeout(() => {
+                    updatePosition(this.getCenter().lat(), this.getCenter().lng()); // update position display
+                }, 2000);
+            }
+        });
+    }
+
+    function markerOnMap(lat,lng){
+        $("#modal-lat").val(lat)
+        $("#modal-long").val(lng)
+        let markerOptions = {
+            position: {lat : parseFloat(lat), lng:parseFloat(lng)},
+            map: Gmap,
+            animation: google.maps.Animation.BOUNCE,
+            clickable: true
+        };
+        Gmarker = new google.maps.Marker(markerOptions);
+    }
+
+    getGeolocation = (lat, lng) => {
+        $("#address_line_1").attr('value','');
+        $("#address_line_2").attr('value','');
+        $("#sid").attr('value','');
+        $("#shipping-city").attr('value','');
+        $("#zip").attr('value','');
+        $("#modal-lat").val(lat)
+        $("#modal-long").val(lng)
+        fetch(`https://maps.googleapis.com/maps/api/geocode/json?latlng=${lat}+${lng}&key=${__KEY}`)
+        .then(res => res.json())
+        .then(data => getAddress(data.results))
+    }
+
+    updatePosition = (lat, lng) => {
+    getGeolocation(lat, lng);
+    }
+
+    getAddress = (resultData) => {
+        resultData = resultData[0]
+        resultData.address_components.map(component => {
+            const types = component.types
+        
+            if (types.includes('premise')) {
+                $("#address_line_1").attr('value',component.long_name);
+            }
+            if(types.includes('sublocality_level_3')) {
+                var input = $("#address_line_1").val()
+                if (!input){
+                    $("#address_line_1").attr('value', component.long_name);
+                }else{
+                    $("#address_line_1").attr('value', input + ', ' + component.long_name);
+                }
+            }
+            if(types.includes('sublocality_level_2')) {
+                var input = $("#address_line_1").val()
+                if (!input){
+                    $("#address_line_1").attr('value', component.long_name);
+                }else{
+                    $("#address_line_1").attr('value', input + ', ' + component.long_name);
+                }
+            }
+            if(types.includes('sublocality_level_1')) {
+                $("#address_line_2").attr('value', component.long_name);
+            }
+            if (types.includes('administrative_area_level_1')) {
+                $("#sid").attr('value',component.long_name);
+            }
+            if (types.includes('administrative_area_level_2')) {
+                $("#shipping-city").attr('value',component.long_name);
+            }
+            if (types.includes('postal_code')) {
+                $("#zip").attr('value',component.long_name);
+            }
+        })
+    }
+            
+    var stateId= $("#sid option:selected").val();
+    var cityId= $("#shipping-city").val();
+            
+    $(function(){				
+        $("#savebtn").on('click',function(e){
+            var label= $("#label").val(); 
+            var label1= $("#label1").val();
+            var name= $("#name").val();
+            var phone = $("#phone").val();
+            var addressLine1= $("#address_line_1").val();
+            var addressLine2= $("#address_line_2").val();
+            var stateId= $("#shipping-state").val();
+            var cityId= $("#shipping-city").val();
+            var zip=$("#zip").val();
+            var lat = $("#modal-lat").val()
+            var long = $("#modal-long").val()
+
+                $.ajax({
+                    url :"/my-account/add-new-address",
+                    method: 'POST',	
+                    data:{
+                        _csrf: '<%= _csrf %>',
+                        label,
+                        name,
+                        phone,
+                        addressLine1,
+                        addressLine2,
+                        stateId,
+                        cityId,
+                        lat,
+                        long,
+                        zip
+                    },			
+                    success: function(data) { 
+                        if(data.success){
+                            window.location.reload();
+                        }else{
+                            window.location.reload();
+                        }
+                    }
+                });			
+        });
+    });
+
+    BUY_NOW.init({
+        _csrf:'<%= _csrf %>'
+    })
+</script>

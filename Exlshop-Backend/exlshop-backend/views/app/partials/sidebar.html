@@ -1,0 +1,264 @@
+<% var menuActive = menuActive ? menuActive : '' %>
+<% var submenuActive = submenuActive ? submenuActive : '' %>
+<div class="site-menubar">
+    <div class="site-menubar-body">
+        <ul class="site-menu" data-plugin="menu">
+            <% if(session.user.role_name === 'trainer') { %>
+                <li class="site-menu-category">General Details</li>
+                <li class="site-menu-item <%= menuActive == 'assets' ? 'active' : '' %>">
+                    <a href="/app/staffdashboard/a">
+                        <i class="site-menu-icon fa-book" aria-hidden="true"></i>
+                        <span class="site-menu-title">Profile</span>
+                    </a>
+                </li>
+            <% } %>
+            <% if(session.user.role_name === 'brand-admin' || session.user.role_name === 'manager' || session.user.role_name === 'staff') { %>
+                <li class="site-menu-category">General</li>
+                <li class="site-menu-item <%= menuActive == 'dashboard' ? 'active' : '' %>">          
+                <a href="/app/dashboard">
+                    <i class="site-menu-icon wb-dashboard" aria-hidden="true"></i>
+                    <span class="site-menu-title">Dashboard</span>                    
+                </a>
+            </li>
+            <% } %>
+            <% console.log(session.user.currentLocation)%>
+            <% let endDate = new Date(session.user.currentLocation.end_date) %>
+            <% endDate.setDate(endDate.getDate() + 1) %>
+            <!-- <li class="site-menu-item <%= menuActive == 'sales' ? 'active' : '' %>">
+                <a href="/app/sales">
+                    <i class="site-menu-icon fa-shopping-basket" aria-hidden="true"></i>
+                    <span class="site-menu-title">Sales</span>                    
+                </a>
+            </li>
+            <li class="site-menu-item has-sub <%= menuActive == 'members' ? 'active open' : '' %>">
+                <a href="javascript:void(0)">
+                    <i class="site-menu-icon fa-user" aria-hidden="true"></i>
+                    <span class="site-menu-title">Members</span>
+                    <span class="site-menu-arrow"></span>
+                </a>
+                <ul class="site-menu-sub">
+                    <li class="site-menu-item <%= submenuActive == 'viewMembers' ? 'active' : '' %>">
+                        <a href="/app/members">
+                            <span class="site-menu-title">View All</span>
+                        </a>
+                    </li>
+                    <li class="site-menu-item <%= submenuActive == 'attendance' ? 'active' : '' %>">
+                        <a href="/app/members/attendance">
+                            <span class="site-menu-title">Attendance</span>
+                        </a>
+                    </li>
+                </ul>
+            </li>                        
+            <li class="site-menu-item has-sub <%= menuActive == 'schedule' ? 'active open' : '' %>">
+                <a href="javascript:void(0)">
+                    <i class="site-menu-icon wb-pie-chart" aria-hidden="true"></i>
+                    <span class="site-menu-title">Schedule</span>
+                    <span class="site-menu-arrow"></span>
+                </a>
+                <ul class="site-menu-sub">
+                    <li class="site-menu-item <%= submenuActive == 'pt' ? 'active' : '' %>">
+                        <a class="animsition-link" href="/app/schedule/personal-training">
+                            <span class="site-menu-title">Personal Training</span>
+                        </a>
+                    </li>
+                    <li class="site-menu-item <%= submenuActive == 'workout' ? 'active' : '' %>">
+                        <a class="animsition-link" href="/app/schedule/workout-program">
+                            <span class="site-menu-title">Workout Program</span>
+                        </a>
+                    </li>
+                </ul>
+            </li>             -->
+            <% if((session.user.role_name === 'brand-admin' || session.user.role_name === 'manager') && new Date() < endDate) { %>
+                <li class="site-menu-category">Product and Branch</li>            
+                <li class="site-menu-item <%= menuActive == 'assets' ? 'active' : '' %>">
+                    <a href="/app/asset-management">
+                        <i class="site-menu-icon fa-book" aria-hidden="true"></i>
+                        <span class="site-menu-title">Product Management</span>
+                    </a>
+                </li>
+                <li class="site-menu-item <%= menuActive == 'Stock' ? 'active' : '' %>">
+                    <a href="/app/view-stock">
+                        <i class="site-menu-icon fa-book" aria-hidden="true"></i>
+                        <span class="site-menu-title" id="stock">Stock Management</span>                    
+                    </a>
+                </li>
+                <li class="site-menu-item <%= menuActive == 'Deals' ? 'active' : '' %>">
+                    <a href="/app/view-stock/dealsoftheday">
+                        <i class="site-menu-icon fa-book" aria-hidden="true"></i>
+                        <span class="site-menu-title" id="stock">Deals of the Days</span>                    
+                    </a>
+                </li>
+            <% } %>
+            <% if((session.user.role_name === 'brand-admin' || session.user.role_name === 'manager') && new Date() < endDate) { %>
+                <% if(session.user.currentLocation.allowed_features && ((session.user.currentLocation.allowed_features).split(',')).includes('1')) { %>
+                    <li class="site-menu-item <%= menuActive == 'leads' ? 'active open' : '' %>">
+                        <a href="/app/marketing/leads">
+                            <i class="site-menu-icon fa fa-sitemap" aria-hidden="true"></i>
+                            <span class="site-menu-title">Branch Management</span>                    
+                        </a>
+                    </li>
+                <% } %>               
+            <% } %>
+            <!-- <% if(session.user.role_name === 'brand-admin' || session.user.role_name === 'manager') { %>
+            <li class="site-menu-item <%= menuActive == 'packages' ? 'active' : '' %>">
+                <a href="/app/packages">
+                    <i class="site-menu-icon fa-list" aria-hidden="true"></i>
+                    <span class="site-menu-title">Packages</span>
+                </a>
+            </li>
+            <% } %> -->
+           
+            <!-- <li class="site-menu-category">Marketing</li>
+            <li class="site-menu-item <%= menuActive == 'leads' ? 'active open' : '' %>">
+                <a href="/app/marketing/leads">
+                    <i class="site-menu-icon fa-bullseye" aria-hidden="true"></i>
+                    <span class="site-menu-title">Leads</span>                    
+                </a>                
+            </li> -->
+            <!--            <li class="site-menu-item">
+                            <a href="/app/events">
+                                <i class="site-menu-icon fa-bullhorn" aria-hidden="true"></i>
+                                <span class="site-menu-title">Events</span>                    
+                            </a>                
+                        </li>-->
+            <!--            <li class="site-menu-item">
+                            <a href="/app/events">
+                                <i class="site-menu-icon fa-shopping-cart" aria-hidden="true"></i>
+                                <span class="site-menu-title">Shop</span>                    
+                            </a>                
+                        </li>-->
+            
+            <% if(session.user.currentLocation.allowed_features && ((session.user.currentLocation.allowed_features).split(',')).includes('2') && new Date() < endDate) { %>
+                <% if(session.user.role_name === 'brand-admin' || session.user.role_name === 'manager') { %>
+                    <li class="site-menu-category">Brand Staff</li>               
+                    <li class="site-menu-item <%= menuActive == 'users' ? 'active' : '' %>">
+                        <a href="/app/users">
+                            <i class="site-menu-icon fa-users" aria-hidden="true"></i>
+                            <span class="site-menu-title">Staff Management</span>                    
+                        </a>                
+                    </li>
+                <% } %>
+            <% } %>
+            <% if(session.user.currentLocation.allowed_features && ((session.user.currentLocation.allowed_features).split(',')).includes('3') && new Date() < endDate) { %>
+                <li class="site-menu-item <%= menuActive == 'messenger' ? 'active' : '' %>">
+                    <a href="/app/chats">
+                        <i class="site-menu-icon fa fa-comments-o" aria-hidden="true"></i>
+                        <span class="site-menu-title">Messenger</span>                    
+                    </a>                
+                </li>
+            <% } %>
+
+            <% if((session.user.role_name === 'brand-admin' || session.user.role_name === 'manager' || session.user.role_name === 'staff') && new Date() < endDate) { %>
+                <li class="site-menu-category">Orders</li>
+                <li class="site-menu-item <%= menuActive == 'orders-list' ? 'active' : '' %>">
+                    <a href="/app/orders/orders">
+                        <i class="site-menu-icon fa-shopping-basket" aria-hidden="true"></i>
+                        <span class="site-menu-title" id="order">Orders Management</span>                    
+                    </a>
+                </li>
+            <%}%>
+
+          
+
+            <% if((session.user.role_name === 'brand-admin' || session.user.role_name === 'manager') && new Date() < endDate) { %>
+                <!-- <li class="site-menu-category">Orders</li> -->
+                <li class="site-menu-item <%= menuActive == 'charges' ? 'active' : '' %>">
+                    <a href="/app/orders/addShippingCharges">
+                        <i class="site-menu-icon fa-truck" aria-hidden="true"></i>
+                        <span class="site-menu-title" id="chrgs">Shipping Management</span>                    
+                    </a>
+                </li>
+            <%}%>
+            <% if((session.user.role_name === 'brand-admin' || session.user.role_name === 'manager') && new Date() < endDate) { %>
+                <li class="site-menu-item <%= menuActive == 'grouporders' ? 'active' : '' %>">
+                    <a href="/app/grouporders">
+                        <i class="site-menu-icon fa-square" aria-hidden="true"></i>
+                        <span class="site-menu-title" id="group">Group Orders Management</span>                    
+                    </a>
+                </li>
+            <% } %>
+            <% if((session.user.role_name === 'brand-admin' || session.user.role_name === 'manager' || session.user.role_name === 'staff') && new Date() < endDate) { %>
+                <li class="site-menu-category">Settlement</li>
+                <li class="site-menu-item <%= menuActive == 'settelment' ? 'active' : '' %>">
+                    <a href="/app/orders/location">
+                        <i class="site-menu-icon fa-shopping-cart" aria-hidden="true"></i>
+                        <span class="site-menu-title" id="sub">Vendor Settlement</span>
+                    </a>
+                </li>
+            <%}%>
+            <% if((session.user.role_name === 'brand-admin' || session.user.role_name === 'manager') && new Date() < endDate) { %>
+                <li class="site-menu-category">Customer</li>
+                <li class="site-menu-item <%= menuActive == 'cust' ? 'active' : '' %>">
+                    <a href="/app/custmor">
+                        <i class="site-menu-icon fa-user" aria-hidden="true"></i>
+                        <span class="site-menu-title" id="customer">Customer List</span>                    
+                    </a>
+                </li>
+                <% if(session.user.currentLocation.allowed_features && ((session.user.currentLocation.allowed_features).split(',')).includes('4') && new Date() < endDate) { %>
+                    <li class="site-menu-item <%= menuActive == 'custmess' ? 'active' : '' %>">
+                        <a href="/app/chats/customer">
+                            <i class="site-menu-icon fa fa-comments-o" aria-hidden="true"></i>
+                            <span class="site-menu-title" id="custmess">Customer Messenger</span>                    
+                        </a>
+                    </li>
+                <% } %>
+            <% } %>
+            <% if((session.user.role_name === 'brand-admin' || session.user.role_name === 'manager') ) { %>
+                <!-- <% if(session.user.currentLocation.allowed_features && ((session.user.currentLocation.allowed_features).split(',')).includes('5')) { %>
+                    <li class="site-menu-category">Promotions, Subscription</li>
+                    <li class="site-menu-item <%= menuActive == 'promotions' ? 'active' : '' %>">
+                        <a href="/app/promotions">
+                            <i class="site-menu-icon fa fa-money" aria-hidden="true"></i>
+                            <span class="site-menu-title" id="prom">Promotions Management</span>                    
+                        </a>
+                    </li>
+                <% } else { %> 
+                     <% } %>-->
+                    <li class="site-menu-category">Subscription</li>
+               
+                <li class="site-menu-item <%= menuActive == 'subscription' ? 'active' : '' %>">
+                    <a href="/app/subscriptionrequest/subscription">
+                        <i class="site-menu-icon fa fa-money" aria-hidden="true"></i>
+                        <span class="site-menu-title" id="sub">Subscription Management</span>                    
+                    </a>
+                </li>
+            <%}%>
+        </ul>              
+    </div>
+
+    <div class="site-menubar-footer">
+        <a href="/app/settings" class="fold-show" data-placement="top" data-toggle="tooltip" data-original-title="Settings">
+            <span class="icon wb-settings" aria-hidden="true"></span>
+        </a>
+        <a href="javascript: void(0);" data-placement="top" data-toggle="tooltip" data-original-title="Lock">
+            <span class="icon wb-eye-close" aria-hidden="true"></span>
+        </a>
+        <a href="javascript: void(0);" data-target="#logout-session" data-toggle="modal">
+            <span class="icon wb-power" aria-hidden="true"></span>
+        </a>
+    </div>
+</div>
+
+
+<div class="modal fade" id="logout-session" aria-hidden="false" aria-labelledby="logout-session" role="dialog" tabindex="-1">
+    <div class="modal-dialog modal-simple" style="background: white;">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">×</span>
+                </button>
+                <h4 class="modal-title">Logout</h4>
+            </div>
+            <div class="modal-body">
+                <div class="row">
+                    <div class="col-lg-12">
+                        <p style="font-size: 15px;">Do you want to Logout?</p>
+                    </div>
+                    <div class="col-12" style="text-align: center; pointer-events: all">
+                        <a class="btn btn-primary" id="logout-site" href="/logout">Logout</a>
+                      <!-- <button type="button" class="btn btn-primary" style="cursor: pointer;" id="want-logout">Logout</button> -->
+                        <button type="button" class="btn btn-secondary" data-dismiss="modal" style=" cursor: pointer;">Cancel</button>
+                    </div>
+                </div>                
+            </div>            
+    </div>
+</div>

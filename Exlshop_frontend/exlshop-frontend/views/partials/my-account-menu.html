@@ -1,0 +1,219 @@
+<style>
+    :root{
+    --nav-bck:#F24A72;
+    --log-bck:#fff;
+    --cart-color:#fff;
+    --txt-color:#0000;
+   --grey:#FAFAFA;
+}
+body{
+     background-color: #F7F6F2;;
+}
+.my-profile{
+    padding: 5% 0%
+}
+.profile-name, .my-orders, .account-setting, .logout{
+    background-color: #fff;
+    padding: 12px 5px 12px 66px;
+}
+.profile-name span{
+    font-size: 12px;
+}
+.profile-name h5{
+    padding-top: 3px;
+font-size: 16px;
+font-weight: 500;
+}
+.my-orders h5, .account-setting h5, .logout h5{
+    font-size: 16px;
+color: #878787;
+cursor: pointer;
+}
+.list a:hover{
+    color: #2455f4;
+}
+.account{
+    padding: 12px 0px 12px 0px;
+}
+.logout{
+    border-top: 1px dotted gray;
+}
+.account-setting h6,.list h5{
+    padding: 6px 15px;
+}
+.list h5:hover,.list h6:hover{
+    color: #2874f0;
+background-color: #f5faff;
+cursor: pointer;
+font-weight: 700;
+transition: 1ms;
+}
+.manage-address h5{
+    font-size: 18px;
+font-weight: 500;
+display: block;
+padding-bottom: 20px;
+}
+.manage-address h6{
+    font-size: 14px;
+color: #2874f0;
+font-weight: 600;
+cursor: pointer;
+}
+i{
+    color: white;
+}
+.address-box{
+    box-sizing: border-box;
+}
+.address-form{
+    background-color: #fff;
+}
+.form-bck
+{
+    background-color: #dfeafd;
+}
+.address-form span{
+    color: #2874f0;
+font-weight: 600;
+font-size: 14px;
+}
+.address-form button{
+    background: #2874f0;
+color: #fff;
+box-shadow: 0 2px 4px 0 rgba(0,0,0,.2);
+border: none;
+}
+.address-form button{
+    padding: 0px 20px;
+}
+.address-form i{
+    font-size: 25px;
+}
+.address-form p{
+    padding-top: 15px;
+}
+.address-form input{
+    margin: 7px 2px;
+padding: 7px 10px;
+}
+.address-form select{
+    padding: 6px;
+    margin: 7px 2px;
+}
+.address-form-wrapper span{
+    display: block;
+    padding: 5px 0px;
+}
+.address-box{
+    padding: 15px 0px;
+}
+.manage-address{
+    background-color: #fff;
+}
+.address-form button i{
+    padding-top: 8px;
+}
+.box
+{
+    background-color: var(--grey);
+}
+.myform{
+    background-color: #fff;
+}
+.search-order-detail{
+    padding: 0px;
+}
+.order-1 p{
+    font-size: 14px;
+color: #212121;
+}
+.order-1-a p{
+    color: #878787;
+font-size: 13px;
+}
+.search-order-detail{
+    padding-left: 48px;
+}
+.search-input{
+width: 86%; 
+width: 71%;
+}
+.search-input p{
+    font-size: 14px;
+font-weight: 500;
+}
+.box
+{
+    background-color: var(--grey);
+    height: 45px;
+}
+span
+{
+    cursor: pointer;
+}
+body
+{
+    background-color: var(--grey);
+}
+.list a
+{
+    color: black;
+}
+.inside{
+    border: 1px solid #ccc;
+}
+.fourteen
+{
+    font-size: 14px;
+}
+</style>
+
+<aside class="col-md-3 list p-0">
+            <div class="inside ms-3  pb-2">
+                        <section class="profile-name">
+                            <div class="d-flex">
+                                <div style="height: 80px; width: 80px;">
+                                    <img src="/images/male-avatar.svg" style="height: 80px; width: 80px;">
+                                </div>
+                                <div class="ps-2">
+                                    <span class="fourteen">Hello</span>
+                                    <h5 class=""><strong> <%= session.user.fname %> <%= session.user.lname %></strong> <br></h5>
+                                </div>
+                            </div>
+                        </section>
+                        <section class="my-orders">
+                            <div class="d-flex">
+                                <h5><a href="/my-account/account" id="overview">ACCOUNT OVERVIEW</a></h5>
+                            </div>
+                        </section>
+                        <section class="my-orders">
+                            <div class="d-flex">
+                                <h5><a href="/my-account/orders" id="myorder">My Order
+                                </a></h5>
+                            </div>
+                            <div class="d-flex">
+                                <h5><a href="/my-account/my-wishlist" id="wishlist">My Wishlist</a></h5>
+                            </div>
+                            <div class="d-flex">
+                                <h5><a href="/my-account/deliver_order">Delivered Orders</a></h5>
+                            </div>
+                        </section>
+                        <section class="account-setting">
+                            <div class="account d-flex">
+                                <h5>ACCOUNT SETTINGS</h5>
+                            </div>
+                            <div>
+                                <h6 class="personal-info"><a href="/profile/profile" id="personalinfo">Personal information</a></h6>
+                                <h6 class="manage-add">
+                                <a href="/my-account/shipping-address" id="manageadd">
+                                Manage address</a></h6>
+                            </div>
+                        </section>
+                        <section class="logout">
+                            <div class="pt-2">
+                                <h5><a href="/log_out" class="text-decoration-none">Logout</a></h5>
+                            </div>
+                        </section>
+            </div>
+</aside>

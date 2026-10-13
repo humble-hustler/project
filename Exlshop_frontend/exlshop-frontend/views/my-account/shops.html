@@ -1,0 +1,98 @@
+<style>
+    .headingdiscover{
+        font-size: 36px;
+    }
+    #searchshop{
+        width: 746;
+    height: 70px;
+    margin: 0px auto;
+    border: none;
+    align-items: center;
+    border-radius: 0.5em;
+    }
+    .category{
+      padding-left: 1%;
+      cursor: pointer;
+      border-left: 1px solid #dee2e6;
+    }
+    .s{
+      left: 73.5%;
+    top: 22;
+    border: none;
+    background: no-repeat;
+    }
+    #mainmenulist{
+  display: flex;
+    justify-content: space-evenly;
+    width: 100%;
+    text-align: center;
+}
+li{
+    list-style-type:none;
+}
+#listofmenus
+{
+    left: 50%;
+    top: 45%;
+    padding-left: 10px;
+    z-index: 10;
+}
+.navimg1{
+  height: 40px;
+  width: 50px;
+}
+ #mymainmenu{
+  border: none;
+} 
+#shiftright{
+  display: flex;
+    justify-content: space-evenly;
+    width: 100%;
+    text-align: center;
+}
+</style>
+<%- include('../partials/header.html') %>
+<img src="../images/pattern.jpg" class="backimage" height="500px" width="100%" style ="margin-bottom: -20;">
+<h1 class="text-center headingdiscover pb-2" style="margin-top: -350px;">Discover Shops Near You </h1>
+<form action="/search_shop" method="post">
+<div class="text-center" style="margin-bottom: -100px;">
+    <div class="bg-white d-flex" id="searchshop" style="margin-bottom: 350px">
+        <div class="ps-2" style="width: 49%; padding-top: 30px; margin-left: 110px;">
+            <h2 for="autocomplete" class="text-start fourteen ms-3 mb-2" style="font-size: 22px;">Location</h2>
+            <input  type="text" style="width: 500px;" class="form-control border-0" id="addressSearch" onclick="myFunction1()" name="autocomplete" placeholder="Search location" >
+        </div>
+        <input type="hidden" name="_csrf" value="<%= _csrf %>" />
+        <input type="hidden" name="currentLocation" id="MyLatitude1" value="<%=1%>"/>
+        <input type="hidden" name="currentLocation" id="MyLongitude1" value="<%=1%>"/>
+  </div>
+</div>
+</form>
+
+<%- include('../partials/footer.html') %>
+<!-- <script async defer src="https://maps.googleapis.com/maps/api/js?key=AIzaSyDQEmUoo4733HGxaZy6ylbiGHC4WzgHodQ"></script> -->
+<script>
+
+function getlocation()
+{
+  const options = {
+        enableHighAccuracy: true
+    }
+navigator.geolocation.getCurrentPosition(successfulLookup, console.log, options)
+}
+
+document.getElementById("s_data").value= "shops";  
+
+successfulLookup = (position) => {
+    const lat = parseFloat(position.coords.latitude);
+    const lng = parseFloat(position.coords.longitude);
+    const latlong = {lat,lng};
+    document.getElementById("MyLatitude1").value = lat;
+    document.getElementById("MyLongitude1").value = lng;
+}
+
+function myFunction1() {
+getlocation()
+          var lat = document.getElementById("MyLatitude1").value;
+          var long = document.getElementById("MyLongitude1").value;
+      }
+</script>

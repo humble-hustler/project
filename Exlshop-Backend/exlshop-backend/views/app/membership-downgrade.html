@@ -1,0 +1,297 @@
+<%- include("./partials/header.html") %>
+<%- include("./partials/topnav.html") %>
+<%- include("./partials/sidebar.html") %>
+<div class="page">    
+    <div class="page-content">
+        <div class="panel">
+            <div class="panel-heading">
+               
+                <h3 class="panel-title membership-title" >Downgrade Membership</h3>
+                <hr />
+                <div class="panel-actions text-white">
+                    
+                </div>
+            </div>
+            <div class="panel-body membership-upgrade">
+                <div class='row'>
+                    <% if(!isDowngradable){ %>
+                    <div class='col-lg-12' >
+                        <div class="alert alert-danger"> You cant Downgrade as there are no more Packages available for Downgrade!</div>
+                    </div>
+                    <% } %>
+                </div>
+                <div class='row'>
+                    <div class='col-lg-6'>
+                        <div class='row '>
+                            <div class='col-lg-4'>
+                                <label>Member</label>
+                            </div>
+                            <div class='col-lg-6'>
+                                <input type='text' class='form-control' value='<%= membership.member_name %>' disabled>
+                            </div>
+                        </div>
+                        <div class='row mt-10'>
+                            <div class='col-lg-4'>
+                                <label>Current Package</label>
+                            </div>
+                            <div class='col-lg-6'>
+                                <input type='text' class='form-control' value='<%= membership.package_name %>' disabled name='current_package'>
+                            </div>
+                        </div>
+                        <div class='row mt-10'>
+                            <div class='col-lg-4'>
+                                <label>Sold By</label>
+                            </div>
+                            <div class='col-lg-6'>
+                                <select class='form-control' id="sold-by">
+                                    <option value = ''>Select</option>
+                                    <% team.forEach(function(t){ %>
+                                    <option value='<%= t.id %>'><%= t.user_name %></option>
+                                    <% }) %>
+                                </select>
+                            </div>
+                        </div>
+                        <div class='row mt-10'>
+                            <div class='col-lg-4'>
+                                <label>Downgrade To</label>
+                            </div>
+                            <div class='col-lg-6'>
+                                <select class='form-control' id='packages'>
+                                    <option value = ''>Select</option>
+                                    <% packages.forEach(function(p){ %>
+                                    <option value='<%= p.id %>'><%= p.name %></option>
+                                    <% }) %>
+                                </select>
+                            </div>
+                        </div>
+                    </div>
+                    <div class='col-lg-6'>
+                        <div class='row '>
+                            <div class='col-lg-4'>
+                                <label>Downgrade Plan Price</label>
+                            </div>
+                            <div class='col-lg-6'>
+                                <input type='text' name='upgrade_plan_price' class='form-control editable' id='upgrade_plan_price' disabled>
+                            </div>
+                        </div>
+                        <div class='row mt-10'>
+                            <div class='col-lg-4'>
+                                <label>Price Difference</label>
+                            </div>
+                            <div class='col-lg-6'>
+                                <input type='text' name='' class='form-control editable' id='price_difference' name='price_difference' disabled>
+                            </div>
+                        </div>
+                        <div class='row mt-10'>
+                            <div class='col-lg-4'>
+                                <label>Paid Amount</label>
+                            </div>
+                            <div class='col-lg-6'>
+                                <input type='text' name='' class='form-control ' id='paid_amount' name='paid_amount' value='<%= membership.amount_paid %>' disabled>
+                            </div>
+                        </div>
+                        <div class='row mt-10'>
+                            <div class='col-lg-4'>
+                                <label>Due Amount</label>
+                            </div>
+                            <div class='col-lg-6'>
+                                <input type='text' name='' class='form-control editable' id='due_amount' name='due_amount' disabled>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <br>
+                <!-- comparison table start-->
+                <div class='row'>
+                    <div class='col-lg-8'>
+                        <table class="table table-bordered">
+                            <thead>
+                                <tr>
+                                    <th>Particulars</th>
+                                    <th>Current Package Details</th>
+                                    <th>Downgrade Package Details</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <td>Total Amount</td>
+                                    <td>
+                                        <% var current_total_amount = membership.total_amount; %>
+                                        <% current_total_amount = current_total_amount ; %>
+                                        <input type='text' value='<%= (current_total_amount/(1+(membership.tax_rate/100))).toFixed(2) %>' class='form-control' disabled></td>
+                                    <td><input type='text' name='fees' id='fees' class='form-control editable' disabled></td>
+                                </tr>
+                                <tr>
+                                    <% tax_amount = 0;%>
+                                    <% if(membership.tax_included){
+                                            tax_amount = (current_total_amount - (current_total_amount/(1+(membership.tax_rate/100)))).toFixed(2)
+                                        }else{
+                                            tax_amount = membership.tax_rate*current_total_amount/100;
+                                        }
+                                    %>
+                                    <td>Tax Amount </td>
+                                    <td><input type='text' name='' class='form-control' disabled value='<%= tax_amount %>'></td>
+                                    <td><input type='text' name='tax_price' class='form-control editable' id='tax_price' disabled></td>
+                                </tr>
+                                <tr>
+                                    <td>Tax Percentage</td>
+                                    <td><input type='text' name='' class='form-control' disabled value='<%= membership.tax_rate %>'></td>
+                                    <td><input type='text' name='tax' class='form-control editable' id='tax' disabled></td>
+                                </tr>
+                                <tr>
+                                    <td>Net Total</td>
+                                    <td><input type='text' name='' class='form-control' disabled value='<%= (membership.tax_included)?(current_total_amount):(current_total_amount + (membership.tax_rate*current_total_amount/100)) %>' id="old_plan_price"></td>
+                                    <td><input type='text' name='total_price' class='form-control editable' id='total_price' disabled></td>
+                                </tr>
+                                <tr>
+                                    <td>Start Date</td>
+                                    <td> <input type='text' name='current_start_date' id='current_start_date' class='form-control' value ='<%= membership.start_date %>' disabled></td>
+                                    <td><input type='text' name='package_start_date' class='form-control editable' id='package_start_date' disabled></td>
+                                </tr>
+                                <tr>
+                                    <td>End Date</td>
+                                    <td><input type='text' name='current_end_date' class='form-control' id='current_end_date' value ='<%= membership.expiry_date %>' disabled></td>
+                                    <td><input type='text' name='package_end_date' class='form-control editable' id='package_end_date' disabled original_package_date=""></td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+                <!-- comparison table end -->
+                <!-- final amount, discount , add payment option start-->
+                <br>
+                <div class='row'>
+                    <div class='col-lg-4'>
+                        <div class='row'>
+                            <div class='col-lg-3'>
+                                <label>Discount</label>
+                            </div>
+                            <div class='col-lg-9'>
+                                <input type="text" class="form-control" name="discount" id="discount" value="0">
+                            </div>
+                        </div>
+                        <!-- <div class='row mt-10'>
+                            <div class='col-lg-3'>
+                                <label>Final Amount</label>
+                            </div>
+                            <div class='col-lg-9'>
+                                <input type="text" class="form-control" name="final_amount" id="final-amount" disabled>
+                            </div>
+                        </div> -->
+                    </div>
+                    <div class='col-lg-4'>
+                        <div class='row'>
+                            <div class='col-lg-3'>
+                                <label>Trainer </label>
+                            </div>
+                            <div class='col-lg-9'>
+
+                                <select class="form-control" name="trainer" id="trainer" <%= membership.is_pt ? '' : 'disabled'  %>>
+                                    <option value="0">--Select Trainer--</option>
+                                    <% trainers.forEach(function(t){ %>
+                                    <option value="<%= t.id %>"><%= t.fname +' '+ t.lname %></option>
+                                    <% }) %>
+                                </select>
+                            </div>
+                        </div>
+                    </div>
+                    <div class='col-lg-4'>
+                        <div class='row'>
+                            <div class='col-lg-3'>
+                                <label>Time Slot</label>
+                            </div>
+                            <div class='col-lg-9'>
+                                <select class="form-control" name="time_slots" id="time-slots">
+                                    <option value="0">--Select Time Slot--</option>
+                                    <% timeSlots.forEach(function(t){ %>
+                                    <option value="<%= t.id %>"><%= t.start_time +' '+ t.end_time %></option>
+                                    <% }) %>
+                                </select>
+                            </div>
+                        </div>
+                    </div>
+                    
+                </div>
+                <!-- final amount, discount , add payment option end-->
+                <div class='row'>
+                    
+                    <br>
+                    <div class='col-lg-12 margin-top-3 display-hidden' id='downgrade_add_on'>
+                        <div class='row'>
+                            <div class='col-lg-12'>
+                                <label class='panel-title'>Choose one of the Below options to adjust the remaining Amount</label><br>
+                                <input type='radio' name='plan_downgrade' value='add-new'> Add Another Plan for Remaining Amount
+                                &nbsp;&nbsp;&nbsp;&nbsp;
+                                <input type='radio' name='plan_downgrade' value='extend-downgrade'> Extend Downgrade Plan
+                            </div>
+                        </div>
+                    </div>
+                    <br>
+                    <div class='col-lg-12 display-hidden margin-top-3' id='add-plan'>
+                        <div class='row'>
+                            <div class='col-lg-3'>
+                                <label>Select Package</label>
+                                <select class='form-control editable' id='downgrade_additional_package'>
+                                    <option value = ''>Select</option>
+                                    <% packages.forEach(function(p){ %>
+                                    <option value='<%= p.id %>'><%= p.name %></option>
+                                    <% }) %>
+                                </select>
+                            </div>
+                            <div class='col-lg-3'>
+                                <label>Validity</label>
+                                <input type='text' name='downgrade_additional_validity' class='form-control editable' id='downgrade_additional_validity' name='downgrade_additional_validity' disabled>
+                            </div>
+                            <div class='col-lg-3'>
+                                <label>Start Date</label>
+                                <input type='text' name='downgrade_additional_start_date' class='form-control editable' id='downgrade_additional_start_date' name='downgrade_additional_start_date' disabled>
+                            </div>
+                            <div class='col-lg-3'>
+                                <label>End Date</label>
+                                <input type='text' name='downgrade_additional_end_date' class='form-control editable' id='downgrade_additional_end_date' name='downgrade_additional_end_date' disabled>
+                            </div>
+                            <div class='col-lg-3'>
+                                <label>Trainers</label>
+                                <select class="form-control" name="downgrade_additional_trainer" id="downgrade_additional_trainer" <%= membership.is_pt ? '' : 'disabled'  %>>
+                                    <option value=0>--Select Trainer--</option>
+                                    <% trainers.forEach(function(t){ %>
+                                    <option value="<%= t.id %>"><%= t.fname +' '+ t.lname %></option>
+                                    <% }) %>
+                                </select>
+                            </div>
+                            <div class='col-lg-3'>
+                                <label>Time Slot</label>
+                                <select class="form-control" name="downgrade_additional_time_slots" id="downgrade_additional_time_slots">
+                                    <option value="0">--Select Time Slot--</option>
+                                    <% timeSlots.forEach(function(t){ %>
+                                    <option value="<%= t.id %>"><%= t.start_time +' '+ t.end_time %></option>
+                                    <% }) %>
+                                </select>
+                            </div>
+                        </div>
+                    </div>
+                    <div class='col-lg-12 display-hidden margin-top-3' id='extend-downgrade'>
+                        <div class='row'>
+                            <div class='col-lg-4'>
+                                <label>Extended Package Period (Days)</label>
+                                <input type='number' name='extended-period' class='form-control editable' id='extended-period' name='' value=''>
+                            </div>
+                        </div>
+                    </div>
+                    <div class='col-lg-12 text-right margin-top-3'>
+                        <button class='btn btn-primary' id='submit-upgrade'> Submit </button>
+                    </div>
+                </div>
+            </div>
+        </div>       
+    </div>
+</div>
+<%- include("./partials/footer.html") %>
+<script type="text/javascript">
+    MEMBERSHIP_DOWNGRADE.init({
+        _csrf: '<%= _csrf %>',
+        packages : '<%- JSON.stringify(packages) %>',
+        taxes:  '<%- JSON.stringify(taxes) %>',
+        membership: '<%- JSON.stringify(membership) %>'
+    })
+</script>

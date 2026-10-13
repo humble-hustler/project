@@ -1,0 +1,36 @@
+<%- include("./partials/header.html") %>
+<%- include("./partials/topnav.html") %>
+<%- include("./partials/sidebar.html") %>
+<div class="page">
+    <div class="page-content">
+        <div class="panel">            
+            <div class="panel-heading">
+                <h3 class="panel-title">Invoices</h3>
+                <div class="panel-actions text-white">
+                </div>
+            </div>
+            <div class="panel-body">
+                <table class="table table-hover dataTable table-striped w-full" id="accounting-invoices-table">
+                    <thead>
+                        <tr>
+                            <th>Invoice Date</th>
+                            <th>Invoice No</th>
+                            <th>Member Name</th>
+                            <th>Packages</th>
+                            <th>Total Amount</th>
+                            <th>Payment Status</th> 
+                            <th>View Invoice</th>
+                        </tr>
+                    </thead>                    
+                    <tbody></tbody>
+                </table>
+            </div>
+        </div>       
+    </div>
+</div>
+<%- include("./partials/footer.html") %>
+<script type="text/javascript">
+    ACCOUNTING_INVOICES.init({
+        _csrf: '<%= _csrf %>'
+    })
+</script>

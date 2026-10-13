@@ -1,0 +1,114 @@
+  <%- include("./partials/header.html") %>
+<%- include("./partials/topnav.html") %>
+<%- include("./partials/sidebar.html") %>
+<div class="page">
+    <div class="page-aside">
+        <div class="page-aside-switch">
+            <i class="icon md-chevron-left" aria-hidden="true"></i>
+            <i class="icon md-chevron-right" aria-hidden="true"></i>
+        </div>
+        <div class="page-aside-inner page-aside-scroll">
+            <div data-role="container">
+                <div data-role="content">
+                    <section class="page-aside-section">
+                        <h5 class="page-aside-title">Diet Plan Subscribers</h5>
+                        <div class="list-group " id="user-list">
+                            
+                        </div> 
+                        <a class="nav-link navbar-avatar single-member display-hidden"  user-id="" href="javascript:void(0)" id="sample-user">
+                            <span class="avatar avatar-online"><img src="/images/avatar-placeholder.png" alt=""></span>
+                            <span class="badge badge-pill badge-info up  message-count" ></span>
+                            <span class="avatar-name color-gray user-name"></span>
+                        </a> 
+                    </section>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="page-main">
+        <div class="page-content">
+            <div class="panel" style="height: 80vh">
+                <div class="panel-heading">
+                    <h3 class="panel-title chat-header">Messenger</h3>
+                    <a class="nav-link navbar-avatar user-chat-profile display-hidden" data-toggle="dropdown" href="#" aria-expanded="false" data-animation="scale-up" role="button">
+                        <span class="avatar avatar-online"><img src="" alt="..." class="avatar-img"></span>
+                        <span class="avatar-name color-gray"></span>
+                    </a>
+                    <!-- <div class="col-lg-12"><p id="typing">typing...</p></div> -->
+                </div>
+                <div class="col-lg-12"><hr class="chat-hr"/></div>
+                <div class="panel-body chat-top-container">
+                    <div class="chat-container" data-plugin="scrollable" >
+                    <div data-role="container" class="chat-box">
+                      <div data-role="content" class="chats"id="chat-box">
+                            <center><p id="no-chat">No Conversation selected Yet!</p></center>
+                      </div>
+                    </div>
+                  </div>
+                    <!-- <div class="chat-box " >
+                        <div class="chats" id="chat-box">
+                            <center><p>No Conversation selected Yet!</p></center>
+                        </div>
+                    </div> -->
+                <div>
+                <div class="chat display-hidden" id="my-chat">
+                    <div class="chat-avatar">
+                        <a class="avatar" data-toggle="tooltip" href="#" data-placement="right" title="June Lane">
+                            <img src="" alt="" class="chat-user-profile">
+                        </a>
+                    </div>
+                    <div class="chat-body">
+                        <div class="chat-content">
+                            <p class="chat-text">        
+                            </p>
+                            <time class="chat-time"> </time>
+                        </div>
+                    </div>
+                </div>
+                <div class="chat chat-left display-hidden" id="your-chat">
+                    <div class="chat-avatar">
+                        <a class="avatar" data-toggle="tooltip" href="#" data-placement="left" title="Edward Fletcher">
+                            <img src="" alt="" class="chat-user-profile">
+                        </a>
+                    </div>
+                    <div class="chat-body">
+                        <div class="chat-content">
+                            <p class="chat-text">
+                              
+                            </p>
+                            <time class="chat-time" ></time>
+                        </div>
+                    </div>
+                </div>
+              </div>
+            </div>
+            <div class="panel-footer display-hidden">
+                <!-- <form> -->
+                    <input type="hidden" name="to_user" id="to-user" value="81">
+                    <input type="hidden" name="from_user" id="from-user" value="<%= session.user.id %>">
+                    
+                    <div class="input-group ">
+                       <!--  <span class="input-group-btn">
+                            <a href="javascript: void(0)" class="btn btn-pure btn-default icon md-camera"></a>
+                        </span> -->
+
+                        <input class="form-control" type="text" placeholder="Type message here ..." id="message" >
+                        <span class="input-group-btn">
+                            <button type="button" class="btn btn-pure " id="send-message" title="Send"><i class="fa fa-paper-plane" aria-hidden="true"></i></button>
+                        </span>
+                    </div>
+                <!-- </form> -->
+            </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<%- include("./partials/footer.html") %>
+<script src="/global/js/Plugin/socket.io.js"></script>
+<script type="text/javascript">
+    DIETITIAN_MESSENGER.init({
+        _csrf: '<%= _csrf %>',
+        userSession: '<%- JSON.stringify(session.user) %>'      
+    })
+</script>

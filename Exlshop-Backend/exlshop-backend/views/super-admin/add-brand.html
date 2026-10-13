@@ -1,0 +1,45 @@
+<%- include("./partials/header.html") %>
+<%- include("./partials/topnav.html") %>
+<%- include("./partials/sidebar.html") %>
+<div class="page">
+    <div class="page-header">
+        <h1 class="page-title">Add New Shop</h1>
+    </div>    
+    <div class="page-content">
+        <% if(messages.success) { %>
+        <div class="alert alert-success"><%= messages.success %></div>
+        <% } %>
+        <% if(messages.error) { %>
+        <div class="alert alert-danger"><%= messages.error %></div>
+        <% } %>
+        <div class="panel">            
+            <div class="panel-body">                
+                <!-- <form action="/api/v1/brands/addBrand" method="POST" autocomplete="off">                     -->
+                    <div class="form-group row">
+                        <div class="col-md-6">
+                            <label class="form-control-label" for="brand-name">Shop Name</label>
+                            <input type="text" class="form-control" id="brand-name" name="name" required />
+                        </div>
+                        <div class="col-md-6">
+                            <label class="form-control-label" for="brand-active">Active</label><br />
+                            <input type="checkbox" name="active" id="brand-active" data-color="#eb6709" checked value="1" />
+                        </div>                        
+                    </div>   
+                    <div class="form-group row">
+                        <div class="col-md-6">
+                            <%- csrf_html %>
+                            <button id="addbtn" class="btn btn-primary">Add</button>
+                        </div>
+                    </div>
+                <!-- </form> -->
+            </div>
+        </div> 
+      
+    </div>
+</div>
+<%- include("./partials/footer.html") %>
+<script type="text/javascript">
+    ADD_BRAND.init({
+        _csrf: '<%= _csrf %>'
+    })
+</script>

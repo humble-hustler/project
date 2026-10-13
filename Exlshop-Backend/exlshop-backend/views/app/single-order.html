@@ -1,0 +1,392 @@
+<%- include("./partials/header.html") %>
+<%- include("./partials/topnav.html") %>
+<%- include("./partials/sidebar.html") %>
+<div class="page add-product">
+    <div class="page-content">
+        <div class="row">
+            <div class="col-md-8">
+                <div class="panel panel-bordered">
+                    <div class="panel-heading">
+                        <h3 class="panel-title">Order: <%= order.razorpay_order_id || order.id %></h3>
+                        <span class=" pd-10" id="orderDate" value="<%= order.created_date %>">Date: <%= formatDate(order.created_date, 'Do MMM YYYY') %></span>
+                    </div>
+                    <div class="panel-body">
+                        <div class="col-lg-12 ">
+                            <% var TotalRegPrice = 0 %>
+                            <% var TotalDisPrice = 0 %>
+                            <% var TotalSellPrice = 0 %>
+                            <% orderProducts.forEach(function(op){ %>
+                            <div class="row order-item pd-5">
+                                <div class="col-lg-8">
+                                    <figure class="itemside">
+                                        <div class="aside">
+                                            <a href="/app/asset-management" alt="" class="title text-dark">
+                                                <% if(op.file_name){ %>
+                                                <img src="/product-img/<%= op.file_name %>" class="img-sm">
+                                                <% }else{ %>
+                                                <img src="/images/logo.png" class="img-sm">
+                                                <% } %>
+                                            </a>
+                                        </div>
+                                        <figcaption class="info">
+                                            <a href="/shop" title="" class="title text-dark"><%= op.product_name %></a><br>
+                                            <span class="text-uppercase small"><%= op.category_name %></span><br>
+                                            <% if(op.product_type == 2) {%>
+                                            <span class="small"><%= op.variation_name %></span><br>
+                                            <% } %>
+                                            <span class="small">Qty: <%= op.quantity %></span>
+                                        </figcaption>
+                                    </figure>
+                                </div>
+                                <div class="col-lg-4">
+                                    <% if(op.product_type == 1){ %>
+                                    <% TotalRegPrice = TotalRegPrice + op.regular_price*op.quantity %>
+                                    <% TotalDisPrice = TotalDisPrice + op.discount_price*op.quantity %>
+                                    <% TotalSellPrice = TotalSellPrice + (op.regular_price - op.discount_price)*op.quantity %>
+                                    <span class="text-danger"> Regular Price: ₹ <%= op.regular_price*op.quantity %></span><br>
+                                    <span class="text-warning"> Discount: ₹ <%= op.discount_price*op.quantity %></span><br>
+                                    <span class="text-success"> Selling Price: ₹ <%= (op.regular_price - op.discount_price)*op.quantity %></span><br>
+                                    <% }else{ %>
+                                    <span class="text-dark"> Price: ₹ <%= op.variation_regular_price*op.quantity %></span><br>
+                                    <% } %>
+                                </div>
+                                <div class="col-lg-12 dietitian-row">
+                                <% if(op.slug =='diet-plans'){ %>
+                                    <% if(op.dietitian_id){ %>
+                                    <div class="col-lg-6 ">
+                                        <div class="row ">
+                                            Allocated Dietitian:&nbsp;<a href="/super-admin/settings/dietitian/<%= op.dietitian_id %>" class="dietitian-name"><%= op.dietitian_name %></a>
+                                        </div>
+                                    </div>
+                                    <% } %>
+                                    <div class="col-lg-6 text-right">
+                                        <a href="#" class="dietitian" data-target="#update-dietitian" data-toggle="modal" order_product_id="<%= op.id %>"><i class="fa fa-pencil" ></i> Dietitian</a>
+                                    </div>
+                                <% } %> 
+                                </div>                             
+                            </div>
+                            <% }) %>
+                            <div class="row order-item pd-5">
+                                <h3 class="panel-title" id="totalAmt" reg="<%= TotalRegPrice %>" dis="<%= TotalDisPrice %>" sel="<%= TotalSellPrice %>">Total Amount: ₹ <%= order.amount %></h3>   
+                            </div><br>
+                            <h4> Delivery details for this order</h4>
+                            <div class="row order-item pd-5"><br>
+                                <div class="col-12"><br>
+                                    <% if(order.delivery_choice == '1'){ %>
+                                        <input name="collapseGroup" type="radio" checked/>
+                                        <label> Exlshop Delivery</label>
+                                        <% if(getExlShopDelDetails.length) { %>
+                                            <h5>Details Provided for ExlShop Delivery by Shop Admin</h5>
+                                            <table class="table table-bordered">
+                                                <thead style="text-align:center;">
+                                                    <th>#</th>
+                                                    <th>Values</th>
+                                                </thead>
+                                                <tbody style="text-align:center;">
+                                                    <tr>
+                                                        <td>Weight</td>
+                                                        <td><%= getExlShopDelDetails[0].weight %> in Kg</td>
+                                                    </tr>
+                                                    <tr>
+                                                        <td>Height</td>
+                                                        <td><%= getExlShopDelDetails[0].height %> in Cm</td>
+                                                    </tr>
+                                                    <tr>
+                                                        <td>Length</td>
+                                                        <td><%= getExlShopDelDetails[0].length %> in Cm</td>
+                                                    </tr>
+                                                    <tr>
+                                                        <td>Breadth</td>
+                                                        <td><%= getExlShopDelDetails[0].breadth %> in Cm</td>
+                                                    </tr>
+                                                </tbody>
+                                            </table>
+                                            <% if(order.order_status != 7) { %>
+                                                <button class="btn btn-primary" id="Edit_exlshop_delivery" data-target="#add-delivery-details" data-toggle="modal">Edit</button>
+                                            <% } %>
+                                        <% } else { %>
+                                            <h5>No Details Available</h5>
+                                            <button class="btn btn-primary" id="add_exlshop_delivery" data-target="#add-delivery-details" data-toggle="modal">Add</button>
+                                        <% } %>
+                                        <% if(order.order_status == 7) { %>
+                                            <h3 class="text-success">Order is Pushed to ShipRocket</h3>
+                                        <% } %>
+                                    <% }else if(order.delivery_choice == '2'){ %> 
+                                        <input name="collapseGroup" type="radio"  checked/> 
+                                        <label> Shop Admin Delivery</label><br>
+                                        <% if (getShippingCharges.length) { %>
+                                            <h5>Existing Delivery Charges By Shop Admin</h5>
+                                            <table class="table table-bordered">
+                                                <thead style="text-align:center;">
+                                                    <th>#</th>
+                                                    <th>Distance</th>
+                                                    <th>Charges</th>
+                                                </thead>
+                                                <tbody style="text-align:center;">
+                                                    <tr>
+                                                        <td>1</td>
+                                                        <td>0 - 20 KM</td>
+                                                        <td>₹ <%= getShippingCharges[0].d_0_20_Km %></td>
+                                                    </tr>
+                                                    <tr>
+                                                        <td>2</td>
+                                                        <td>20 - 40 KM</td>
+                                                        <td>₹ <%= getShippingCharges[0].d_20_40_Km %></td>
+                                                    </tr>
+                                                    <tr>
+                                                        <td>3</td>
+                                                        <td>40 - 60 KM</td>
+                                                        <td>₹ <%= getShippingCharges[0].d_40_60_Km %></td>
+                                                    </tr>
+                                                    <tr>
+                                                        <td>4</td>
+                                                        <td>60 - 80 KM</td>
+                                                        <td>₹ <%= getShippingCharges[0].d_60_80_Km %></td>
+                                                    </tr>
+                                                    <tr>
+                                                        <td>5</td>
+                                                        <td>80 - 100 KM</td>
+                                                        <td>₹ <%= getShippingCharges[0].d_80_100_Km %></td>
+                                                    </tr>
+                                                    <tr>
+                                                        <td>6</td>
+                                                        <td>more than 100 KM</td>
+                                                        <td>₹ <%= getShippingCharges[0].d_more_than_100_Km %></td>
+                                                    </tr>
+                                                </tbody>
+                                            </table>
+                                        <% } else { %>
+                                            <h5>Please select delivery method, for that click on below link</h5>
+                                            <a href="/app/orders/addShippingCharges">Click Here</a>
+                                        <% } %>
+                                    <% } else { %>
+                                        <h5>Please select delivery method, for that click on below link</h5>
+                                        <a href="/app/orders/addShippingCharges">Click Here</a>
+                                    <% } %>
+                                </div> <br><br>
+                            </div><br>
+                            <div class="row order-item pd-5"><br>
+                                <h4 class="col-12 card-title">Sequnce to Change Order Status</h4>
+                                <div class="col-6">
+                                    <h5 class="card-title">For Shop-Admin Delivery Option</h5>
+                                    <p class="card-text">1. Order Placed</p>
+                                    <p class="card-text">2. Shipped</p>
+                                    <p class="card-text">3. Out for Delivery</p>
+                                    <p class="card-text">4. Delivered</p>
+                                    <p class="card-text">5. Cancelled / Returned</p>
+                                </div>
+                                <div class="col-6">
+                                    <h5 class="card-title">For Exlshop Delivery Option</h5>
+                                    <p class="card-text">1. Order Placed</p>
+                                    <p class="card-text">2. Push to ShipRocket</p>
+                                    <p class="card-text">3. Shipped</p>
+                                    <p class="card-text">4. Out for Delivery</p>
+                                    <p class="card-text">5. Delivered</p>
+                                    <p class="card-text">6. Cancelled / Returned</p>
+                                    <p class="card-text">
+                                        <small class="text-danger font-weight-bold">Note - For ExlShop Delivery first add Courier details</small>
+                                    </p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>                    
+                </div>
+                  <div id="collapseOne" class="panel-collapse collapse">
+                    <div class="modal-dialog modal-simple">
+                        <div class="modal-content">
+                            <div class="modal-header">
+                                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                    <span aria-hidden="true">×</span>
+                                </button>
+                                <h4 class="modal-title"> Delivery By Shop Admin</h4>
+                            </div>
+                            <div class="modal-body">
+                                    <div class="row">
+                                        <div class="form-group col-xl-4">
+                                            <label class="form-control-label">Staff</label>
+                                            <select class="form-control" id="staff_id" name="staff" required>
+                                                <option disabled selected value>Select staff</option>
+                                                <option value="101">ram</option>
+                                            </select>
+                                        </div>
+                                        <div class="form-group col-xl-4">
+                                            <label class="form-control-label">Pickup_date</label>
+                                            <input type="date" class="form-control" id="pickup_date_id123" name="pickup_date" placeholder="Pickup Date" required />
+                                        </div>
+                                        <div class="form-group col-xl-4">
+                                            <label class="form-control-label">Pickup_time</label>
+                                            <input type="time" class="form-control" id="pickup_time_id123" name="pickup_time" placeholder="Pickup Time" required />
+                                        </div>
+                                        
+                                        <div class="form-group col-xl-4">
+                                            <label class="form-control-label">Pickup_location</label>
+                                            <input type="text" class="form-control" id="pickup_location_id123" name="pickup_location" placeholder="Pickup Location" required />
+                                        </div>
+                                        <div class="form-group col-xl-12">
+                                            <%- csrf_html %>
+                                            <button class="btn btn-primary" id="add_shopadmin_delivery">Add</button>
+                                        </div>
+                                    </div>
+                               
+                            </div>
+                        </div>
+                    </div>
+                  </div>  
+            </div>
+            <div class="col-md-4">
+                <div class="panel panel-bordered">
+                    <div class="panel-heading">
+                        <h3 class="panel-title">Shop Details</h3>
+                    </div>
+                    <div class="panel-body">
+                        <a id="brandName"><%= brandDetails.name %></a><br>
+                        <span class="font-size-12" id="brandAddress1"><i class="fa fa-map-marker"></i> <%= brandDetails.address_line_1 %></span><br>
+                        <span class="font-size-12" id="brandAddress2"><i></i> <%= brandDetails.address_line_2 %></span><br>
+                        <span class="font-size-12" id="brandCity"><i></i> <%= brandDetails.city %></span>
+                        <span class="font-size-12"><i></i>, </span>
+                        <span class="font-size-12" id="brandState"><i></i> <%= brandDetails.state %></span><br>
+                        <span class="font-size-12" id="brandCountry"><i></i> <%= brandDetails.country %></span>
+                        <span class="font-size-12" id="brandZip"><i></i> <%= brandDetails.zip %></span><br>
+                        <span class="font-size-12" id="brandPhone"><i class="fa fa-phone"></i> <%= brandDetails.phone %></span><br>
+                        <span class="font-size-12" id="brandEmail"><i class="fa fa-envelope"></i> <%= brandDetails.email %></span><br>
+                        <span class="font-size-12" id="brandlat"><i></i> Latittude : <%= brandDetails.lat %></span><br>
+                        <span class="font-size-12" id="brandlong"><i></i> Longitude :<%= brandDetails.lng %></span><br>
+                        <span class="font-size-12" id="brandGst"><i></i> GST No. :<%= brandDetails.gstin %></span>
+                    </div>
+                </div>
+                <% if(user){ %>
+                <div class="panel panel-bordered">
+                    <div class="panel-heading">
+                        <h3 class="panel-title">Customer Details</h3>
+                    </div>
+                    <div class="panel-body">
+                        <a id="orderName" fname="<%= user.fname %>" lname="<%= user.lname %>"><%= user.fname+' '+user.lname %></a><br>
+                        <span class="font-size-12" id="orderPhone" phone="<%= user.phone %>"><i class="fa fa-phone"></i> <%= user.phone %></span><br>
+                        <span class="font-size-12" id="orderMail" mail="<%= user.email %>"><i class="fa fa-envelope"></i> <%= user.email %></span>
+                    </div>
+                </div>
+                <% } %>
+                <% if(order){ %>
+                <div class="panel panel-bordered">
+                    <div class="panel-heading">
+                        <h3 class="panel-title">Shipping Address</h3>
+                    </div>
+                    <div class="panel-body">
+                        <span><i class="fa fa-map-marker" aria-hidden="true"></i></span>
+                        <span ><%= order.label %></span><br>
+                        <span class="font-size-12" id="orderDelName" delname="<%= order.address_name %>" delnum="<%= order.phone %>"><%= order.address_name %> | <%= order.phone %></span><br>
+                        <% if(order.address_line_1){%>
+                        <span class="font-size-12" id="addLine1"><%= order.address_line_1 %></span><br>
+                        <% } %>
+                        <% if(order.address_line_2){%>
+                        <span class="font-size-12" id="addLine2"><%= order.address_line_2 %></span><br>
+                        <% } %>
+                        <span class="font-size-12" id="cityZip" zip="<%= order.zip %>" city="<%= order.city_name %>" state="<%= order.state_name %>" country="<%= order.country_name %>"><%= order.zip+', '+order.city_name+', '+order.state_name+', '+order.country_name %></span>
+                    </div>
+                </div> 
+                <div class="panel panel-bordered">
+                    <div class="panel-heading">
+                                <div  id="selectId" class="form-group col-xl-6">
+                                    <br>
+                                    <select  id="order_status_id" name="order_statusid" data-orderId = "<%= order.id %>" <%= (order.delivery_choice === '1' && getExlShopDelDetails.length) ? '':'disabled'%>>
+                                        <% order_status.forEach(function(o) { %>
+                                            <% if(order.delivery_choice === '2' && o.id !== 7) { %>
+                                                <option  value="<%= o.id%>" class="" <%= order.order_status==o.id ? 'selected':''%>><%= o.name%></option>
+                                            <% } else if(order.delivery_choice === '1') { %>
+                                                <option value="<%= o.id%>" <%= order.order_status==o.id ? 'selected':''%>><%= o.name%></option>
+                                            <% } %>
+                                        <% }) %>                                        
+                                    </select>
+                                </div>                 
+                                <div class="form-group col-xl-12">
+                                    <%- csrf_html %>
+                                    <button class="btn btn-primary" id="update-status-btn">Update Status</button>
+                                </div>
+                    </div>
+                </div>
+                <% } %>                               
+            </div>
+           
+        </div>       
+    </div>
+  
+</div>
+<div class="modal fade" id="add-delivery-details" aria-hidden="false" aria-labelledby="add-delivery-details" role="dialog" tabindex="-1">
+    <div class="modal-dialog modal-md">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">×</span>
+                </button>
+                <h4 class="modal-title">ExlShop Delivery</h4>
+            </div>
+            <div class="modal-body">
+                <h5>Please fill all the details</h5>
+                <div class="row">
+                    <div class="form-group col-xl-4">
+                        <label class="form-control-label">Courier Length (In cms.)</label>
+                        <input type="number" id="courier-length" name="length" placeholder="Enter courier length" value="<%= getExlShopDelDetails.length ? getExlShopDelDetails[0].length : ''%>" required>
+                    </div>
+                    <div class="form-group col-xl-4">
+                        <label class="form-control-label">Courier Breadth (In cms.)</label>
+                        <input type="number" id="courier-breadth" name="breath" placeholder="Enter courier breadth" value="<%= getExlShopDelDetails.length ? getExlShopDelDetails[0].breadth : ''%>" required>
+                    </div>
+                    <div class="form-group col-xl-4">
+                        <label class="form-control-label">Courier Height (In cms.)</label>
+                        <input type="number" id="courier-height" name="height" placeholder="Enter courier height" value="<%= getExlShopDelDetails.length ? getExlShopDelDetails[0].height : ''%>" required>
+                    </div>
+                    <div class="form-group col-xl-4">
+                        <label class="form-control-label">Courier Weight (in  kgs.)</label>
+                        <input type="number" id="courier-weight" name="weight" placeholder="Enter courier weight" value="<%= getExlShopDelDetails.length ? getExlShopDelDetails[0].weight : ''%>" required>
+                    </div>
+                    <div class="form-group col-xl-12">
+                        <%- csrf_html %>
+                        <% if(getExlShopDelDetails.length) { %>
+                            <button class="btn btn-primary" id="update-ExlShop-delivery-btn">Update</button>
+                        <% } else { %>
+                            <button class="btn btn-primary" id="ExlShop-delivery-btn">Add</button>
+                        <% } %>
+                    </div>
+                </div>
+            </div>            
+        </div>
+    </div>
+</div>
+
+
+<div class="modal fade" id="update-dietitian" aria-hidden="false" aria-labelledby="update-dietitian" role="dialog" tabindex="-1">
+    <div class="modal-dialog modal-md">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">×</span>
+                </button>
+                <h4 class="modal-title">Select Dietitian</h4>
+            </div>
+            <div class="modal-body">
+                <form action="/super-admin/shop/update-dietitian" method="POST">
+                    <input type="hidden" name="order_product_id">
+                    <div class="row">
+                        <div class="form-group col-xl-6">
+                            <!-- <label class="form-control-label">Select Dietitan</label> -->
+                            <select class="form-control" id="dietitian" name="dietitian_id">
+                                
+                            </select>
+                        </div>
+                        <div class="form-group col-xl-12">
+                            <%- csrf_html %>
+                            <button class="btn btn-primary" id="btn">Save</button>
+                        </div>
+                    </div>
+                </form>
+            </div>            
+        </div>
+    </div>
+</div>
+<%- include("./partials/footer.html") %>
+<script type="text/javascript">
+    SINGLE_ORDER.init({
+        _csrf: '<%= _csrf %>'
+    })
+</script>
+

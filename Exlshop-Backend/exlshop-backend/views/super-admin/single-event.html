@@ -1,0 +1,87 @@
+<%- include("./partials/header.html") %>
+<%- include("./partials/topnav.html") %>
+<%- include("./partials/sidebar.html") %>
+<div class="page">
+    <div class="page-content">
+        <div class="panel">
+            <div class="panel-body nav-tabs-animate nav-tabs-horizontal">
+                <ul class="nav nav-tabs nav-tabs-line tabs-line-top mb-10" role="tablist">
+                    <li class="nav-item" role="presentation"><a class="nav-link active" data-toggle="tab" href="#details" aria-controls="details" role="tab">Details</a></li>
+                    <li class="nav-item" role="presentation"><a class="nav-link" data-toggle="tab" href="#registrations" aria-controls="registrations" role="tab">Event Registrations</a></li> 
+                </ul>
+
+                <div class="tab-content">
+                    <div class="tab-pane active" id="details" role="tabpanel">
+                        <form action="/super-admin/events/update" method="POST">
+                            <div class="row">
+                                <input type="hidden" name="event_id" value="<%= eventData.id %>">
+                                <div class="form-group col-md-6">
+                                    <label class="form-control-label" for="event-name">Event Name</label>
+                                    <input type="text" class="form-control edit-data" id="event-name" name="event_name" value="<%= eventData.name %>">
+                                </div>
+                                <div class="form-group col-md-3">
+                                    <label class="form-control-label" for="start-date">Start Date</label><br>
+                                    <input type="text" class="form-control edit-data" id="start-date" name="start_date" value="<%= formatDate(eventData.start_date, 'DD-MM-YY hh:mm a') %>">
+                                </div>
+                                <div class="form-group col-md-3">
+                                    <label class="form-control-label" for="end-date">End Date</label><br>
+                                    <input type="text" class="form-control edit-data" id="end-date" name="end_date" value="<<%= formatDate(eventData.end_date, 'DD-MM-YY hh:mm a') %>">
+                                </div>
+                                <div class="form-group col-md-3">
+                                    <label class="form-control-label" for="user-demo-switch">Event Type</label><br>
+                                    <select type="text" class="form-control edit-data" id="event-type" name="event_type" value="">
+                                        <option value=""> Select Event Type </option>
+                                        <% eventTypes.forEach(function(e){ %>
+                                        <option value="<%= e.id %>" <%= (e.id == eventData.event_type)?('selected'):('') %>><%= e.type %></option>
+                                        <% }) %>
+                                    </select>
+                                </div>
+                                <div class="form-group col-md-3">
+                                    <label class="form-control-label" for="charges">Charges</label><br>
+                                    <input type="text" class="form-control edit-data" id="charges" name="charges" value="<%= eventData.charges %>">
+                                </div>
+                                <div class="form-group col-md-6">
+                                    <label class="form-control-label" for="held-by">Held By</label><br>
+                                    <input type="text" class="form-control edit-data" id="held-by" name="held_by" value="<%= eventData.held_by %>">
+                                </div>
+                                <div class="form-group col-md-6">
+                                    <label class="form-control-label" for="description">Description</label><br>
+                                    <textarea  class="form-control edit-data" id="description" name="description" value=""><%= eventData.description %>
+                                    </textarea>
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="form-group col-md-4">
+                                    <%- csrf_html %>
+                                    <button class="btn btn-primary" id="update-event">Update</button>
+                                </div>
+                            </div>
+                        </form>
+                    </div>
+                    <div class="tab-pane " id="registrations" role="tabpanel">
+                        <table class="table table-hover dataTable table-striped w-full" id="event-list">
+                            <thead>
+                                <tr>
+                                    <th>id</th>
+                                    <th>Name</th>
+                                    <th>Status</th> 
+                                    <th>Fees Paid</th>           
+                                </tr>
+                            </thead>                    
+                            <tbody>
+                                
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<%- include("./partials/footer.html") %>
+<script type="text/javascript">
+    SINGLE_EVENT.init({
+        _csrf: '<%= _csrf %>',
+        event_id: '<%= eventData.id %>'
+    })
+</script>

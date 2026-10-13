@@ -1,0 +1,333 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="UTF-8">
+        <meta http-equiv="X-UA-Compatible" content="IE=edge">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <title><%= title %></title>
+    </head>
+    <style>
+        .listitemsofmainmain
+        {
+            list-style-type: none;
+            padding-left: 10px;
+        }
+        #m-list li
+        {
+            list-style-type: none;
+            padding-left: 30px;
+        }
+        .insideproduct
+        {
+            border: 1px solid #ccc;
+             width: 96%;
+            padding: 0px
+        }
+        #innersearch
+        {
+            position: absolute;
+             right: 4%;
+             top: 34%;
+        }
+        .red{
+            font-weight: bolder;
+            background-color: #ccc;
+        }
+        #slug
+        {
+            font-size: 22px;
+        }
+        #shop
+        {
+            font-size: 24px;
+        }
+        #g
+        {
+            font-size: 15px;
+        }
+        #bookmark
+        {
+            color: #FFB84E;
+            font-size: 24px;
+        }
+        span {
+            cursor: pointer;
+        }
+        .slider {
+            height: 5px;
+            width: 95%;
+            position: relative;
+            background: #ddd;
+            border-radius: 5px;
+        }
+        .slider .progress {
+            height: 100%;
+            width: auto;
+            left: 0%;
+            right: 0%;
+            margin-top: -8px;
+            position: absolute;
+            border-radius: 5px;
+            background: #17A2B8;
+        }
+        .range-input {
+            position: relative;
+        }
+        .range-input input {
+            position: absolute;
+            width: 95%;
+            height: 5px;
+            top: -5px;
+            background: none;
+            pointer-events: none;
+            -webkit-appearance: none;
+            -moz-appearance: none;
+        }
+        input[type="range"]::-webkit-slider-thumb {
+            height: 17px;
+            width: 17px;
+            border-radius: 50%;
+            background: #17A2B8;
+            pointer-events: auto;
+            -webkit-appearance: none;
+            margin-top: -2px;
+            box-shadow: 0 0 6px rgba(0, 0, 0, 0.05);
+        }
+        input[type="range"]::-moz-range-thumb {
+            height: 17px;
+            width: 17px;
+            border: none;
+            border-radius: 50%;
+            background: #17A2B8;
+            pointer-events: auto;
+            -moz-appearance: none;
+            box-shadow: 0 0 6px rgba(0, 0, 0, 0.05);
+        }
+    </style>
+    <%- include('../partials/header.html') %>
+    <body>
+       <div class="container-fluid">
+        <div class="row">
+            <div class="col-md-3">
+                <div class="a allcontainer " id="filters">
+                    <h2 class="pt-3 ps-3">Filters</h2>
+                    <hr>
+                    <i class="icon-control fa fa-chevron-up text-dark pe-3" id="showhidemainlist"></i>
+                    <h6 class="title ps-3">PRODUCTS</h6>
+                    <div id="collapse_1" class="ps-3">
+                        <div class="input-group py-2">
+                            <input type="text" class="form-control" placeholder="Search Product.."
+                                id="search-product"><i class="fa fa-search" id="innersearch"></i> -->
+                             <div class="input-group-append">
+                                <button class="btn btn-light" type="button">
+                                <i class="fa fa-search"></i></button>
+                            </div> 
+                        </div>
+                        </form>
+                         <ul class="list-menu"> 
+                            <% shop_categories.forEach((s)=>{ %>
+                                <ul id="cat_list" style="list-style: none;">
+                                    <p> <input type="checkbox" class="catfilter" id="cat" value="<%= s.id %>"><label
+                                            style="cursor: pointer " class="category text-dark ps-2"
+                                            value="<%= s.id %>">
+                                            <%= s.name %>
+                                        </label></p>
+                                </ul>
+                                <% }) %>
+                        </ul> 
+                    </div>
+
+                    <h5 class="pt-3 ps-3" id="g">Grocery</h5> -->
+                    <hr>      
+                     <i class="icon-control fa fa-chevron-up text-dark pe-3" id="showhidemainlist"></i>
+                    <h6 class="title ps-3">PRODUCTS</h6>
+                    <div id="collapse_1" class="ps-3">
+                        <div class="input-group py-2">
+                            <input type="text" class="form-control" placeholder="Search Product.." id="search-product"><i class="fa fa-search" id="innersearch"></i>
+                            <div class="input-group-append">
+                                <button class="btn btn-light" type="button">
+                                <i class="fa fa-search"></i></button>
+                            </div>
+                        </div>
+                        </form>
+                    </div> 
+                    <ul id="mylist"></ul>
+                    <ul id="subsublist"></ul>
+                    <hr>
+                    <i class="icon-control fa fa-chevron-up text-dark pe-3" id="showhidemainlist1"></i>
+                    <h6 class="ps-3 mb-2">CUSTOMER RATINGS</h6>
+                    <div class="ps-3" id="ratingcollapse" >
+                        <input type="checkbox" id="onestar" class="starrating"  value="1">
+                        <label for="1star" class="starrating ps-2">1<i class="bi bi-star-fill  pe-1"></i> & above</label><br>
+                        <input type="checkbox" id="twostar" class="starrating"  value="2">
+                        <label for="2star" class="starrating ps-2">2<i class="bi bi-star-fill pe-1"></i> & above</label><br>
+                        <input type="checkbox" id="threestar" class="starrating"  value="3">
+                        <label for="3star" class="starrating ps-2">3<i class="bi bi-star-fill pe-1"></i> & above</label><br>
+                        <input type="checkbox" id="fourstar" class="starrating"  value="b4">
+                        <label for="4star" class="starrating ps-2">4<i class="bi bi-star-fill pe-1"></i> & above</label><br>
+                        </form>
+                    </div>    <!--end of rating-->
+                    <hr>
+                    <i class="icon-control fa fa-chevron-up pe-3" id="showhidemainlist2"></i>
+                    <h6 class="ps-3 mb-2">PRICE RANGE </h6>
+                    <div id="collapse_3 slider1" class=" ps-3">
+                        <input type="range" class="custom-range" min="0" max="100" name="">
+                        <div class="form-row ">
+                            <div class="form-group col-md-6">
+                                <label>Min</label>
+                                <input class="form-control" placeholder="Rs. 0" type="number" id="min-price">
+                            </div>
+                            <div class="form-group text-right col-md-6">
+                                <label class="pe-2">Max</label>
+                                <input class="form-control me-3" placeholder="Rs. 50,000" type="number" id="max-price">
+                            </div>
+                        </div>
+                        <button class="btn btn-block btn-primary" id="apply-price-range-btn">Apply</button>
+                    
+                        <hr>
+                        <i class="icon-control fa fa-chevron-up text-dark pe-3" id="showhidemainlist3"></i>
+                        <h6 class="ps-3 mb-2">OFFERS</h6>
+                        <div class="ps-3" id="collapseoffers" >
+                            <input type="checkbox"><label class="myoffers ps-2">Buy More,Save More</label><br>
+                            <input type="checkbox"><label class="myoffers ps-2">Special Price</label>
+                        </div>   
+                    <!--end-->
+                        <hr>
+                        <i class="icon-control fa fa-chevron-down text-dark pe-3" id="showhidemainlist4"></i>
+                        <h6 class="ps-3 mb-2">DISCOUNT</h6>
+                        <div class="ps-3" id="collapsediscount" >
+                            <input type="checkbox" class="percentage" value="50">
+                            <label class="ps-2">50% or more</label><br>
+                            <input type="checkbox" class="percentage" value="40"><label class="ps-2">40% or more</label><br>
+                            <input type="checkbox" class="percentage" value="30"><label class="ps-2">30% or more</label><br>
+                            <input type="checkbox" class="percentage" value="20"><label class="ps-2">20% or more</label><br>
+                            <input type="checkbox" class="percentage" value="10"><label class="ps-2">10% or more</label><br>
+                            <input type="checkbox" class="percentage" value="9"><label class="ps-2">10% or below</label><br>
+                        </div>   
+                        <!--end-->
+                        <hr>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="col-9 p-0 bg-white">
+                <div class="inside">
+                    <section class="section-name  padding-y-sm">
+                        <div class="container p-0 m-0" id="product-list">
+                            <div class="d-flex justify-content-between">
+                                <div>
+                                    <nav class="breadspace" aria-label="breadcrumb">
+                                        <ol class="breadcrumb mb-0 py-2">
+                                            <li class="breadcrumb-item">
+                                                <a href="/" class="twelve breadclr">Home</a>
+                                            </li>
+                                            <li class="breadcrumb-item" aria-current="page"><a class="twelve breadclr" href="/search_shop" ></a></li>
+                                            <li class="breadcrumb-item" aria-current="page"><a class="twelve breadclr" id="bread2"></a></li>
+                                            <!-- <li class="breadcrumb-item" aria-current="page"><a class="twelve breadclr" id="bread3"></a></li> -->
+                                        </ol>
+                                    </nav>
+                                    <h5 class="ps-3" id="shop"><i class="bi bi-shop-window pe-3"></i>SHOP A</h5>
+                                </div>
+                                <div class="pe-3" >
+                                    <i class="bi bi-bookmark" id="bookmark"></i>
+                                </div>
+                            </div>
+                            <hr>
+                            <div class="mx-auto insideproduct">
+                                <h2 class="ps-3 my-2" id="slug">Dals pulses</h2>
+                                <span class="text-start d-inline ps-3">Sort By</span>
+                                <span class="sortfilter ps-3" id="sort1">Popularity</span>
+                                <span class="sortfilter ps-3" id="sort2">Price-Low to High</span>
+                                <span class="sortfilter ps-3" id="sort3">Price-High to Low</span>
+                                <span class="sortfilter ps-3" id="sort4">Discount</span>
+                                <main id="product-list">
+                                </main>
+                                <hr>
+                                <div class="row px-3">
+                                    <% if(products.length <= 0){%>
+                                        <h4>Product Is not Availble</h4>
+                                    <% } %>
+
+                                    <% products.forEach((p) => { %>
+                                    <% if(p.products_type == 1) { %>
+                                    <div class="col-md-3">
+                                        <div href="/shop/<%= p.slug %>/<%= p.id %>" class="text-center card-product-grid">
+                                            <a href="/shop/<%= p.slug %>/<%= p.id %>" class="img-wrap">
+                                                <% if(p.file_name){ %>
+                                                <img src="<%=session.imgURL %><%= p.file_name %>" alt="<%= p.name %>">
+                                                <%}else{%>
+                                                <img src="<%= coreHostname %>/images/logo.png" alt="<%= p.name %>">
+                                                <%}%>
+                                            </a>
+                                            <figcaption class="info-wrap">                        
+                                                <a href="/shop/<%= p.slug %>/<%= p.id %>" class="title" title="<%= p.name %>"><%= p.name %></a>
+                                                <span class="price mt-1">
+                                                    Rs. <%= p.variation_regular_price.split(',').sort()[0] %>
+                                                </span>
+                                            </figcaption>
+                                            <button  onclick="abc(this)" class="mb-2 bg-white" id="addbtn">ADD +</button>
+                                            <div class="input-group mb-3 input-spinner plusof justify-content-center" id="plusdiv" onload="fun()">
+                                                <div class="input-group-append">
+                                                    <button class="btn btn-light button-minus" type="button" id="button-minus"> − </button>
+                                                </div>
+                                                <input type="text" class="form-control quantityclass" name="quant" value="1" id="quantity">
+                                                <div class="input-group-prepend">
+                                                    <button class="btn btn-light button-plus" id="button-plus" type="button" > + </button>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <% } else { %>
+                                    <div class="col-md-3">
+                                        <div href="/shop/<%= p.slug %>/<%= p.id %>" class="card card-product-grid">
+                                            <a href="/shop/<%= p.slug %>/<%= p.id %>" class="img-wrap">
+                                                <% if(p.file_name){ %>
+                                                <img src="<%=session.imgURL %><%= p.file_name %>">
+                                                <%}else{%>
+                                                <img class="logo" src="/images/logo.png">
+                                                <%}%>
+                                            </a>
+                                            <figcaption class="info-wrap">                        
+                                                <a href="/shop/<%= p.slug %>/<%= p.id %>" class="title"><%= p.name %></a> 
+                                                <div class="myrate green  "><%=p.avg_rate%><i class="bi bi-star-fill ps-1 ten"></i></div>
+                                                    <span class="price mt-1">
+                                                        Rs. <%= p.regular_price-p.discount_price %><del class="ps-2 information">Rs. <%= p.regular_price %></del>
+                                                            <p class="text-success"><%=Math.round(p.discount_price*100 /p.regular_price) %>% off</p>
+                                                    </span> 
+                                                <button id="addingquantity" class="mb-2 addbtn" onclick="abc(this)">ADD +</button>
+                                                <div class="input-group mb-3 input-spinner plusof justify-content-center" id="plusdiv" onload="fun()">
+                                                <div class="input-group-append">
+                                                    <button class="btn btn-light button-minus" type="button" id="button-minus"> − </button>
+                                                </div>
+                                                <input type="text" class="form-control quantityclass" name="quant" value="1" id="quantity">
+                                                <div class="input-group-prepend">
+                                                    <button class="btn btn-light button-plus" id="button-plus" type="button" > + </button>
+                                                </div>
+                                                </div>
+                                            </figcaption>
+                                        </div>
+                                    </div>
+                                    <% } %>
+                                    <% }) %>
+                                </div>
+                            </div>
+                        </div>
+                    </section>
+                </div>
+            </div>
+        </div>
+    </body>
+    <%- include('../partials/footer.html') %>
+</html>
+<script type="text/javascript">
+    MY_WISHLIST.init({
+        _csrf: '<%= _csrf %>'
+    })
+    $("#listsix").hide();
+    var track1 = localStorage.getItem('track1')
+            var track2 = localStorage.getItem("track2")
+            var track3 = localStorage.getItem("track3")
+            $('#bread1').text(track1)
+            $('#bread2').text(track2)
+            $('#bread3').text(track3)
+</script>

@@ -1,0 +1,106 @@
+<style>
+    .fsixteen
+    {
+        font-size: 16px;
+    }
+    #goto
+    {
+        display: inline-block;
+        height: 38px;
+        width: 140px;
+        background-color: #FBA11B;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        border-radius: 2px;
+    }
+    .feighteen
+    {
+        font-size: 18px;
+    }
+    .parent{
+        display: flex;
+        justify-content: space-evenly;
+    }
+</style>
+<%- include('../partials/header.html') %>
+<input type="hidden" class="delivery_charges" value="<%= delChr %>">
+<div class="m-0 p-0 mx-auto container mt-2 bg-white">
+<h4 class="twenty pt-3 ps-3">Your order has been placed</h4>
+<hr>
+<h3 class="ps-5">Order Summary</h3>
+<div class="row" style="margin-top: 20px;">
+    <div class="col-7">
+     
+<% orderdata.forEach((o) => { %>
+<div class="parent">
+    <div>
+        <img src="<%=session.imgURL %><%= o.file_name %>" alt="<%= o.name %>" class="img-md ps-3">
+    </div>
+
+    <div>
+        <!-- <h5 class="fsixteen">ORDER ID:<%= o.id %></h5> -->
+        <h5 class="feighteen"><%= o.name %></h5>
+        <h5 class="fsixteen pt-2 pb-1">Quantity :- <%= o.quantity %></h5>
+        <span>Regular Price :- <%=o.regular_price %></span><br>
+        <span>Discount Price :- <%= o.discount_price %><span>
+        <h5 class="fsixteen pt-2 fw-bold">Total Amount :- <%= (o.regular_price-o.discount_price) * o.quantity %></h5>
+
+    </div>
+</div>
+<hr>
+<% }) %>
+</div>
+
+<!-- <hr> -->
+
+<div class="col-5">
+    <div style="margin-left: 220px;">
+        <span class="fsixteen  pe-2">Delivery by within 3 - 7 working days</span> <br>
+        <span class="fsixteen  pe-2"><strong>Shipping Address</strong> :- <%= orderdata[0].address_line_1  %></span><br>
+        <span class="  pe-2"><strong>Total Quantity</strong> :-  <%= orderTotalData[0].total_product_quantity %> </span><br>
+       
+        <span class="  pe-2"><strong>Amount</strong> :- <span class="product-total-amount"><%= orderTotalData[0].product_total_amount %></span>  </span><br>
+        <span class="  pe-2"><strong>Total Discount</strong> :- <span class="order-total-discount"><%= orderTotalData[0].product_total_discount %></span>  </span><br>
+        <span class="  pe-2"><strong>Shipping Charges</strong> :- <span class="order-delivery-charge"><%= delChr %></span>  </span><br>
+      
+        <span class=" pe-2" id="payment-mode"><strong>Payment Mode</strong> :-  <%= orderdata[0].payment_mode %></span><br>
+
+ <% if(orderdata[0].payment_mode == 'COD'){ %>
+        <span class="  pe-2 fw-bold" ><strong class="changeText"> Amount Paid to be</strong> :- <span class="order-total-amount"> <%= orderdata[0].amount %> </span> </span><br>
+        <%} %>
+
+        <% if(orderdata[0].payment_mode == 'ONLINE'){ %>
+            <span class="  pe-2 fw-bold" ><strong class="changeText"> Paid Amount</strong> :- <span class="order-total-amount"><%= orderdata[0].amount %> </span> </span><br>
+            <%} %>
+    
+    </div>
+    <div class="d-flex  pt-4 pe-5 pb-3" style="margin-left: 220px;"><a href="/" class="text-dark fw-bold" id="goto">GO TO HOME</a></div>
+
+</div>
+
+</div>
+
+  
+
+
+
+</div>
+
+
+    
+   
+<%- include('../partials/footer.html') %>
+
+<script type="text/javascript">
+    $(document).ready(function (){
+     var order_total_amount =  parseInt($(".order-total-amount").text())
+
+    var order_delivery_charge =  parseInt($(".order-delivery-charge").text())
+     
+    var order_total_discount =  parseInt($(".order-total-discount").text())
+     
+       var product_total_amount = (order_total_amount - order_delivery_charge) + order_total_discount
+      
+    })
+</script>

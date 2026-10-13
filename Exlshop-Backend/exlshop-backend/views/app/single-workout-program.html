@@ -1,0 +1,386 @@
+<%- include("./partials/header.html") %>
+<%- include("./partials/topnav.html") %>
+<%- include("./partials/sidebar.html") %>
+<div class="page">
+    <div class="page-header workout-panel">
+        <div class="page-header-actions">
+            <button class="btn btn-round btn-primary" id="print-workout">
+                <i class="icon fa fa-print" aria-hidden="true"></i>
+                <span class="hidden-sm-down">Print</span>
+            </button>
+            <button class="btn btn-round btn-danger" id="delete-workout-btn" data-target="#delete-workout-program" data-toggle="modal">
+                <i class="icon fa fa-trash" aria-hidden="true"></i>
+                <span class="hidden-sm-down">Delete Workout Program</span>
+            </button>
+        </div>
+    </div>
+    <div class="page-content">
+        <div class="panel workout-panel">
+            <div class="panel-body">
+                <div class="row">
+                    <div class="col-md-12">
+                        <table class="table">
+                            <thead>
+                                <tr>
+                                    <th>Program Name</th>
+                                    <th>Workout Level</th>
+                                    <th>Fitness Goal</th>
+                                    <th>Age Group</th>
+                                    <th>Gender</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <td><%= workoutData.program_name %></td>
+                                    <td><%= workoutData.workout_level_name %></td>
+                                    <td><%= workoutData.fitness_goal_name %></td>
+                                    <td><%= workoutData.age_group_label %></td>
+                                    <td>
+                                        <%
+                                        var gender = ''
+                                        switch (workoutData.gender) {
+                                        case 'A':
+                                        gender = 'All';
+                                        break;
+                                        case 'M':
+                                        gender = 'Male';
+                                        break;
+                                        case 'F':
+                                        gender = 'Female';
+                                        break;
+                                        default:
+                                        gender = 'NA'
+                                        break;
+                                        } %>
+                                        <%= gender %>
+                                    </td>
+                                </tr>
+                            </tbody>
+                        </table>                        
+                    </div>
+                </div>
+            </div>
+        </div>        
+        <div class="panel workout-panel" id="workout-exercise-add-form">
+            <div class="panel-heading">
+                <h3 class="panel-title">Add Exercise</h3>
+            </div>
+            <div class="panel-body">                
+                <div class="row">
+                    <div class="form-group col-md-12 col-lg-12">
+                        <label class="form-control-label">Exercise</label>
+                        <select class="form-control" name="exercise_id" id="exercise-id"></select>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="form-group col-md-2">
+                        <label class="form-control-label">Days</label>
+                        <select class="form-control" name="days" id="days" multiple>
+                            <option value="1">Monday</option>
+                            <option value="2">Tuesday</option>
+                            <option value="3">Wednesday</option>
+                            <option value="4">Thursday</option>
+                            <option value="5">Friday</option>
+                            <option value="6">Saturday</option>
+                            <option value="7">Sunday</option>
+                        </select>
+                    </div>
+                    <div class="form-group col-md-2">
+                        <label class="form-control-label">Sets</label>
+                        <input type="text" class="form-control" name="sets" id="sets" />
+                    </div>                        
+                    <div class="form-group col-md-2">
+                        <label class="form-control-label">Repetition</label>
+                        <input type="text" class="form-control" name="repetition" id="repetition" />
+                    </div>            
+                    <div class="form-group col-md-2">
+                        <label class="form-control-label">Weight (Kg's)</label>
+                        <input type="number" class="form-control" name="weight" id="weight" />
+                    </div>
+                    <div class="form-group col-md-2">
+                        <label class="form-control-label">Time(Min.)</label>
+                        <input type="text" class="form-control" name="time" id="time" />
+                    </div>
+                    <div class="form-group col-md-2">
+                        <label class="form-control-label">Distance</label>
+                        <input type="text" class="form-control" name="distance" id="distance" />
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="form-group col-md-12">
+                        <div class="text-right">
+                            <button class="btn btn-primary" id="add-workout-exercise">Add</button>
+                        </div>
+                    </div>
+                </div>
+            </div>            
+        </div>
+        <div class="panel-group panel-group-continuous workout-panel" id="workout-exercise-schedule" aria-multiselectable="true" role="tablist">
+            <% for(var key in chart) { %>
+            <div class="panel">
+                <div class="panel-heading" id="monday-heading" role="tab">
+                    <a class="panel-title" data-toggle="collapse" href="#<%= key %>" data-parent="#<%= key %>" aria-expanded="false" aria-controls="<%= key %>">
+                        <%= key %>
+                    </a>
+                </div>
+                <div class="panel-collapse collapse" id="<%= key %>" aria-labelledby="<%= key %>-heading" role="tabpanel">
+                    <div class="panel-body">
+                        <table class="table">
+                            <thead>
+                                <tr>
+                                    <th>Exercise</th>
+                                    <th>Muscle</th>
+                                    <th>Equipment</th>
+                                    <th>Sets</th>
+                                    <th>Reps</th>
+                                    <th>Weight</th>
+                                    <th>Time (Min.)</th>
+                                    <th>Distance</th>
+                                    <th>Action</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <% chart[key].forEach((c) => { %>
+                                <tr>
+                                    <td><%= c.exercise_name %></td>
+                                    <td><%= c.muscle %></td>
+                                    <td><%= c.equipment %></td>
+                                    <td><%= c.sets %></td>
+                                    <td><%= c.repetition %></td>
+                                    <td><%= c.weight %></td>
+                                    <td><%= c.time %></td>
+                                    <td><%= c.distance %></td>
+                                    <td>
+                                        <a href="#" data-toggle="modal" data-target="#update-workout-excercise"  class="update-workout-excercise" wo_id = "<%= c.id %>"><i class="fa fa-pencil" aria-hidden="true" ></i></a>
+                                        &nbsp;&nbsp;
+                                        <a href="#" data-toggle="modal" data-target="#delete-workout-excercise" class="delete-workout-excercise" wo_id = "<%= c.id %>"><i class="fa fa-trash" aria-hidden="true" ></i></a>
+                                    </td>
+                                </tr>
+                                <% }) %>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+            <% } %>
+        </div> 
+
+        <div class="panel display-hidden workout-print">
+            <div class="panel-body">
+                <div class="row">
+                    <div class="col-md-12">
+                        <h4><center>Workout Chart</center></h4>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-md-12">
+                        <table class="table">
+                            <thead>
+                                <tr>
+                                    <th>Program Name</th>
+                                    <th>Workout Level</th>
+                                    <th>Fitness Goal</th>
+                                    <th>Age Group</th>
+                                    <th>Gender</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <td><%= workoutData.program_name %></td>
+                                    <td><%= workoutData.workout_level_name %></td>
+                                    <td><%= workoutData.fitness_goal_name %></td>
+                                    <td><%= workoutData.age_group_label %></td>
+                                    <td>
+                                        <%
+                                        var gender = ''
+                                        switch (workoutData.gender) {
+                                        case 'A':
+                                        gender = 'All';
+                                        break;
+                                        case 'M':
+                                        gender = 'Male';
+                                        break;
+                                        case 'F':
+                                        gender = 'Female';
+                                        break;
+                                        default:
+                                        gender = 'NA'
+                                        break;
+                                        } %>
+                                        <%= gender %>
+                                    </td>
+                                </tr>
+                            </tbody>
+                        </table>                        
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-md-12">
+                        <hr />
+                        <h5>Exercise</h5>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-md-12">
+                        <table class="table table-bordered">
+                            <thead>
+                                <tr>
+                                    <th>Day</th>
+                                    <th>Exercise</th>
+                                    <th>Muscle</th>
+                                    <th>Equipment</th>
+                                    <th>Sets</th>
+                                    <th>Reps</th>
+                                    <th>Weight</th>
+                                    <th>Time (Min.)</th>
+                                    <th>Distance</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <% for(var key in chart) { %>
+                                <tr>
+                                    <td rowspan=<%= chart[key].length+1 %>><%= key %></td>
+                                </tr>
+                                <% chart[key].forEach((c) => { %>
+                                <tr>
+                                    <td rowspan=1><%= c.exercise_name %></td>
+                                    <td rowspan=1><%= c.muscle %></td>
+                                    <td rowspan=1><%= c.equipment %></td>
+                                    <td rowspan=1><%= c.sets %></td>
+                                    <td rowspan=1><%= c.repetition %></td>
+                                    <td rowspan=1><%= c.weight %></td>
+                                    <td rowspan=1><%= c.time %></td>
+                                    <td rowspan=1><%= c.distance %></td>
+                                </tr>
+                                <% }) %>
+                                <% } %>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div> 
+    </div>
+</div>
+
+<div class="modal fade" id="update-workout-excercise" aria-hidden="false" aria-labelledby="update-workout-excercise" role="dialog" tabindex="-1">
+    <div class="modal-dialog modal-simple">
+        <form class="modal-content" action="/app/schedule/update-workout-excercise" method="POST" autocomplete="off">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">×</span>
+                </button>
+                <h4 class="modal-title">Update Workout Excercise</h4>
+            </div>
+            <div class="modal-body">
+                <div class="row">
+                    <div class="form-group col-md-12">
+                        <label class="form-control-label">Exercise</label>
+                        <select class="form-control" name="update_exercise_id" id="update-exercise-id"></select>
+                    </div>
+                    <div class="form-group col-md-4">
+                        <label class="form-control-label">Days</label>
+                        <select class="form-control" name="update_days" id="update-days" >
+                            <option value="1">Monday</option>
+                            <option value="2">Tuesday</option>
+                            <option value="3">Wednesday</option>
+                            <option value="4">Thursday</option>
+                            <option value="5">Friday</option>
+                            <option value="6">Saturday</option>
+                            <option value="7">Sunday</option>
+                        </select>
+                    </div>
+                    <div class="form-group col-md-4">
+                        <label class="form-control-label">Sets</label>
+                        <input type="text" class="form-control" name="update_sets" id="update-sets" />
+                    </div>                        
+                    <div class="form-group col-md-4">
+                        <label class="form-control-label">Repetition</label>
+                        <input type="text" class="form-control" name="update_repetition" id="update-repetition" />
+                    </div>                        
+                    <div class="form-group col-md-4">
+                        <label class="form-control-label">Weight (Kg's)</label>
+                        <input type="number" class="form-control" name="update_weight" id="update-weight" />
+                    </div> 
+                    <div class="form-group col-md-4">
+                        <label class="form-control-label">Time (Min.)</label>
+                        <input type="text" class="form-control" name="update_time" id="update-time" />
+                    </div>                        
+                    <div class="form-group col-md-4">
+                        <label class="form-control-label">Distance</label>
+                        <input type="text" class="form-control" name="update_distance" id="update-distance" />
+                    </div> 
+                </div>
+                <br>
+                <div class="row">
+                    <input type="hidden" id="update-wo-excerise-id" name="update_wo_excercise_id">
+                    <div class="form-group col-xl-12">
+                        <%- csrf_html %>
+                        <button class="btn btn-primary" id="update-wo-excercise-btn">Update</button>
+                    </div>
+                </div>                
+            </div>            
+        </form>
+    </div>
+</div>
+
+<div class="modal fade" id="delete-workout-excercise" aria-hidden="false" aria-labelledby="delete-workout-excercise" role="dialog" tabindex="-1">
+    <div class="modal-dialog modal-simple">
+        <form class="modal-content" action="/app/schedule/delete-workout-excercise" method="POST" autocomplete="off">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">×</span>
+                </button>
+                <h4 class="modal-title">Delete Workout Excercise</h4>
+            </div>
+            <div class="modal-body">
+                <div class="row">
+                    <div class="col-lg-12">
+                        <p>Do you really want to Delete the selected Workout Excercise ?</p>
+                    </div>
+                    <input type="hidden" id="delete-wo-excerise-id" name="delete_wo_excercise_id">
+                    <div class="form-group col-xl-12">
+                        <%- csrf_html %>
+                        <button class="btn btn-primary" id="delete-wo-excercise-btn">Delete</button>
+                    </div>
+                </div>                
+            </div>            
+        </form>
+    </div>
+</div>
+
+<div class="modal fade" id="delete-workout-program" aria-hidden="false" aria-labelledby="delete-workout-program" role="dialog" tabindex="-1">
+    <div class="modal-dialog modal-simple">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">×</span>
+                </button>
+                <h4 class="modal-title">Delete Workout Program</h4>
+            </div>
+            <div class="modal-body">
+                <form action="/app/schedule/workout-program/delete" method="POST">
+                    <input type="hidden" name="workout_id" value="<%= workoutData.id %>" >
+                    <%- csrf_html %>
+                    <div class="row">
+                        <div class='col-md-12'>
+                            <p>Are you sure you want to DELETE this Workout Program ?</span></p>
+                        </div>                    
+                    </div>
+                    <div class="row">
+                        <div class='col-md-12'>
+                            <button type="submit" class="btn btn-primary"> Delete</button>
+                        </div>                    
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+<%- include("./partials/footer.html") %>
+<script type="text/javascript">
+    SINGLE_WORKOUT_PROGRAM.init({
+        _csrf: '<%= _csrf %>',
+        workoutProgramId: '<%= workoutData.id %>'
+    })
+</script>

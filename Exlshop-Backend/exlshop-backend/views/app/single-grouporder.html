@@ -1,0 +1,95 @@
+<%- include("./partials/header.html") %>
+<%- include("./partials/topnav.html") %>
+<%- include("./partials/sidebar.html") %>
+<div class="page">
+    <div class="page-content">
+        <div class="panel">
+            <div class="panel-heading">
+                <h3 class="panel-title">Orders</h3>
+            </div>
+            <div class="panel-body">
+                <table class="table table-hover dataTable table-striped w-full" id="grouporder-list">
+                    <thead>
+                        <tr>
+                            <th>Date</th>
+                            <th>Order Id</th>
+                            <th>Amount</th>
+                            <th>Payment Mode</th>
+                            <th>Customer Name</th>
+                            <th>Shipping Address</th>
+                            <th>Phone</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+</div>
+<%- include("./partials/footer.html") %>
+<script type="text/javascript">
+    const zipId = "<%= zipId %>"
+    var _csrf = '<%= _csrf %>'
+    $(document).ready(function () {
+        var dataTableOpt = {
+            'processing': true,
+            'serverSide': true,
+            'autoWidth': false,
+            'ajax': {
+                'method': 'POST',
+                'url': `/app/grouporders/zipcode`,
+                headers: {
+                    'csrf-token': _csrf,
+                },
+                data:{
+                    zipId:zipId
+                }
+            },
+            'columns': [
+                {'data': 'created_date'},
+                {'data': 'id'},
+                {'data': 'amount'},
+                {'data': 'payment_mode'},
+                {'data': 'user_name'},
+                {'data': 'shipping_address'},
+                {'data': 'phone'}
+            ],
+            'ordering': true,
+            'aaSorting': [],
+            'columnDefs': [{
+                'searchable': false,
+                'orderable': false,
+                'className': 'dt-body-center',
+            },
+            {
+                "targets": 0,
+                "render": function (data, type, row) {
+                    return data ? moment(data).format('DD-MM-YYYY hh:mm a') : ''
+                }
+            },
+            {
+                "targets": 2,
+                "render": function (data, type, row) {
+                    return `₹ ${data?data:0}`
+                }
+            },
+            {
+                "targets": 5,
+                "render": function (data, type, row) {
+                    return `${row.address_line_1}<br>${row.address_line_2}<br>${data}-${row.zip}`
+                }
+            }],
+            'createdRow': function( row, data, dataIndex ) {
+                $(row).on('click', function() {
+                    var orderId = $(this).find('td:eq(1)').text()
+                    window.location.href = `/app/accounts/view/order/${orderId}`
+                })
+            },
+            'order': [[ 0, "asc" ]]
+        };
+
+        var table = $('#grouporder-list').DataTable(dataTableOpt);
+    })
+</script>

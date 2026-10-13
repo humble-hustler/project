@@ -1,0 +1,271 @@
+    <style>
+    /* i{
+        background-color: #d9d9d9;
+    } */
+    .w-15
+    {
+        width: 10%;
+    }
+    .maindiv
+    {
+        width: 90%;
+        margin: 0px auto;
+        padding-bottom: 20px;
+    }
+    .inside
+    {
+        border: 1px solid #ccc;
+        width: 50%;
+       margin-left: 45px;
+       padding-bottom: 20px;
+    }
+    .p
+    {
+        border: none;
+    }
+    .s{
+        width: 120px;
+        height: 38px;
+        background-color: #FBA11B;
+        border: 1px solid #FBA11B;
+    }
+    .parent{
+        display: flex;
+    }
+.block-row{
+    display: flex;
+}
+#mn{
+    cursor: pointer;
+}
+.card {
+  box-shadow: 0 4px 8px 0 rgba(0,0,0,0.2);
+  transition: 0.3s;
+  width: fit-content;
+  max-width: 550px;
+}
+.card:hover {
+  box-shadow: 0 8px 16px 0 rgba(0,0,0,0.2);
+}
+.container {
+  padding: 20px 16px ;
+}
+   
+</style>
+<%- include('../partials/header.html') %>
+    <div class="maindiv bg-white my-3" >
+        <div class="pt-1">
+            <% orders.forEach((o) => { %>
+            <div class="block-row mt-4" style="height: auto; width: 95%; border: 1px solid #ccc; margin-left: 30px;">
+                
+                <div class="" style="width: 40%;">
+                    <div class="parent" style="margin-top: 30px;">
+                        <div class=" ms-4">
+                            <img src="<%=session.imgURL %><%= o.file_name %>" alt="<%= o.name %>" class="img-md ps-3">
+                        </div>
+                    
+                        <div class="ps-5">
+                            <!-- <h5 class="fsixteen">ORDER ID:<%= o.id %></h5> -->
+                            <h5 class="feighteen"><%= o.product_name %></h5>
+                            <h5 class="fsixteen pt-2 pb-1">Quantity :- <%= o.quantity %></h5>
+                            <span>Regular Price :- ₹ <%=o.regular_price %></span><br>
+                            <span>Discount :- ₹ <%= o.discount_price %><span> <br>
+                                <span>Selling Price :- ₹ <%= (o.regular_price-o.discount_price) %></span>
+                            <h5 class="fsixteen pt-2 fw-bold">Total Amount :- <%= (o.regular_price-o.discount_price) * o.quantity %></h5>
+                    
+                        </div>
+
+                    </div>
+
+                    <h3 class=" pt-3 twenty mb-3 ms-5 fw-bold">Rate this product</h3>
+       
+                    <div class="inside p-3" style="margin-bottom: 10px;">
+                    <div class=" w-15 d-flex justify-content-between star">
+                        <input type="hidden" class="product-rate" value="<%= o.product_rate %>">
+                        <input type="hidden" class="product-id" value="<%= o.product_id %>">
+                        <input type="hidden" class="user-id" value="<%=session.user.id %>">
+
+                        <% if(o.product_rate == 1){ %>
+                            <i class="fa fa-star checked ps-1" aria-hidden="false" style="color: goldenrod;" value="1"  id="mn"></i>
+                            <i class="fa fa-star ps-1" style="color: gray;" value="2" id="mn"></i>
+                            <i class="fa fa-star ps-1" style="color: gray;" value="3" id="mn"></i>
+                            <i class="fa fa-star ps-1" style="color: gray;" value="4" id="mn"></i>
+                            <i class="fa fa-star ps-1" style="color: gray;" value="5" id="mn"></i>
+                    <% } %>
+
+                    <% if(o.product_rate == 2){ %>
+                        <i class="fa fa-star checked ps-1" aria-hidden="false" style="color: goldenrod;" value="1"  id="mn"></i>
+                            <i class="fa fa-star ps-1" style="color: goldenrod;" value="2" id="mn"></i>
+                            <i class="fa fa-star ps-1" style="color: gray;" value="3" id="mn"></i>
+                            <i class="fa fa-star ps-1" style="color: gray;" value="4" id="mn"></i>
+                            <i class="fa fa-star ps-1" style="color: gray;" value="5" id="mn"></i>
+                        <% } %>
+
+                    <% if(o.product_rate == 3){ %>
+                        <i class="fa fa-star checked ps-1" aria-hidden="false" style="color: goldenrod;" value="1"  id="mn"></i>
+                        <i class="fa fa-star ps-1" style="color: goldenrod;" value="2" id="mn"></i>
+                        <i class="fa fa-star ps-1" style="color: goldenrod;" value="3" id="mn"></i>
+                        <i class="fa fa-star ps-1" style="color: gray;" value="4" id="mn"></i>
+                        <i class="fa fa-star ps-1" style="color: gray;" value="5" id="mn"></i>
+                        <% } %>
+                        
+                    <% if(o.product_rate == 4){ %>
+                        <i class="fa fa-star checked ps-1" aria-hidden="false" style="color: goldenrod;" value="1"  id="mn"></i>
+                        <i class="fa fa-star ps-1" style="color: goldenrod;" value="2" id="mn"></i>
+                        <i class="fa fa-star ps-1" style="color: goldenrod;" value="3" id="mn"></i>
+                        <i class="fa fa-star ps-1" style="color: goldenrod;" value="4" id="mn"></i>
+                        <i class="fa fa-star ps-1" style="color: gray;" value="5" id="mn"></i>
+                        <% } %>
+        
+                    <% if(o.product_rate == 5){ %>
+                        <i class="fa fa-star checked ps-1" aria-hidden="false" style="color: goldenrod;" value="1"  id="mn"></i>
+                        <i class="fa fa-star ps-1" style="color: goldenrod;" value="2" id="mn"></i>
+                        <i class="fa fa-star ps-1" style="color: goldenrod;" value="3" id="mn"></i>
+                        <i class="fa fa-star ps-1" style="color: goldenrod;" value="4" id="mn"></i>
+                        <i class="fa fa-star ps-1" style="color: goldenrod;" value="5" id="mn"></i>
+                        <% } %>
+
+                        <% if(o.product_rate == 0){ %>
+                            <i class="fa fa-star checked ps-1" aria-hidden="false" style="color: gray;" value="1"  id="mn"></i>
+                            <i class="fa fa-star ps-1" style="color: gray;" value="2" id="mn"></i>
+                            <i class="fa fa-star ps-1" style="color: gray;" value="3" id="mn"></i>
+                            <i class="fa fa-star ps-1" style="color: gray;" value="4" id="mn"></i>
+                            <i class="fa fa-star ps-1" style="color: gray;" value="5" id="mn"></i>
+                            <% } %>
+                    </div>
+                    </div>
+                </div>
+
+                <div class="review-block" style="width: 60%;">
+                    <div class="ms-4">
+                        <h3 class="pt-2 fw-bold ">All Reviews</h3>
+                        <div class="mt-2 me-2" style="height: 250px; overflow: auto; border: 1px solid rgb(182, 179, 179); padding: 5px;">
+                        <% if(o.product_review) { %>
+                            <% for(var i=0; i < o.product_review.length; i++){ %>
+                               
+                             <div class="mt-3 ms-3 ps-2 card">
+                                <div class="container" >
+                                  <h4><%= o.product_review[i][0] %></h4> 
+                                  <div style="float: right;">
+                                  <p class=" mt-2 fw-bold" style="color: #2c2c2c; font-size: 14px;"><i class="fa fa-user"></i> <%= o.product_review[i][2] %></p>
+                                  <p class="" style="margin-top: -18px;  font-size: 11px;">- <%= o.product_review[i][1] %></p>
+                                </div>
+                                </div> 
+                            </div>
+                          
+                            <% } %>
+                        <% } %>
+                        </div>
+                    </div>
+
+                    <h3 class="pt-4 fw-bold ps-2 ms-3">Review this product</h3>
+                    <input type="hidden" id="product-id" value="<%= o.product_id %>">
+                    <input type="hidden" id="user-id" value="<%=session.user.id %>">
+                    <input type="hidden" id="order-id" value="<%= o.order_id %>">
+                    <div class="ps-2 ms-3" style="margin-top: 10px;">
+                        <textarea type="text" placeholder="Enter your Review" name="review" id="add-review" rows="3" cols="60"></textarea>
+                        <button type="submit" class="btn btn-primary" style="margin-top: -29px;" id="submit-review">Submit Review</button>
+                    </div>
+                </div>
+            </div>
+           
+            <% }) %>
+           
+        </div>
+</div>
+<%- include('../partials/footer.html') %>
+
+<script>
+
+    $(document).ready(function(){
+        $(".star #mn").each(function (){
+
+           $(this).click(function (){
+            var product_rate = $(this).parent().find(".product-rate").val()
+            var proId = $(this).parent().find(".product-id").val()
+            var userId = $(this).parent().find(".user-id").val()
+
+            if(product_rate == 0){
+                var addProductRate = $(this).attr("value")
+                $.ajax({
+                    url : `/my-account/add-rate1`,
+                    method: `POST`,
+                    data: {
+                        _csrf: '<%= _csrf %>',
+                        proId,
+                        userId,
+                        addProductRate
+                    },
+                    success: function(data){
+                        if(data.success){
+                            toastr.success("Response  submitted successfully")
+                            location.reload();
+                        } else{
+                            toastr.error("Response not submitted successfully")
+                         }
+                    }
+                })
+            }else{
+                var updateProductRate = $(this).attr("value")
+                $.ajax({
+                    url : `/my-account/update-rate`,
+                    method: `POST`,
+                    data: {
+                        _csrf: '<%= _csrf %>',
+                        proId,
+                        userId,
+                        updateProductRate
+                    },
+                    success: function(data){
+                        if(data.success){
+                            toastr.success("Response  submitted successfully")
+                            location.reload();
+                        } else{
+                            toastr.error("Response not submitted successfully")
+                         }
+                }
+            
+            })
+        }
+        })
+    })
+       
+                
+        $(".review-block").find("#submit-review").click(function(){
+        
+          var proId =   $(this).parent().parent().find("#product-id").val()
+          var order_Id =  $(this).parent().parent().find("#order-id").val()
+          var userId =  $(this).parent().parent().find("#user-id").val()
+          var review_text = $(this).parent().find("#add-review").val()
+            if(!review_text){
+                toastr.error("Please Enter review")
+                return
+            }
+
+          $.ajax({
+                    url : `/my-account/add-review`,
+                    method: `POST`,
+                    data: {
+                        _csrf: '<%= _csrf %>',
+                        proId,
+                        userId,
+                       order_Id,
+                       review_text
+                    },
+                    success: function(data){
+                        if(data.success){
+                            toastr.success("Review added successfully")
+                            // alert("Review added successfully")
+                            location.reload();
+                        } else{
+                            alert("Review not added successfully")
+                         }
+                    }
+                })
+            
+        })
+    
+    
+    })
+
+</script>

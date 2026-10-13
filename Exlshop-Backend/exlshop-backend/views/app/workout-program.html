@@ -1,0 +1,92 @@
+<%- include("./partials/header.html") %>
+<%- include("./partials/topnav.html") %>
+<%- include("./partials/sidebar.html") %>
+<div class="page">
+    <div class="page-header">
+        <h1 class="page-title">Workout Program</h1>
+        <div class="page-header-actions">
+            <button class="btn btn-round btn-primary" data-target="#add-new-workout-program" data-toggle="modal">
+                <i class="icon fa-plus" aria-hidden="true"></i>
+                <span class="hidden-sm-down" id="add-workout-btn">Add New Workout Program</span>
+            </button>
+        </div>
+    </div>
+
+    <div class="page-content">
+        <div class="panel">            
+            <div class="panel-body">
+                <table class="table table-hover dataTable table-striped w-full" id="workout-program-list">
+                    <thead>
+                        <tr>
+                            <th>Workout Name</th>
+                            <th>Level</th>
+                            <th>Fitness Goal</th>                            
+                            <th>Age Group</th>                            
+                            <th>Gender</th>                          
+                        </tr>
+                    </thead>                    
+                    <tbody></tbody>
+                </table>
+            </div>
+        </div>       
+    </div>
+</div>
+<div class="modal fade" id="add-new-workout-program" aria-hidden="false" aria-labelledby="add-new-workout-program" role="dialog" tabindex="-1" style="z-index: 9999!important;">
+    <div class="modal-dialog modal-simple">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">×</span>
+                </button>
+                <h4 class="modal-title" id="add-new-team-member">Add Workout Program</h4>
+            </div>
+            <div class="modal-body">
+                <div class="row">
+                    <div class="form-group col-md-12">
+                        <input type="text" class="form-control" name="exercise_name" id="workout-program-text" placeholder="Workout Program Name">
+                    </div>
+                    <div class="form-group col-md-6">
+                        <select class="form-control" id="workout-level-search" name="workout_level_search"></select>
+                    </div>
+                    <div class="form-group col-md-6">
+                        <select class="form-control" id="fitness-goal-search" name="fitness_goal_search"></select>
+                    </div>
+                    <div class="form-group col-md-6">
+                        <select class="form-control" id="age-group" name="age_group">
+                            <option value="">Select Age Group</option>
+                            <% ageGroups.forEach((a) => { %>
+                            <option value="<%= a.id %>"><%= a.label %></option>
+                            <% }) %>
+                        </select>
+                    </div>
+                    <div class="form-group col-xl-6">
+                        <label class="form-control-label">Gender</label><br>
+                        <div class="radio-custom radio-primary radio-inline">
+                            <input type="radio" class="gender-radio" id="gender-all" name="gender" value="A">
+                            <label for="gender-male">All</label>
+                        </div>
+                        <div class="radio-custom radio-primary radio-inline">
+                            <input type="radio" class="gender-radio" id="gender-male" name="gender" value="M">
+                            <label for="gender-male">Male</label>
+                        </div>
+                        <div class="radio-custom radio-primary radio-inline">
+                            <input type="radio" class="gender-radio" id="gender-female" name="gender" value="F">
+                            <label for="gender-female">Female</label>
+                        </div>
+                    </div>
+                    <div class="form-group col-md-12">
+                        <button class="btn btn-primary" id="add-new-workout-program-btn">Add Program</button>
+                    </div>
+                </div>                
+            </div>            
+        </div>
+    </div>
+</div>
+
+
+<%- include("./partials/footer.html") %>
+<script type="text/javascript">
+    WORKOUT_PROGRAM.init({
+        _csrf: '<%= _csrf %>'
+    })
+</script>

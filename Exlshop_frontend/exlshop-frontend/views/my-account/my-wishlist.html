@@ -1,0 +1,391 @@
+<%- include('../partials/header.html') %>
+        <style>
+            * {
+                box-sizing: border-box
+            }
+            .tablink {
+            background-color: #555;
+            color: white;
+            float: left;
+            border: none;
+            outline: none;
+            cursor: pointer;
+            padding: 20px 16px;
+            font-size: 17px;
+            width: 25%;
+            }
+            .tablink:hover {
+            background-color: #777;
+            }
+            .tabcontent {
+            color: white;
+            display: none;
+            padding: 100px 20px;
+            height: 100%;
+            }
+            #remove-wishlist-btn
+            {
+                font-size: 25px;
+                color: #777;
+                display: block;
+            }
+            .p-img
+            {
+                height: 190px;
+                width: 250px;
+            }
+            #wishlist
+            {
+                color: blue;
+            }
+            .innerwishlist
+            {
+                border: 1px solid #ccc;
+                width: 98%;
+                margin: 0px auto;
+            }
+    .page-number{
+      text-align: center;
+      user-select: none;
+    }
+    .page-number li {
+      display: inline-block;
+      margin: 5px;
+    }
+    .page-number li a{
+      text-decoration: none;
+      font-size: 15px;
+      line-height: 25px;
+    }
+    .page-number li:not(.acti) a{
+        color: black;
+    }
+    .previous-page, .next-page{
+      background-color: rgb(11, 175, 240);
+      cursor: pointer;
+    }
+    .pagination{
+      text-align: center;
+      margin: 30px 30px 60px;
+      user-select: none;
+    }
+    .pagination li {
+      display: inline-block;
+      margin: 5px;
+      
+    }
+    .pagination li a{
+      text-decoration: none;
+      font-size: 15px;
+      line-height: 25px;
+    }
+    .acti a{
+        background-color: rgb(161, 159, 159);
+        color: black;
+    }
+    .pagination li:not(.acti) a{
+        color: black;
+
+    }
+    .current-page, .dots{
+      background: #ccc;
+      /* width: 30px; */
+      cursor: pointer;
+    }
+        </style>
+
+<% if(session.user) {%>
+    <% if(session.cart) {%>
+        <% if(session.cart.line.length == 0){ %>
+            <input type="hidden" class="isLocation" value="0">
+        <% } else { %>
+            <input type="hidden" class="isLocation" value="<%=session.cart.line[0].locationId %>">
+        <% } %>
+    <% } else{%>
+        <input type="hidden" class="isLocation" value="0">
+    <% } %>
+<% } %>
+       
+        <div style="padding-top: 100px;">
+            <button class="tablink" onclick="openPage('shop', this, '#3167eb')">Favourite Shops<i class="fa fa-heart px-2" aria-hidden="true"></i></button>
+            <button class="tablink" onclick="openPage('product', this, '#3167eb')" id="defaultOpen">Favourite Products<i class="fa fa-heart px-2" aria-hidden="true"></i></button>
+        </div>
+
+        <section class="tabcontent" id="product">
+            <div class="container">
+                <div class="row">
+                    <%- include('../partials/my-account-menu.html') %>
+                    <div class="col-lg-8 bg-white"  id="product" class="tabcontent">
+                        <div class="innerwishlist" id="main-row" style="display: none;">
+                            <h3 class="pt-3 ps-3 ">Wishlist</h3>
+                            <hr class="bg-dark">
+                            <% userProductWishlist.forEach((p) => { %>
+                                <div class="wishlist-row">
+                                    <div class="d-flex bg-white" style="margin-left: 20px;">
+                                        <div class="">
+                                            <a href="/shop/<%= p.slug %>/<%= p.product_id %>" class="img-wrap">
+                                                <% if(p.file_name){ %>
+                                                <img src="<%=session.imgURL %><%= p.file_name %>"  class="p-img" alt="<%= p.name %>">
+                                                <%}else{%>
+                                                <img src="images/logo.png" alt="<%= p.product_name %>">
+                                                <%}%>
+                                            </a>
+                                        </div>
+                                        <div class="info-wrap" style="margin-left: 60px;">                        
+                                            <h4 class="fw-bold"><a href="/shop/<%= p.slug %>/<%= p.product_id %>" class="title text-dark display-5 mt-3 d-inline-block eighteen fw-bold" title="<%= p.product_name %>"><%= p.product_name %></a><br> 
+                                                <input type="hidden" id="productId" value="<%= p.product_id %>">
+                                                <input name="_csrf" value="<%= _csrf %>" type="hidden">
+                                                <span class="price mt-1">
+                                                Regular price :- ₹ <%= p.regular_price %>    
+                                                </span><br>
+                                            </h4>
+                                            <div style="display: flex; margin-top: 50px;"> 
+                                                <div><i id="remove-wishlist-btn" class="bi bi-trash"></i></div>
+                                                <div style=" margin-top: 10px;">
+                                                    <input value="<%= p.product_id %>" type="hidden" value1="<%= p.regular_price %>" value2="<%= p.discount_price %>" id="remove_product_id">
+                                                    <a href="#" class="text-dark fourteen mt-2" id="move-to-cart" onclick="movetocart()">MOVE TO CART</a> 
+                                                    <input type="hidden" id="location_id" value="<%=p.brand_location_id %>">
+                                                    <input type="hidden" id="shopLat" value="<%= p.lat%>">
+                                                    <input type="hidden" id="shopLong" value="<%= p.lng %>">
+                                                    <input type="hidden" id="maximum-shop-distance" value="<%= p.maximum_order_distance %>">
+                                                </div>
+                                            
+                                            </div>
+                                        </div>
+                                   </div>
+                                    <hr class="bg-dark">
+                                </div>
+                            <%  }) %>
+                        </div>
+
+                        <div class="fl" style="padding-top: 10px; display: flex; justify-content: space-between;">
+                            <div style="padding-left: 30px; margin-top: 15px;" class="append-para">
+                                <p>Showing <span class="numRecord"></span> Records of <span class="totalRecord"></span></p>
+                            </div>
+                    
+                            <div class="page-number" style="margin-right: 20px;">
+                                <!-- <ul class="pagin-ul">
+                                    <li class="first-arrow"> <a href="#">&laquo;</a></li>
+                                    <li id="pagin"> </li>
+                                    <li class="last-arrow"><a href="#">&raquo;</a></li> 
+                                </ul> -->
+                            </div>
+                        </div>
+                    </div>
+                </div>   
+            </div>    
+            <%- include('../partials/footer.html') %>
+        </section>
+
+        <section class="tabcontent" id="shop" style="display: none;">
+            <div class="container">
+                <div class="row">
+                    <%- include('../partials/my-account-menu.html') %>
+                <div class="col-lg-8 bg-white"  id="product" class="tabcontent">
+                    <div class="innerwishlist" id="main-row">
+                    <h3 class="pt-3 ps-3 ">Wishlist</h3>
+                    <hr class="bg-dark">
+                    <% userShopWishlist.forEach((p) => { %>
+                       <div class="wishlistshop-row">
+                                <div href="/shop_product/<%= p.brand_id %>/<%=p.brand_location_id %>">
+                                    <div class="d-flex bg-white" style="margin-left: 20px;">
+                                        <div class="">
+                                            <a href="/shop_product/<%= p.brand_id %>/<%=p.brand_location_id %>" class="img-wrap">
+                                                <img src="<%= p.brand_logo ?  p.brand_logo  : `${coreHostname}/images/logo.png` %>"  alt="<%= p.brand_name %>" height="100px" style="width: 150px;">
+                                            </a>
+                                        </div>
+                                        <div class="info-wrap" style="margin-left: 60px;">                        
+                                            <a href="/shop_product/<%= p.brand_id %>/<%=p.brand_location_id %>">
+                                            <span class="price mt-1">Shop-name :- <span style="font-weight: normal;"><%= p.brand_name %></span> </span></a><br>                        
+                                            <span class="price mt-1">location :- <span style="font-weight: normal;"><%= p.location_name %>/<%=p.brand_location_id %></span> </span><br>
+                                            <span class="price mt-1">Address :- <span style="font-weight: normal;"><%= p.address %></span> </span><br> 
+                                            <div class="d-flex">
+                                                <a href="#" class="btn btn-primary my-3" id="remove-shop-wishlist-btn">
+                                                    <input value="<%= p.brand_location_id %>" type="hidden" id="brand_location_id">
+                                                    <input value="<%= p.brand_id %>" type="hidden" id="brand_id">
+                                                    Remove
+                                                    <i class="fa fa-heart" aria-hidden="true"></i>
+                                                </a> 
+
+                                                <a href="/shop_product/<%= p.brand_id %>/<%=p.brand_location_id %>" class="btn btn-primary my-3 ms-4" id="remove-shop-wishlist-btn">
+                                                    <input value="<%= p.brand_location_id %>" type="hidden" id="brand_location_id">
+                                                    <input value="<%= p.brand_id %>" type="hidden" id="brand_id">
+                                                    Go to shop</a> 
+                                                    <% for(var i=0; i < shopOrderLocation.length; i++){ %>
+                                                        <% if(shopOrderLocation[i].location_id == p.brand_location_id){ %>
+                                                    <form action="/shop_rate_review" method="post">
+                                                        <input type="hidden" name="_csrf" value="<%= _csrf %>" />
+                                                        <input value="<%= p.brand_location_id %>" type="hidden" name="brand_location_id" id="brand_location_id">
+                                                        <input value="<%= p.brand_id %>" type="hidden" name="brand_id" id="brand_id">
+                                                        <button class="btn btn-primary my-3 ms-4" id="rate-review-shop">Rate & Review</button>  
+                                                    </form>
+                                                    <% } %>
+                                                    <% } %>
+                                            </div>  
+                                        </div>
+                                   </div>
+                                </div>
+                                <hr class="bg-dark">
+                        </div>
+                    <%  }) %>
+                    </div>
+                </div>
+                </div>
+            </div>
+            <%- include('../partials/footer.html') %>
+        </section>
+
+<script type="text/javascript">
+
+    function getPageList(totalPages, page, maxLength){
+                        function range(start, end){
+                          return Array.from(Array(end - start + 1), (_, i) => i + start);
+                        }
+                        var sideWidth = maxLength < 9 ? 1 : 2;
+                        var leftWidth = (maxLength - sideWidth * 2 - 3) >> 1;
+                        var rightWidth = (maxLength - sideWidth * 2 - 3) >> 1;
+                  
+                        if(totalPages <= maxLength){
+                          return range(1, totalPages);
+                        }
+                  
+                        if(page <= maxLength - sideWidth - 1 - rightWidth){
+                          return range(1, maxLength - sideWidth - 1).concat(0, range(totalPages - sideWidth + 1, totalPages));
+                        }
+                  
+                        if(page >= totalPages - sideWidth - 1 - rightWidth){
+                          return range(1, sideWidth).concat(0, range(totalPages - sideWidth - 1 - rightWidth - leftWidth, totalPages));
+                        }
+                  
+                        return range(1, sideWidth).concat(0, range(page - leftWidth, page + rightWidth), 0, range(totalPages - sideWidth + 1, totalPages));
+                      }
+
+                    $(document).ready(function(){
+                        $(function(){
+                        var numberOfItems = $("#main-row .wishlist-row").length;
+                        var limitPerPage = 10;
+                        var totalPages = Math.ceil(numberOfItems / limitPerPage)
+                        var paginationSize = 7;
+                        var currentPage;
+                  
+                        function showPage(whichPage){
+                          if(whichPage < 1 || whichPage > totalPages) return false;
+                  
+                          currentPage = whichPage;
+                  
+                          $("#main-row .wishlist-row").hide().removeClass("xxx").slice((currentPage - 1) *  limitPerPage, currentPage * limitPerPage).show().addClass("xxx");
+                          var numItems = $("#main-row .xxx").length
+                          $(".numRecord").text(numItems)
+                          $(".totalRecord").text(numberOfItems)
+                          $(".page-number li").slice(1, -1).remove();
+                  
+                          getPageList(totalPages, currentPage, paginationSize).forEach(item =>{
+                            $("<li>").addClass("page-item").addClass(item ? "current-page" : "dots").toggleClass("acti", item === currentPage).append($("<a>").addClass("page-link").attr({href: "javascript:void(0"}).text(item || "...")).insertBefore(".next-page");
+                          });
+                  
+                          $(".previous-page").toggleClass("disabled", currentPage === 1);
+                          $(".next-page").toggleClass("disabled", currentPage === totalPages)
+                          return true;
+                        }
+                        $(".page-number").append(
+                          $("<li>").addClass("page-item").addClass("previous-page").append($("<a>").addClass("page-link").attr({href: "javascript:void(0)"}).text("Prev")),
+                            $("<li>").addClass("page-item").addClass("next-page").append($("<a>").addClass("page-link").attr({href: "javascript:void(0)"}).text("Next"))
+                          );
+                  
+                          $("#main-row").show();
+                          showPage(1);
+                  
+                          $(document).on("click", ".page-number li.current-page:not(.acti)", function(){
+                            return showPage(+$(this).text());
+                          });
+                          $(".next-page").on("click", function(){
+                            return showPage(currentPage + 1);
+                          })
+                          $(".previous-page").on("click", function(){
+                            return showPage(currentPage - 1);
+                          })
+                      })
+                    })
+
+
+    
+        $("#move-to-cart").on('click', function(){
+            productId = $('#remove_product_id').val();
+            var regular_price =$('#remove_product_id').attr('value1');
+            var discount_price =  $('#remove_product_id').attr('value2');
+            var locationValue =   $(".isLocation").val()
+             var locationId = $(this).parent().find("#location_id").val()
+             var myLat =  parseFloat($("#MyLatitude").val())
+            var myLong =  parseFloat($("#MyLongitude").val())
+            var shopLat =  parseFloat($(this).parent().find("#shopLat").val())
+            var shopLong =  parseFloat($(this).parent().find("#shopLong").val())
+            console.log(myLat, myLong, shopLat, shopLong)
+            var radlat1 = Math.PI * myLat/180
+            var radlat2 = Math.PI * shopLat/180
+            var theta = myLong-shopLong
+            var radtheta = Math.PI * theta/180
+            var dist = Math.sin(radlat1) * Math.sin(radlat2) + Math.cos(radlat1) * Math.cos(radlat2) * Math.cos(radtheta);
+            dist = Math.acos(dist)
+            dist = dist * 180/Math.PI
+            dist = dist * 60 * 1.1515 * 1.609344 
+            var maxDistance = $(this).parent().find("#maximum-shop-distance").val()
+            console.log(maxDistance, dist)
+
+            // if(dist <= maxDistance){
+            if(locationValue == 0 || locationValue == locationId){
+     
+                    $.ajax({
+                       url: '/shop/add-to-cart',
+                        method: 'POST',
+                        data: {
+                            _csrf: "<%= _csrf %>",
+                            productId: productId,
+                            regular_price: regular_price,
+                            discount_price:discount_price,
+                            quantity: 1,
+                        },
+                        success: function (data) {
+                            if (data.success) {
+                                toastr.success('Item added to cart')
+                                window.location.reload();
+                            } else {
+                                toastr.error('Some error occurred. Please try again later')
+                            }
+                        }
+                    })    
+                }else{
+                    toastr.error('please select product from same location')
+                }   
+            // }else{
+            //     toastr.error('No Delivery At Your Location from this shop')
+            // }   
+        })
+     
+    function openPage(pageName, elmnt, color) {
+        // Hide all elements with class="tabcontent" by default */
+        var i, tabcontent, tablinks;
+        tabcontent =  document.getElementsByClassName("tabcontent");
+        for (i = 0; i < tabcontent.length; i++) {
+            tabcontent[i].style.display = "none";
+        }
+
+        // Remove the background color of all tablinks/buttons
+        tablinks = document.getElementsByClassName("tablink");
+        for (i = 0; i < tablinks.length; i++) {
+            tablinks[i].style.backgroundColor = "";
+        }
+
+        // Show the specific tab content
+        document.getElementById(pageName).style.display = "block";
+
+        // Add the specific color to the button used to open the tab content
+        elmnt.style.backgroundColor = color;
+    }
+
+// Get the element with id="defaultOpen" and click on it
+document.getElementById("defaultOpen").click();
+
+MY_WISHLIST.init({
+        _csrf: '<%= _csrf %>'
+    })
+</script>

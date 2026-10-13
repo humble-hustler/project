@@ -1,0 +1,507 @@
+<div id="sale-loader">
+    <span>Loading</span>
+</div>
+<div class="page-content container-fluid">
+    <div class="row">
+        <div class="col-md-9">
+            <div class="panel panel-bordered mb-10">
+                <div class="panel-body p-0">
+                    <% if(memberDetails.id) { %>
+                    <ul class="list-group ">
+                        <li class="list-group-item pt-0 list-group-item-success" style="padding-top: 1%!important;">
+                            <span class="sales-options-key font-size-15"> <%= memberDetails.fname %> <%= memberDetails.lname %></span>
+                            <span class="sales-options-value font-size-15"><%= memberDetails.phone %></span>
+                        </li>
+                        <li class="list-group-item pt-0" style="padding-top: 1%!important;">
+                            <span class="sales-options-key font-size-15 "><a data-target="#member_packages" data-toggle="modal" class="color-gray"><i class="fa fa-eye" aria-hidden="true"></i> View Previous Packages</a></span>
+                        </li>
+                    </ul>
+                    <% } %>
+                </div>
+            </div>
+            <br>
+            <div class="panel panel-bordered paper-cut no-box-shadow">
+                <div class="panel-body p-0" id="sales-items-table-wrapper">
+                    <div class=" pt-5">
+                        <table class="table m-0" data-role="content" data-plugin="selectable" data-row-selectable="true">
+                            <thead class="bg-blue-grey-100">
+                                <tr>
+                                    <th class="text-center" colspan="2">Package</th>
+                                    <th class="text-center" colspan="2">Price</th>
+                                    <th class="text-center">Subtotal</th>
+                                    <th class="text-center">Tax</th>
+                                    <th class="text-center">Total</th>
+                                    <th></th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <% var total_amount =0, taxes = [],sub_total = 0 , due_amount=0;%>
+                                <% salePackages.forEach(function(sp){ %>
+                                <% membershipLogs.forEach(function(ml){ %>
+                                <% if(ml.package_id == sp.id){ %>
+                                    <% var total_line_amount = 0;%>
+                                    <tr package_id = "<%= sp.package_id %>">
+                                        <td class="text-center" colspan="2">
+                                            <%= sp.name %> (Price: Rs. <%= sp.cost_price %>)
+                                            <a href="#" data-target="#change-package" data-toggle="modal" class="edit-package"><i class=" fa fa-pencil-square-o"></i></a>
+                                            <% if(sp.is_pt){ %>
+                                            <select class="form-control trainer-id" data-package-id="<%= sp.id %>" data-line-id="<%= sp.line_id %>">
+                                                <option value="">Select Trainer</option>
+                                                <% trainers.forEach((t) => { %>
+                                                <option value="<%= t.id %>" <%= ml.trainer_id == t.id ? 'selected' : '' %>><%= t.fname %> <%= t.lname %></option>
+                                                <% }) %>
+                                            </select>
+                                            <% } %>
+                                        </td>
+                                        <td class="text-center" colspan="2">
+                                            <div class="form-group">
+                                                <div class="input-group">
+                                                    <div class="input-group-prepend">
+                                                        <span class="input-group-text pl-2 pr-2">Rs.</span>
+                                                    </div>
+                                                    <input type="number" min="0" max="100" class="form-control text-center set-price pl-1 pr-1" data-package-id="<%= sp.id %>" data-line-id="<%= sp.line_id %>" value="<%= sp.selling_price %>">                    
+                                                </div>
+                                            </div>
+                                        </td>                                   
+                                        <td class="text-center">
+                                            Rs. <%= sp.selling_price.toFixed(2) %>
+                                            <% total_line_amount = sp.selling_price; %>
+                                            <% sub_total += sp.selling_price; %>
+                                        </td>
+                                        <td class="text-center">
+                                             
+                                            <% salePackageTaxes.forEach(function(spt){ %>
+                                            <% if(spt.package_id == sp.id){ %>
+                                            <% if(spt.label != 'NA'){ %>
+                                            <ul class="list-unstyled">
+                                                <li><%= spt.label %>: Rs. <%= (sp.selling_price * (spt.rate/100)).toFixed(2) %></li>
+                                                <% total_line_amount += sp.selling_price * (spt.rate/100); %>
+                                                <% taxes.push({
+                                                    label: spt.label,
+                                                    rate: spt.rate,
+                                                    packageId: sp.id,
+                                                    taxAmount: sp.selling_price * (spt.rate/100)
+                                                }); %>
+                                            </ul>
+                                            <% } else { %>
+                                            Rs. 0
+                                            <% } %>
+                                            <% } %>
+                                            <% }) %>
+                                        </td>
+                                        <td class="text-center">
+                                            Rs. <%= total_line_amount.toFixed(2) %>
+                                        </td>
+                                        <td class="text-center">
+                                          
+                                        </td>
+                                    </tr>
+                                    <tr package_id = "<%= sp.package_id %>">
+                                        <td colspan="2" style="border-top: none; padding-bottom: 20px">
+                                            <label class="form-control-label">Sold By</label>
+                                            <select class="form-control sold-by" data-line-id="<%= sp.line_id %>" data-package-id="<%= sp.id %>">
+                                                <option value="">Sold By</option>
+                                                <% team.forEach((t) => { %>
+                                                <option value="<%= t.id %>" <%= ml.sold_by == t.id ? 'selected' : '' %>><%= t.user_name %></option>
+                                                <% }) %>
+                                            </select>
+                                        </td>
+                                        <td colspan="2" style="border-top: none; padding-bottom: 20px">
+                                            <label class="form-control-label">Time Slots</label>
+                                            <select class="form-control slot-id" data-package-id="<%= sp.id %>" data-line-id="<%= sp.line_id %>">
+                                                <option value=0>Select Time Slot</option>
+                                                <% if(sp.is_pt && ml.trainer_id){ %>
+                                                    <% ptTimeSlots.forEach((t) => { %>
+                                                    <option value="<%= t.slot_id %>" <%= ml.slot_id == t.slot_id ? 'selected' : '' %>><%= t.start_time%> - <%= t.end_time %></option>
+                                                    <% }) %>
+                                                <% }else{ %>
+                                                    <% timeSlots.forEach((t) => { %>
+                                                    <option value="<%= t.id %>" <%= ml.slot_id == t.id ? 'selected' : '' %>><%= t.start_time%> - <%= t.end_time %></option>
+                                                    <% }) %>
+                                                <% } %>
+                                            </select>
+                                            <% if(sp.is_pt && ml.trainer_id){ %>
+                                            <a href="#" data-toggle='modal' data-target='#booked_slots' class='view_booked_slots'><i class="fa fa-eye" aria-hidden="true"></i>View Trainers Booked Slots</a>
+                                            <% } %>
+                                        </td>
+                                        <td colspan="2" style="border-top: none; padding-bottom: 20px;position:relative;">
+                                            <% var minDate = formatDate(new Date(), 'YYYY-MM-DD') ;%>
+
+                                            <% if(allMembershipLogs.length > 1){
+                                                if(allMembershipLogs[0].sale_id == sale.id){
+                                                }else{
+                                                    minDate = formatDate(allMembershipLogs[0].expiry_date, 'YYYY-MM-DD');
+                                                }
+                                                if(formatDate(new Date(), 'YYYY-MM-DD') > minDate){
+                                                    minDate = formatDate(new Date(), 'YYYY-MM-DD');
+                                                }
+                                             %>
+                                            <% } %>
+                                            <label class="form-control-label">Membership Start Date</label>
+                                            <input type="text" class="form-control membership-date start-date" data-line-id="<%= sp.line_id %>" data-package-id="<%= sp.id %>" data-date-type="start" value="<%= formatDate(ml.start_date, 'DD-MM-YYYY') %>" min="<%= formatDate(minDate, 'DD-MM-YYYY') %>"/>
+                                        </td>
+                                        <td colspan="2" style="border-top: none; padding-bottom: 20px">
+                                            <label class="form-control-label">Membership End Date</label>
+                                            <input type="text" class="form-control membership-date" data-line-id="<%= sp.line_id %>" data-package-id="<%= sp.id %>" data-date-type="expiry" value="<%= formatDate(ml.expiry_date, 'DD-MM-YYYY') %>" disabled/>
+                                        </td>
+                                    </tr>
+                                    <% total_amount+= total_line_amount; %>
+                                <% } %>
+                                <% }) %>
+                                <% }) %>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div> 
+        <div class="col-md-3">
+           
+            <div class="panel panel-bordered paper-cut no-box-shadow">
+                <div class="panel-body p-0" id="amount-block-wrapper">
+                    <ul class="list-group">
+                        <li class="list-group-item list-group-item-success border-radius-0">
+                            <span class="sales-options-key"><strong>Sub Total:</strong></span>
+                            <span class="sales-options-value">Rs. <%= sub_total ? sub_total.toFixed(2) : '0.00' %></span>
+                        </li>
+                        <% total_tax = 0;%>
+                        <% taxes.forEach((t) => { %>
+                        <li class="list-group-item pb-0 pt-0">
+                            <span class="sales-options-key"><%= t.label %>: </span>
+                            <span class="sales-options-value">Rs. <%= t.taxAmount.toFixed(2) %></span>
+                        </li>
+                        <% total_tax+= t.taxAmount; %>
+                        <% }) %>
+                        <li class="list-group-item border-radius-0 pb-0">
+                            <span class="sales-options-key"><strong>Total Tax:</strong></span>
+                            <span class="sales-options-value">Rs. <%= total_tax ? total_tax.toFixed(2) : '0.00' %></span>
+                        </li>                        
+                    </ul>
+                    <% total_payed_amount = 0;%>
+                    <% salePayments.forEach(function(sp){
+                        total_payed_amount+= sp.amount;
+                    })%>   
+                    <div class="amount-block">
+                        <div class="total amount">
+                            <div class="side-heading">
+                                Total
+                            </div>
+                            <div class="amount total-amount">
+                                Rs. <%= total_amount ? total_amount.toFixed(2) : '0.00' %>
+                            </div>
+                        </div>
+                        <div class="total amount-due">
+                            <div class="side-heading">
+                                Amount Due
+                            </div>
+                            <div class="amount">
+                                <% due_amount = total_amount - total_payed_amount %>
+                                Rs. <span id="due_amount"><%= due_amount.toFixed(2) %></span>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="payment-lines pt-2 pb-2">
+                        <ul class="list-group mb-0">
+                            <% salePayments.forEach((p) => { %>
+                            <li class="list-group-item pb-1 pt-0">                                
+                                <span class="sales-options-key"> <%= p.label %></span>
+                                <span class="sales-options-value">Rs. <%= p.amount.toFixed(2) %></span>
+                            </li>
+                            <% }) %>                            
+                        </ul>
+                    </div>
+                             
+                    <div class="payment-type-block pl-20 pr-20 pb-20 pt-10">
+                        <div class="side-heading">
+                        </div>
+                        <div class="payment-methods">
+                                                      
+                        </div>
+                        <% if(due_amount > 0.5){ %>
+                        <div class="form-group mb-0 mt-10">
+                            <button data-target='#add-sale-payment' data-toggle='modal' class="btn btn-primary" id="add-payment-btn">Add Payment</button>
+                        </div>
+                        <% } %>
+                        <br>
+                        <div class="form-group" id="">
+                            <div class="input-group input-group-icon">
+                                <div class="input-group-prepend">
+                                    <button type="button" class="btn btn-default"><i class="fa fa-calendar"></i></button>
+                                </div>
+                                <input type="text" class="form-control" id="change-sale-date-text" value="<%= formatDate(sale.invoice_date, 'DD-MM-YYYY hh:mm a') %>">
+                            </div>
+                        </div>
+                        <div class="form-group mb-0 mt-10">
+                            <label class="form-control-label">Comments:</label>
+                            <textarea class="form-control" id="sale-comment" value=""><%= sale.comment%></textarea>
+                        </div>
+                        <div class="form-group mb-0 mt-10">
+                            <button type="submit" class="btn btn-primary" id="update-sale"  >Update Sale</button> 
+                        </div>
+                    </div>
+                    <div class="change-sale-date-block pl-20 pr-20 pb-20 pt-10">
+                        
+                    </div>
+                </div>
+            </div>
+        </div>         
+    </div>
+</div>
+
+
+</div>
+<div class="modal fade" id="member_packages" aria-hidden="false" aria-labelledby="member-packages" role="dialog" tabindex="-1">
+    <div class="modal-dialog modal-simple">
+        <form class="modal-content" action="/app/packages/add" method="POST" autocomplete="off">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">×</span>
+                </button>
+                <h4 class="modal-title">Customer Packages</h4>
+            </div>
+            <div class="modal-body">
+                <div class="">
+                    <table class="table m-0" data-role="content" data-plugin="selectable" data-row-selectable="true">
+                        <thead class="bg-blue-grey-100">
+                            <tr>
+                                <th class="text-center">Package Name</th>
+                                <th class="text-center">Package Start</th>
+                                <th class="text-center">Package End</th>
+                                <th class="text-center">Trainer</th>
+                                <th class="text-center">Status</th>
+                                <th></th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <% if(!allMembershipLogs || allMembershipLogs.length == 0){ %>
+                            <tr>
+                                <td colspan="7" class="text-center">No Packages Available</td>
+                            </tr>
+                            <% } else { %>
+                                <% allMembershipLogs.forEach((m) => { %>
+                                <tr>
+                                    <td><%= m.package_name %></td>
+                                    <td><%= formatDate(m.start_date, 'Do MMM YYYY') %></td>
+                                    <td><%= formatDate(m.expiry_date, 'Do MMM YYYY') %></td>
+                                    <td><%= m.trainer_fname %> <%= m.trainer_lname %></td>
+                                    <td>
+                                        <% var status = ''%>
+                                        <% if(new Date() < m.start_date ) { %>
+                                        <span class="badge badge-warning">To Start</span>
+                                        <% } else if (new Date() > m.expiry_date) { %>
+                                        <span class="badge badge-default">Expired</span>
+                                        <% }else if(m.is_transferred){%>
+                                        <span class="badge badge-default">Transferred to <%= m.transferred_to_member_name %></span>
+                                        <% } else { %>
+                                        <span class="badge badge-success">Active</span>
+                                        <% } %>
+                                    </td>
+                                </tr>
+                                <% }) %>
+                            <% } %>
+                        </tbody>
+                    </table>
+                </div>        
+            </div>            
+        </form>
+    </div>
+</div>
+<div class="modal fade" id="add-sale-payment" aria-hidden="false" aria-labelledby="add-sale-payment" role="dialog" tabindex="-1">
+    <div class="modal-dialog modal-simple">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">×</span>
+                </button>
+                <h4 class="modal-title" id="add-new-team-member">Add Payment</h4>
+            </div>
+            <div class="modal-body">
+                <div class="row">
+                    <div class="form-group col-lg-12">
+                        <label></label>
+                        <select id="payment-method" name="payment-method" class="form-control">
+                            <option value="">--Select Payment Method--</option>
+                            <% paymentMethods.forEach((m, i) => { %>
+                            <option value="<%= m.id %>"><%= m.label %></option>
+                            <% }) %>   
+                        </select>
+                    </div>
+                </div> 
+                <div class="row display-hidden" id="card">
+                    <div class="form-group col-lg-6">
+                        <label>Card Type</label><br>
+                        <input type="radio" name ='card-type' value='credit'> Credit
+                        <input type="radio" name ='card-type' value='debit'> Debit
+                    </div>
+                    <div class="form-group col-lg-6">
+                        <label>Last 4 Digits on card</label>
+                        <input type="text"  class="form-control" name="card-number" id="card-number">
+                    </div>
+                    <div class="form-group col-lg-4">
+                        <label>Name On card</label>
+                        <input type="text"  class="form-control" name="card-name" id="card-name">
+                    </div>
+                    <div class="form-group col-lg-4">
+                        <label>Phone No</label>
+                        <input type="text"  class="form-control" name="card-phone" id="card-phone">
+                    </div>
+                    <div class="form-group col-lg-4">
+                        <label>Amount</label>
+                        <input type="text"  class="form-control" name="card-amount" id="card-amount">
+                        <div class="invalid-feedback"></div>
+                    </div>
+                </div> 
+                <div class="row display-hidden" id="neft">
+                    <div class="form-group col-lg-6">
+                        <label>Bank Name</label>
+                        <input type="text"  class="form-control" name="bank-name" id="bank-name">
+                    </div>
+                    <div class="form-group col-lg-6">
+                        <label>Amount</label>
+                        <input type="text"  class="form-control" name="neft-amount" id="neft-amount">
+                        <div class="invalid-feedback"></div>
+                    </div>
+                    <div class="form-group col-lg-6">
+                        <label>Date</label>
+                        <input type="text"  class="form-control" name="neft-date" id="neft-date">
+                    </div>
+                    <div class="form-group col-lg-6">
+                        <label>UTF/ Ref No.</label>
+                        <input type="text"  class="form-control" name="ref-no" id="ref-no">
+                    </div>
+                </div>
+                <div class="row display-hidden" id="cash">
+                    <div class="form-group col-lg-6">
+                        <label>Total cash Amount</label>
+                        <input type="text"  class="form-control" name="total-cash-amount" id="total-cash-amount">
+                        <div class="invalid-feedback"></div>
+                    </div>
+                </div>
+                <div class="row display-hidden" id="razorpay">
+                    <div class="form-group col-lg-6">
+                        <label>Amount</label>
+                        <input type="number"  class="form-control" name="razorpay-amount" id="razorpay-amount">
+                        <div class="invalid-feedback"></div>
+                    </div>
+                    <div class="form-group col-lg-6">
+                        <label>Transaction ID</label>
+                        <input type="text"  class="form-control" name="razorpay-transaction-id" id="razorpay-transaction-id">
+                    </div>
+                </div> 
+                <div class="row display-hidden" id="cheque">
+                    <div class="form-group col-lg-6">
+                        <label>Bank Name</label>
+                        <input type="text"  class="form-control" name="cheque-bank-name" id="cheque-bank-name">
+                    </div>
+                    <div class="form-group col-lg-6">
+                        <label>Cheque No</label>
+                        <input type="text"  class="form-control" name="cheque-no" id="cheque-no">
+                    </div>
+                    <div class="form-group col-lg-6">
+                        <label>Cheque Date</label>
+                        <input type="text"  class="form-control" name="cheque-date" id="cheque-date">
+                    </div>
+                    <div class="form-group col-lg-6">
+                        <label>Amount</label>
+                        <input type="text"  class="form-control" name="cheque-amount" id="cheque-amount">
+                        <div class="invalid-feedback"></div>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="form-group col-xl-12">
+                        <%- csrf_html %>
+                        <button class="btn btn-primary" id="add-payment">Add Payment</button>
+                    </div>    
+                </div>           
+            </div>            
+        </div>
+    </div>
+</div>
+<div class="modal fade" id="change-package" aria-hidden="false" aria-labelledby="change-package" role="dialog" tabindex="-1">
+    <div class="modal-dialog modal-simple">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">×</span>
+                </button>
+                <h4 class="modal-title" id="add-new-team-member">Update Package</h4>
+            </div>
+            <div class="modal-body">
+                <div class="row">
+                    <input type="hidden" name="" id="old-package-id">
+                    <div class="col-lg-12">
+                        <select class="form-control" id="select-package">
+                            
+                        </select>
+                    </div>
+                </div> 
+                <br>
+                <div class="row">
+                    <div class="form-group col-xl-12 text-right">
+                        <%- csrf_html %>
+                        <button class="btn btn-primary" id="update-package-btn">Update Package </button>
+                    </div>    
+                </div>           
+            </div>            
+        </div>
+    </div>
+</div>
+<div class="modal fade" id="booked_slots" aria-hidden="false" aria-labelledby="booked_slots" role="dialog" tabindex="-1">
+    <div class="modal-dialog modal-lg">
+        <form class="modal-content" action="/app/packages/add" method="POST" autocomplete="off">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">×</span>
+                </button>
+                <h4 class="modal-title">Booked Slots</h4>
+            </div>
+            <div class="modal-body">
+                <div class="">
+                    <table class="table m-0" data-role="content" data-plugin="selectable" data-row-selectable="true">
+                    <thead class="bg-blue-grey-100">
+                        <tr>
+                            <th class="text-center">Slot Timing</th>
+                            <th class="text-center">Week Days Available</th>
+                            <th class="text-center">Member Booking Logs</th>
+                            <th></th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <% ptTimeSlots.forEach(function(pt){ %>
+                        <tr>
+                            <td><%= pt.start_time%> - <%= pt.end_time %></td>
+                            <td>
+                                <% var arr = ['Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday', 'Sunday']; 
+                                var week_str = '';%>
+                                <% if(pt.week_days == 'all'){ %>
+                                    All Days a Week
+                                <% }else{ 
+                                    var week_arr = pt.week_days.split(",");
+                                    week_arr.forEach(function(w){
+                                        week_str+= ((week_str)?(', '+arr[w]):(arr[w])) ;
+                                    })
+                                } %>
+                                <%= week_str; %>
+                            </td>
+                            <td>
+                                <% trainerBookingLog.forEach(function(bl){ %>
+                                <% if(bl.slot_id == pt.slot_id){ %>
+                                <%= bl.member_name%> (<%= formatDate(bl.start_date, 'DD-MM-YYYY') %> - <%= formatDate(bl.expiry_date, 'DD-MM-YYYY') %>)
+                                <% } %>
+                                <% })%>
+                            </td>
+                        </tr>
+                        <% }) %>
+                    </tbody>
+                </table>
+                </div>        
+            </div>            
+        </form>
+    </div>
+</div>
+<script type="text/javascript">
+    SALE_EDIT.init({
+        _csrf: '<%= _csrf %>',
+        sale: '<%- JSON.stringify(sale) %>'
+    })
+</script>

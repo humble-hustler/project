@@ -1,0 +1,238 @@
+
+<%- include('../partials/header.html') %>
+<style>
+          :root{
+    --nav-bck:#F24A72;
+    --log-bck:#fff;
+    --cart-color:#fff;
+    --txt-color:#0000;
+    --bg-grey:#F1F3F6;
+    
+}
+
+body
+{
+    background-color:#F1F3F6 ;
+}
+
+.myorderbtn
+{
+background: #fb641b;
+ color: #fff;
+font-size: 16px;
+/* padding: 4px 8px; */
+display: inline-block;
+margin-top: 24px;
+font-weight: bolder;
+
+}
+
+.bs4-order-tracking {
+    margin-bottom: 30px;
+    overflow: hidden;
+    color: #878788;
+    padding-left: 0px;
+    margin-top: 30px
+}
+
+.bs4-order-tracking li {
+    list-style-type: none;
+    font-size: 13px;
+    width: 20%;
+    float: left;
+    position: relative;
+    font-weight: 400;
+    color: #878788;
+    text-align: center
+}
+
+.bs4-order-tracking li:first-child:before {
+    margin-left: 15px !important;
+    padding-left: 11px !important;
+    text-align: left !important
+}
+
+.bs4-order-tracking li:last-child:before {
+    margin-right: 5px !important;
+    padding-right: 11px !important;
+    text-align: right !important
+}
+
+.bs4-order-tracking li>div {
+    color: #fff;
+    width: 23px;
+    height: 23px;
+    text-align: center;
+    line-height: 29px;
+    display: block;
+    font-size: 12px;
+    background: #878788;
+    border-radius: 50%;
+    margin: auto
+    
+
+}
+
+.bs4-order-tracking li:after {
+    content: '';
+    width: 150%;
+    height: 2px;
+    background: #878788;
+    position: absolute;
+    left: 0%;
+    right: 0%;
+    top: 15px;
+    z-index: -1
+}
+
+.bs4-order-tracking li:first-child:after {
+    left: 50%
+}
+
+.bs4-order-tracking li:last-child:after {
+    left: 0% !important;
+    width: 0% !important
+}
+
+.bs4-order-tracking li.active {
+    font-weight: bold;
+    color: blue;
+}
+
+.bs4-order-tracking li.active>div {
+    background: blue;
+}
+
+.bs4-order-tracking li.active:after {
+    background: blue;
+}
+
+.card-timeline {
+    background-color: #fff;
+    z-index: 0;
+    width:125%;
+    border: none;
+}
+    .order-btn span{
+        margin-left: 10px;
+    }
+</style>
+
+<section class="section-content padding-y" id="order-history">
+    <div class="container-fluid">
+        <div class="row mb-5">
+            
+        <div class="col-md-3 bg-white border border-1">
+            <div class="border border-1 mt-2">
+            <h6 class="ps-3 pt-3 mb-2">FILTERS</h6>
+            <hr>
+            <h6 class="ps-3 pt-3 mb-2">ORDER STATUS</h6>
+        
+                    <div  id="orderstatus" class="ps-3">
+                    <input type="checkbox" >
+                    <label>On the way</label><br>
+                    <input type="checkbox">
+                    <label>Delivered</label><br>
+                    <input type="checkbox">
+                    <label>Returned</label><br>
+                    <input type="checkbox">
+                    <label>Cancelled</label><br>
+                    </form>
+                </div>    
+                <hr>
+                <h6 class="ps-3 pt-3 mb-2">ORDER TIME</h6>
+                
+                        <div  id="orderstatus" class="ps-3">
+                        <input type="checkbox" >
+                        <label>Last 30 days</label><br>
+                        <input type="checkbox">
+                        <label>2022</label><br>
+                        <input type="checkbox">
+                        <label>2021</label><br>
+                        <input type="checkbox">
+                        <label>2020</label><br>
+                        <input type="checkbox">
+                        <label>2019</label><br>
+                        <input type="checkbox">
+                        <label>2018</label><br>
+                        </form>
+                    </div>    <!--end of rating-->
+                    <hr>
+                </div>
+        </div>
+            <div class="col-md-9">
+                <div class="accordion" id="orderList">
+                    <% orders.forEach((o) => { %>
+                    <div class="container bg-white mb-3">
+                        <div class="row ">
+                            <div class="col-2">
+                                <img src="/images/image5.jpg" class="img-fluid"  alt="">
+                            </div>
+                    <div class="col-2">
+                    <article class="">
+                        <header class="" id="heading-<%= o.id %>">
+                            <h2 class="mb-0">
+                                <button class="btn btn-link text-dark order-btn text-left" data-order-id="<%= o.id %>" type="button" data-toggle="collapse" data-target="#order-<%= o.id %>" aria-expanded="false" aria-controls="order-<%= o.id %>">
+                                    <span><strong >Order ID:</strong> <%= o.id %></span><br>
+                                    <!-- <span><strong>Order Date:</strong> <%= formatDate(o.created_date, 'Do MMM YYYY HH:mm A') %></span><br> -->
+                                    <!-- <span><strong>Shipped To:</strong> <%= o.label %> (<%= o.name %>)</span><br> -->
+                                    <span class="mb-2"><strong></strong> <%= o.name %></span><br>
+                                    <p> Rs. <%= o.regular_price %>/-</p>
+                                    <!-- <span class="mb-2"><strong>Product Price:</strong>   Rs. <%= o.regular_price %>/-</span><br> -->
+                                    <!-- <span class="mb-2"><strong>Shop name:</strong> <%= o.brand_name %></span><br> -->
+                                    <!-- <span><strong>Location :</strong> <%= o.location_name %></span> -->
+                                </button></br>
+                            </h2>
+                        </header>
+                        <div id="order-<%= o.id %>" class="collapse bg" aria-labelledby="heading-<%= o.id %>" data-parent="#orderList"></div>
+                    </article>
+                    </div>   <!--col ends-->
+                    <div class="col-5">
+                         
+                <div class="card card-timeline pt-3 border-none">
+                    <ul class="bs4-order-tracking">
+                        <li class="step" id="1" >
+                            <div class=""></div> Order Placed
+                        </li>
+                        <li class="step" id="2">
+                            <div class=""></div>shipped
+                        </li>
+                        
+                        <li class="step" id="3">
+                            <div class=""></div> Out for delivery
+                        </li>
+                        <li class="step" id="4">
+                            <div class=""></div> Delivered
+                        </li>
+                        </ul>
+                </div> 
+                    </div>
+                    <div class="col-3">
+                        <!-- <span><strong class="mt-2 d-inline-block">Status :</strong> <%= o.status %> </span><br> -->
+                        <a href="/my-account/cancel_order/<%= o.id %>/<%= o.p_id %>" class="myorderbtn" >Cancel</a><br>
+                        <a href="/shop/<%= o.slug %>/<%=o.p_id %>" id="checkout" class="myorderbtn"> Re-Order</a>
+                    </div>
+                  
+                </div>    <!--row close-->
+                </div>   <!--container closed-->
+                    <% }) %>
+                </div>                
+             
+                
+            
+            
+            </div> 
+        </div>
+    </div> 
+</section>
+
+
+<%- include('../partials/footer.html') %>
+<script type="text/javascript">
+    MY_ACCOUNT_ORDERS
+    .init({
+        _csrf: '<%= _csrf %>',
+        myorders: 
+        '<%- JSON.stringify(orders) %>'
+    })
+</script>

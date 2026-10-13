@@ -1,0 +1,45 @@
+<div class="card-body">
+    <div class="row">
+        <div class="col-md-8">
+            <h6 class="text-muted">Order Shipped To</h6>
+            <p><strong><%= orderData.name %> (<%= orderData.label %>)</strong><br>  
+                Phone <%= orderData.phone %> <br>
+                Location: <%= orderData.address_line_1 %> <%= orderData.address_line_2 %><br> 
+                <%= orderData.city %>, <%= orderData.state %>
+                Zip: <%= orderData.zip %>
+            </p>
+        </div>
+        <div class="col-md-4">
+            <h6 class="text-muted">Payment Details</h6>
+            <span>
+                Payment ID: <%= orderData.razorpay_payment_id %>
+            </span>
+            <p>
+                <span class="b">Total:  Rs. <%= orderData.amount %>  </span>
+            </p>
+            <a href="#" class="btn btn-outline-primary" data-toggle="modal" data-target="#track-order">Track order</a>
+        </div>
+    </div>
+</div>
+<div class="table-responsive">
+    <table class="table table-hover mb-0">
+        <tbody>
+            <% orderItems.forEach((o) => { %>
+            <tr>
+                <td width="65">
+                    <a href="/shop/<%= o.slug %>/<%= o.id %>" title="<%= o.product_name %>">
+                        <img src="<%=session.imgURL %><%= o.file_name %>" class="img-xs border">
+                    </a>
+                </td>
+                <td> 
+                    <p class="title mb-0"><%= o.product_name %></p>
+                    <var class="price text-muted">Rs. <%= o.product_type == 2 ? o.variation_regular_price : o.product_regular_price %> Each</var> |
+                    <var class="price text-muted">Quantity: <%= o.quantity %> </var> <br>
+                    <var class="price text-muted">Total: Rs. <%= o.product_type == 2 ? o.variation_regular_price * o.quantity : o.product_regular_price * o.quantity %> </var> <br>
+                </td>
+                <td class="align-middle"> <span class="text-uppercase text-muted"><%= o.slug %></span> </td>                
+            </tr>
+            <% }) %>
+        </tbody>
+    </table>
+</div>

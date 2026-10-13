@@ -1,0 +1,402 @@
+<%- include("./partials/header.html") %>
+<%- include("./partials/topnav.html") %>
+<%- include("./partials/sidebar.html") %>
+<style>
+ form{
+    padding-top: 50px;
+    
+ }
+  .add-shipping-charges{
+    text-align: center;
+    padding-top: 20px;
+    padding-bottom: 30px;
+  }
+  .first-group{
+    padding-left: 300px;
+  }
+  .second-group{
+    padding-left: 40px;
+  }
+
+</style>
+<div class="page">
+    <div class="page-content">
+        <ul class="nav nav-tabs nav-tabs-line tabs-line-top mb-10" role="tablist">
+            <h3>Shipping Management</h3>
+         
+        </ul>
+        <div class="panel">            
+            <div class="panel-heading">
+                
+            </div>
+            <div class="panel-body">
+                <br>
+                <h4> Which option you want to select for delivery of product?</h4>
+                <div class="deliveryOption col-12 pd-5">
+                    <input name="exlshopDel" type="radio" value="1" <%= getDeliveryOption == 1 ? 'checked':''%>/>
+                    <label class="col-5"> <h5>Exlshop Delivery</h5></label>
+                    <input name="shopDel" type="radio"  value="2" data-toggle="modal" data-target="#shop-delivery" <%= getDeliveryOption == 2 ? 'checked':''%>/> 
+                    <label class="col-5"> <h5>Shop Delivery</h5></label><br>
+                </div>
+                <div class="col-12 pd-5" style="display: flex;">
+                    <div class=" col-5 card">
+                        <h4 class="card-title">Steps to Follow</h4>
+                        <p class="card-text">1. Make sure that all shop details are provided below.</p>
+                        <p class="card-text">2. Address Line 1 should conatin minimun 10 characters.</p>
+                        <p class="card-text">3. Once all detials are provided then you have to set pick up location. For that click on Button called <b>"Set Pickup Location"</b>.</p>
+                        <p class="card-text">4. Your shop now exist in pickup location's list.</p>
+                        <p class="card-text">
+                            <small class="text-muted">For any issues please contact to your admin</small>
+                        </p>
+                    </div>
+                    <div class="col-5 card">
+                        <h4 class="card-title">Steps to Follow</h4>
+                        <p class="card-text">1. If not provided, Add delivery charges using button called <b>"Add Shipping Charges"</b>.</p>
+                        <p class="card-text">2. You can delete or modify existing delivery charges</p>
+                        <!-- <p class="card-text">
+                            <small class="text-muted">Terms and conditions(if any)</small>
+                        </p> -->
+                    </div>
+                </div> 
+                <br>
+                <% if(getDeliveryOption == '2') { %>
+                    <table class="table table-hover dataTable table-striped w-full" id="charges-list">
+                        <thead>
+                            <tr>
+                                <th>0-5 Km</th>
+                                <th>5-10 Km</th>
+                                <th>10-20 Km</th>
+                                <th>20-40 Km</th>
+                                <th>40-60 Km</th>
+                                <th>60-100 Km</th> 
+                                <th>More than 100 Km</th> 
+                                <th>Action</th>                  
+                            </tr>
+                        </thead>                    
+                        <tbody></tbody>
+                    </table>
+                    <form id="addCharges" style="display: none;">        
+                        <div class="container">
+                            <div class="row">
+                                <div class="col-6 first-group">
+                                    <div class="form-group">
+                                        <label  for="email">0-5 KM</label><br>
+                                        <input type="number"  id="zero-five" name="zero-five" placeholder="Enter Shipping Charges">
+                                    </div>
+                                    <div class="form-group">
+                                        <label  for="email">10-20 KM</label><br>
+                                        <input type="number"  id="ten-twenty" name="ten-twenty" placeholder="Enter Shipping Charges">
+                                    </div>
+                                    <div class="form-group">
+                                        <label  for="email">40-60 KM</label><br>
+                                        <input type="number"  id="forty-sixty" name="forty-sixty" placeholder="Enter Shipping Charges">
+                                    </div>
+                                    <div class="form-group">
+                                        <label  for="email">More than 100 KM</label><br>
+                                        <input type="number"  id="more-than-hundred" name="more-than-hundred" placeholder="Enter Shipping Charges">
+                                    </div>
+                                </div>
+
+                                <div class="col-6 second-group">
+                                    <div class="form-group">
+                                        <label  for="email">5-10 KM</label><br>
+                                        <input type="number" id="five-ten" name="five-ten" placeholder="Enter Shipping Charges">
+                                    </div>
+                                
+                                    <div class="form-group">
+                                        <label  for="email">20-40 KM</label><br>
+                                        <input type="number"  id="twenty-forty" name="twenty-forty" placeholder="Enter Shipping Charges">
+                                    </div>
+                                    <div class="form-group">
+                                        <label  for="email">60-100 KM</label><br>
+                                        <input type="number"  id="sixty-hundred" name="sixty-hundred" placeholder="Enter Shipping Charges">
+                                    </div>
+                                </div>
+                            </div>
+                        </div>            
+                        <div class="add-shipping-charges">
+                            <button type="button" class="btn btn-secondary Add-btn">Add Shipping Charges</button>
+                        </div>                    
+                    </form>
+                <% } else if(getDeliveryOption == '1') { %>
+                    <div class="row col-12">
+                        <div class="col-6">
+                            <h4> Please Verify Shipping Details </h4>
+                            <h6> (All fileds are required as these details are provided to set pickup location)</h6>
+                        </div>
+                        <div class="col-6">
+                            <% if (brandDetails.set_pickup != 1) { %>
+                                <div class="set-pickup text-right">
+                                    <button type="button" class="btn btn-secondary set-pickup-btn">Set Pickup Location</button>
+                                </div>
+                            <% } else { %>
+                                <h4 class="text-success text-right"> Pick up location exists in ExlShop </h4>
+                            <% } %>
+                        </div>
+                    </div>                    
+                    <table class="table table-bordered" style="text-align: center;" id = "shopDetails">
+                        <thead>
+                            <tr>
+                                <th>#</th>
+                                <th>Details</th>
+                                <th>Action</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td>Shop Name :</td>
+                                <td id="shopName"><%= brandDetails.name %></td>
+                                <td rowspan="12">
+                                    <% if (brandDetails.set_pickup != 1) { %>
+                                        <a href="#" data-toggle="modal" data-target="#update-shop-details" class="update-details-btn">
+                                        <i class="fa fa-pencil" aria-hidden="true" id="update_btn" > </i></a>&nbsp;&nbsp;
+                                    <% } %>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td>Shop Address Line 1:</td>
+                                <td id="shopAdd1"><%= brandDetails.address_line_1 %></td>
+                            </tr>
+                            <tr>
+                                <td>Shop Address Line 2:</td>
+                                <td id="shopAdd2"><%= brandDetails.address_line_2 %></td>
+                            </tr>
+                            <tr>
+                                <td>Shop City :</td>
+                                <td id="shopCity"><%= brandDetails.city %></td>
+                            </tr>
+                            <tr>
+                                <td>Shop State :</td>
+                                <td id="shopState"><%= brandDetails.state %></td>
+                            </tr>
+                            <tr>
+                                <td>Shop Country :</td>
+                                <td id="shopCountry"><%= brandDetails.country %></td>
+                            </tr>
+                            <tr>
+                                <td>Shop Zip :</td>
+                                <td id="shopZip"><%= brandDetails.zip %></td>
+                            </tr>
+                            <tr>
+                                <td>Shop Mobile :</td>
+                                <td id="shopMobile"><%= brandDetails.phone %></td>
+                            </tr>
+                            <tr>
+                                <td>Shop E-mail :</td>
+                                <td id="shopEmail"><%= brandDetails.email %></td>
+                            </tr>
+                            <tr>
+                                <td>Shop GST No. :</td>
+                                <td><%= brandDetails.gstin %></td>
+                            </tr>
+                            <tr>
+                                <td>Shop Latitude :</td>
+                                <td id="shopLat"><%= brandDetails.lat %></td>
+                            </tr>
+                            <tr>
+                                <td>Shop Longitude :</td>
+                                <td id="shopLng"><%= brandDetails.lng %></td>
+                            </tr>
+                        </tbody>
+                    </table>
+                <% } %>
+
+                <div class="modal fade" id="delete-charges" aria-hidden="false" aria-labelledby="delete-charges" role="dialog" tabindex="-1">
+                    <div class="modal-dialog modal-simple">
+                        <div class="modal-content" >
+                           <div class="modal-header">
+                                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                    <span aria-hidden="true">×</span>
+                                </button>
+                                <h4 class="modal-title">Delete Charges</h4>
+                            </div>
+                            <div class="modal-body">
+                                <div class="row">
+                                    <input type="hidden" name="record_id" id="record_id">
+                                    <div class="col-lg-12">
+                                        <p>Do you really want to Delete the selected Charges ?</p>
+                                    
+                                    </div>
+                                    <div class="form-group col-xl-12">
+                                        <button class="btn btn-round btnSelect" id="delete-charges-btn">Delete</button>
+                                    </div>
+                                </div>                
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="modal fade" id="update-charges" aria-hidden="false" aria-labelledby="update-charges" role="dialog" tabindex="-1">
+                    <div class="modal-dialog">
+                        <div class="modal-content">
+                            <div class="modal-header" >
+                                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                    <span aria-hidden="true">×</span>
+                                </button>
+                                <h4 class="modal-title" id="add-new-category">Update Charges</h4>
+                            </div>
+                            <div class="modal-body">
+                                <div class="row">
+                                    <div class="col-6">
+                                        <div class="form-group">
+                                            <label  for="email">0-5 KM</label><br>
+                                            <input type="number"  id="zero-five-update" name="zero-twenty" placeholder="Enter Shipping Charges">
+                                        </div>
+                                        <div class="form-group">
+                                            <label  for="email">10-20 KM</label><br>
+                                            <input type="number"  id="ten-twenty-update" name="forty-sixty" placeholder="Enter Shipping Charges">
+                                        </div>
+                                        <div class="form-group">
+                                            <label  for="email">40-60 KM</label><br>
+                                            <input type="number"  id="forty-sixty-update" name="eighty-hundred" placeholder="Enter Shipping Charges">
+                                        </div>
+                                        <div class="form-group">
+                                            <label  for="email">More than 100 KM</label><br>
+                                            <input type="number"  id="more-than-hundred-update" name="more-that-hundred" placeholder="Enter Shipping Charges">
+                                        </div>
+                                    </div>
+        
+                                    <div class="col-6">
+                                        <div class="form-group">
+                                            <label  for="email">5-10 KM</label><br>
+                                            <input type="number" id="five-ten-update" name="twenty-forty" placeholder="Enter Shipping Charges">
+                                        </div>
+                                       
+                                         <div class="form-group">
+                                            <label  for="email">20-40 KM</label><br>
+                                            <input type="number"  id="twenty-forty-update" name="sixty-eighty" placeholder="Enter Shipping Charges">
+                                        </div>
+
+                                        <div class="form-group">
+                                            <label  for="email">60-100 KM</label><br>
+                                            <input type="number"  id="sixty-hundred-update" name="sixty-eighty" placeholder="Enter Shipping Charges">
+                                        </div>
+                                    </div>
+                                    <div class="form-group col-12" style="text-align: center;">
+                                        <button class="btn btn-round btnSelect" id="update-charges-btn">Update</button>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="modal fade" id="update-shop-details" aria-hidden="false" aria-labelledby="update-shop-details" role="dialog" tabindex="-1">
+                    <div class="modal-dialog">
+                        <div class="modal-content">
+                            <div class="modal-header" >
+                                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                    <span aria-hidden="true">×</span>
+                                </button>
+                                <h4 class="modal-title" id="add-new-category">Update Shop Details</h4>
+                            </div>
+                            <div class="modal-body">
+                                <div class="row">
+                                    <div class="col-4">
+                                        <div class="form-group">
+                                            <label  for="name">Shop Name</label><br>
+                                            <input type="text"  id="name-update" name="name" value="<%= brandDetails.name %>" placeholder="Enter Shop Name" required disabled>
+                                        </div>
+                                        <div class="form-group">
+                                            <label  for="address_line_1">Address Line 1</label><br>
+                                            <input type="text"  id="address-line1-update" name="address_line_1"  value="<%= brandDetails.address_line_1 %>" placeholder="Enter Address Line 1" required>
+                                        </div>
+                                        <div class="form-group">
+                                            <label  for="address_line_2">Address Line 2</label><br>
+                                            <input type="text"  id="address-line2-update" name="address_line_2" value="<%= brandDetails.address_line_2 %>" placeholder="Enter Address Line 2">
+                                        </div>
+                                        <div class="form-group">
+                                            <label  for="zip">Pin Code</label><br>
+                                            <input type="number"  id="zip-update" name="zip" value="<%= brandDetails.zip %>" placeholder="Enter Pincode" required>
+                                        </div>
+                                    </div>
+        
+                                    <div class="col-4">
+                                        <div class="form-group">
+                                            <label  for="country">Country</label><br>
+                                            <input type="text"  id="country-update" name="country" value="<%= brandDetails.country %>" countryId = "<%= brandDetails.country_id %>" placeholder="Select Country" required disabled>
+                                        </div>
+                                        <div class="form-group">
+                                            <label  for="state">State</label>
+                                            <select id="state-update" name="state" class="form-control edit-data" data-city_id = "<%= brandDetails.city_id %>" required>
+                                                <option value>Select State</option>
+                                                <% states.forEach((s) => { %>
+                                                <option value="<%= s.id %>" <%= s.id === brandDetails.state_id ? 'selected' : '' %>><%= s.name %></option>
+                                                <% }) %>
+                                            </select>
+                                        </div>
+                                        <div class="form-group">
+                                            <label  for="city">City</label>
+                                            <select id="city-update" name="city" class="form-control edit-data" required>
+                                            </select>
+                                        </div>
+                                        <div class="form-group">
+                                            <label  for="phone">Phone Number</label><br>
+                                            <input type="number" id="phone-update" name="phoneno" value="<%= brandDetails.phone %>" placeholder="Enter Phone Number" required>
+                                        </div>
+                                    </div>
+                                    <div class="col-4">                                       
+                                        <div class="form-group">
+                                            <label  for="email">E-mail Id</label><br>
+                                            <input type="email"  id="emailid-update" name="emailId" value="<%= brandDetails.email %>" placeholder="Enter Email-Id" required>
+                                        </div>                                      
+                                        <div class="form-group">
+                                            <label  for="gstno">GST No.</label><br>
+                                            <input type="text"  id="gst-update" name="gstin" value="<%= brandDetails.gstin %>" placeholder="Enter GST No.">
+                                        </div>
+                                        <div class="form-group">
+                                            <label  for="lat">Latitude</label><br>
+                                            <input type="number"  id="lat-update" name="lat" value="<%= brandDetails.lat %>" placeholder="Set Latitude" required disabled>
+                                        </div>                                      
+                                        <div class="form-group">
+                                            <label  for="lng">Longitude</label><br>
+                                            <input type="number"  id="lng-update" name="lng" value="<%= brandDetails.lng %>" placeholder="Set Longitude" required disabled>
+                                        </div>
+                                    </div>
+                                    <div class="col-12 text-primary text-center">
+                                        <a class="eighteen text-primary cursor-pointer" role="button" onclick="getlocation()"><i class="text-primary bi bi-geo-fill"></i>Use my current location</a>
+                                    </div><br><br>
+                                    <div class="form-group col-12" style="text-align: center;">
+                                        <button class="btn btn-info btn-round btnSelect" id="update-shop-btn">Update</button>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+               
+    </div>
+</div>
+
+<%- include("./partials/footer.html") %>
+<style>
+     a.right {
+        float: right;
+      }
+</style>
+<script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyBqhwb6YFhpSA0S2lo08eFekIftq6kQz8E"></script>
+<script type="text/javascript">
+const __KEY = 'AIzaSyBqhwb6YFhpSA0S2lo08eFekIftq6kQz8E';
+
+    function getlocation()
+    {
+        const options = {
+            enableHighAccuracy: true
+        }
+        navigator.geolocation.getCurrentPosition(successfulLookup, console.log, options)
+        
+    }
+    successfulLookup = (position) => {
+        const lat = parseFloat(position.coords.latitude);
+        const lng = parseFloat(position.coords.longitude);
+        const latlong = {lat,lng};
+        $('#lat-update').val(lat)
+        $('#lng-update').val(lng)
+    }
+   SHIPPING_CHARGES.init({
+        _csrf: '<%= _csrf %>',
+       
+    })
+</script>

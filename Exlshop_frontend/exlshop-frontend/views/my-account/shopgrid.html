@@ -1,0 +1,155 @@
+<%- include('../partials/header.html') %>
+<!DOCTYPE html>
+<html>
+<head>
+<meta name="viewport" content="width=device-width, initial-scale=1">
+        <style>
+            * {box-sizing: border-box}
+
+            /* Set height of body and the document to 100% */
+            body, html {
+            height: 100%;
+            margin: 0;
+
+            }
+
+            /* Style tab links */
+            .tablink {
+            background-color: #555;
+            color: white;
+            float: left;
+            border: none;
+            outline: none;
+            cursor: pointer;
+            padding: 14px 16px;
+            font-size: 17px;
+            width: 25%;
+            }
+
+            .tablink:hover {
+            background-color: #777;
+            }
+
+            /* Style the tab content (and add height:100% for full page content) */
+            .tabcontent {
+            color: white;
+            display: none;
+            padding: 100px 20px;
+            height: 100%;
+            }
+            #add-to-wishlist-shop
+            {
+                text-align: right;
+                font-size: 20px;
+            }
+            .heart
+            {
+                font-size: 30px;
+                color: #555;
+            }
+            .products-right
+            {
+                width: 82%;
+                margin-left: 27px;
+            }
+            .nisix
+            {
+                width: 20%;
+            }
+            .innersearch
+            {
+                position: absolute;
+                left: 86%;
+                top: 26%;
+            }
+        </style>
+</head>
+    <body>
+       <div class="container-fluid mt-3">
+        <div class="d-flex">
+            <div class="nisix">
+                <div class="a allcontainer ">
+                    <h2 class="py-1 ps-3 pt-2">Filters</h2>
+                    <hr>
+                    <i class="icon-control fa fa-chevron-up text-dark pe-3" id="showhidemainlist"></i>
+                    <h6 class="title ps-3">PRODUCTS</h6>
+                    <div id="collapse_1" class="ps-3">
+                    <div class="input-group py-2">
+                        <input type="text" class="form-control" placeholder="Search Product.." id="search-product"><i class="fa fa-search" id="innersearch"></i>
+                        
+                      </div>
+                     
+                     
+                    </div> 
+                    <hr>
+                    <i class="icon-control fa fa-chevron-up text-dark pe-3" id="showhidemainlist1"></i>
+                    <h6 class="ps-3 mb-2">CUSTOMER RATINGS</h6>
+                    <div class="ps-3" id="ratingcollapse" >
+                    <input type="checkbox" id="onestar" name="onestar" value="brand-1star">
+                    <label for="1star" class="ps-2">1<i class="bi bi-star-fill  pe-1"></i> & above</label><br>
+                    <input type="checkbox" id="twostar" name="twostar" value="brand-2star">
+                    <label for="2star" class="ps-2">2<i class="bi bi-star-fill pe-1"></i> & above</label><br>
+                    <input type="checkbox" id="threestar" name="threestar" value="brand-3star">
+                    <label for="3star" class="ps-2">3<i class="bi bi-star-fill pe-1"></i> & above</label><br>
+                    <input type="checkbox" id="fourstar" name="fourstar" value="brand-4star">
+                    <label for="4star" class="ps-2">4<i class="bi bi-star-fill pe-1"></i> & above</label><br>
+                    </form>
+                </div>    <!--end of rating-->
+                <hr>
+                <i class="icon-control fa fa-chevron-up text-dark pe-3" id="showhidemainlist2"></i>
+                <h6 class="ps-3 mb-2">DISTANCE</h6>
+                <div class="ps-3" id="collapse_3" >
+                    <input type="checkbox"><label class="ps-2">Less than 1 km</label><br>
+                    <input type="checkbox"><label class="ps-2">Less than 3 km</label><br>
+                    <input type="checkbox"><label class="ps-2">Less than 5 km</label><br>
+                    <input type="checkbox"><label class="ps-2">Less than 10 km</label><br>
+                </div>
+                <hr>
+                <i class="icon-control fa fa-chevron-up text-dark pe-3" id="showhidemainlist3"></i>
+                <h6 class="ps-3 mb-2">TIMING</h6>
+                <div class="ps-3" id="collapsediscount" >
+                    <input type="checkbox"><label class="ps-2">open now</label><br>
+                    <input type="checkbox"><label class="ps-2">open till 6p.m.</label><br>
+                    <input type="checkbox"><label class="ps-2">open till 10p.m.</label><br>
+                    <input type="checkbox"><label class="ps-2">open till midnight</label><br>
+                    <input type="checkbox"><label class="ps-2">open 24/7</label><br>
+                    
+ 
+                </div>   
+                <hr>
+              
+                </div>
+        </div>
+       
+            <main class=" products-right allcontainer"> 
+
+               
+                
+              <h2 class="py-3 ps-3">SHOPS</h2>
+              
+
+
+              <span class="text-start d-inline ps-3">Sort By:</span>
+              <span>Popularity</span>
+              <span class="ps-3">Price-Low to High</span>
+              <span class="ps-3">Price-High to Low</span>
+              <span class="ps-3">Discount</span>
+              <hr>
+             <main class="d-flex"></main>
+            
+        </div>
+    
+</div>
+
+
+
+
+
+     
+    
+    </body>
+</html> 
+
+
+
+<%- include('../partials/footer.html') %>

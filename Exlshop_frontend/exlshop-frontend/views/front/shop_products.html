@@ -1,0 +1,1156 @@
+
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="UTF-8">
+        <meta http-equiv="X-UA-Compatible" content="IE=edge">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <title><%= title %></title>
+    </head>
+    <style>
+
+        .filter {
+
+        margin-top: 8px;
+        }
+
+        .filter-div {
+        width: 103%;
+        }
+
+        .listitemsofmainmain
+        {
+            list-style-type: none;
+            padding-left: 10px;
+        }
+
+        /* .listitemsofmain1>a:hover
+        {
+        font-weight: bolder;
+        background-color: #ccc;
+        } */
+        .inside {
+            width: 95%;
+        }
+        #m-list li
+        {
+            list-style-type: none;
+            padding-left: 30px;
+        }
+        .insideproduct
+        {
+            border: 1px solid #ccc;
+             width: 96%;
+            padding: 0px
+        }
+        /* .card
+        {
+            border: 1px solid #ccc;
+        } */
+
+        #innersearch
+        {
+            position: absolute;
+             right: 4%;
+             top: 34%;
+        }
+        .red{
+            font-weight: bolder;
+            background-color: #ccc;
+        }
+        /* #slug
+        {
+            font-size: 22px;
+        } */
+        #shop
+        {
+            font-size: 24px;
+        }
+        #g
+        {
+            font-size: 15px;
+        }
+        #bookmark
+        {
+            color: #FFB84E;
+            font-size: 24px;
+            cursor: pointer;
+        }
+        span {
+            cursor: pointer;
+        }
+
+        .slider {
+            height: 5px;
+            width: 95%;
+            position: relative;
+            background: #ddd;
+            border-radius: 5px;
+        }
+
+        .slider .progress {
+            height: 100%;
+            width: auto;
+            left: 0%;
+            right: 0%;
+            margin-top: -8px;
+            ;
+            position: absolute;
+            border-radius: 5px;
+            background: #17A2B8;
+        }
+
+        .range-input {
+            position: relative;
+        }
+
+        .range-input input {
+            position: absolute;
+            width: 95%;
+            height: 5px;
+            top: -5px;
+            background: none;
+            pointer-events: none;
+            -webkit-appearance: none;
+            -moz-appearance: none;
+        }
+
+        input[type="range"]::-webkit-slider-thumb {
+            height: 17px;
+            width: 17px;
+            border-radius: 50%;
+            background: #17A2B8;
+            pointer-events: auto;
+            -webkit-appearance: none;
+            margin-top: -2px;
+            box-shadow: 0 0 6px rgba(0, 0, 0, 0.05);
+        }
+
+        input[type="range"]::-moz-range-thumb {
+            height: 17px;
+            width: 17px;
+            border: none;
+            border-radius: 50%;
+            background: #17A2B8;
+            pointer-events: auto;
+            -moz-appearance: none;
+            box-shadow: 0 0 6px rgba(0, 0, 0, 0.05);
+        }
+
+        #ratingcollapse i {
+            font-size: 13px;
+        }
+
+        .bread {
+            margin-left: 23%;
+            margin-bottom: 0px;
+        }
+
+
+        .breadspace {
+            --bs-breadcrumb-divider: '>';
+        }
+
+
+        ::selection {
+            color: #fff;
+            background: #17A2B8;
+        }
+        #shopname, #myrate
+{
+    display:inline-flex;
+}
+
+.tt {
+  position: relative;
+  display: inline-block;
+ 
+}
+
+ .ttext {
+  visibility: hidden;
+  width: 150px;
+  background-color: rgb(94, 91, 91);
+  color: rgb(248, 241, 241);
+  text-align: center;
+  border-radius: 6px;
+  padding: 2px 0;
+  font-size: 13px;
+  font-weight: 500;
+  /* Position the tooltip */
+  position: absolute;
+  z-index: 1;
+  top: -5px;
+  right: 105%;
+}
+
+.tt:hover .ttext {
+  visibility: visible;
+}
+.tablink:hover i{
+  color: rgb(8, 8, 8);
+}
+.ttt {
+  position: relative;
+  display: inline-block;
+ 
+}
+
+ .tttext {
+  visibility: hidden;
+  width: 80px;
+  background-color: rgb(32, 31, 31);
+  color: rgb(245, 242, 242);
+  text-align: center;
+  border-radius: 6px;
+  padding: 2px 0;
+  font-size: 13px;
+  font-weight: 500;
+  /* Position the tooltip */
+  position: absolute;
+  z-index: 1;
+  bottom: 100%;
+  left: 60%;
+  margin-left: -40px;
+}
+
+.ttt:hover .tttext {
+  visibility: visible;
+}
+#list{display: none;}
+
+.panelContainer {
+	clear: left;
+	margin-bottom: 25px;
+	/* border: 2px solid green;	 */
+	background-color: #fff;
+	padding: 10px;
+	
+}
+
+.tabs {
+	margin-left: 25px;
+	list-style: none;	
+}
+
+.tabs li {
+   float: left;
+    text-align: center;
+   
+}
+
+.tabs a {
+	display: block;
+	text-decoration: none;
+	color: rgb(12, 12, 12);
+        font-weight: bold;
+        border-radius: 3px;
+	padding:  8px;
+	margin-right: 4px;
+    padding-left: 10px;
+    padding-right: 10px;
+	/* border: 2px solid green; */
+    margin-bottom: -2px;  
+}
+
+.tabs a:not(.active) {
+    padding: 6px;
+	border: 2px solid rgb(30, 31, 30);
+    
+}
+.tabs a:hover{
+    color: rgb(26, 25, 25);
+}
+
+.tabs a.active {
+	background-color: rgb(61, 60, 60);
+	color: #fff;
+        font-weight: bold;
+}
+.table {
+  font-family: arial, sans-serif;
+  border-collapse: collapse;
+  width: 90%;
+}
+
+.table td {
+  border: 1px solid #dddddd;
+  text-align: left;
+  padding: 8px;
+}
+.table th{
+    border: 1px solid #dddddd;
+  text-align: left;
+  padding: 8px;
+}
+.card {
+  box-shadow: 0 4px 8px 0 rgba(0,0,0,0.2);
+  transition: 0.3s;
+  width: fit-content;
+  max-width: 550px;
+}
+
+.card:hover {
+  box-shadow: 0 8px 16px 0 rgba(0,0,0,0.2);
+}
+
+.container {
+  padding: 20px 16px ;
+}
+</style>
+    <%- include('../partials/header.html') %>
+    <body>
+        <input type="hidden" id="brand-id" value="<%= bId %>">
+        <input type="hidden" id="brand-location-id" value="<%= lId %>">
+        <% if(session.user) {%>
+        <input type="hidden" id="user-id" value="<%= session.user.id%>">
+        <% } %>
+       
+    <div class="container mt-3">
+        <div class="row">
+           
+            <div class="col-md-3">
+                <div class="a allcontainer " id="filters">
+                    <h2 class="pt-3 ps-3">Filters</h2>
+                        <hr>      
+                        <i class="icon-control fa fa-chevron-up text-dark pe-3" id="showhidemainlist"></i>
+                        <h6 class="title ps-3">PRODUCTS</h6>
+                        <div id="collapse_1" class="ps-3">
+                            <div class="input-group py-2">
+                                <input type="text" class="form-control" placeholder="Search Product.." id="search-product"><i class="fa fa-search" id="innersearch"></i>                   
+                            </div>
+                            <ul class="list-menu">
+                                <% shop_categories.forEach((s)=>{ %>
+                                <ul id="cat_list" style="list-style: none;">
+                                   <p> <input type="checkbox" class="catfilter" id="cat" value=" <%= s.id  %>"  ><label style="cursor: pointer "class="category text-dark ps-2" value="<%= s.id  %>">
+                                   <%= s.name %>
+                                    </label></p>
+                                </ul>
+                                <% }) %>
+                            </ul>
+                        </div>
+
+                        <hr>
+                        <i class="icon-control fa fa-chevron-up text-dark pe-3" id="showhidemainlist1"></i>
+                        <h6 class="ps-3 mb-2">CUSTOMER RATINGS</h6>
+                        <div class="ps-3" id="ratingcollapse" >
+                            <input type="checkbox" id="onestar" class="starrating"  value="1">
+                            <label for="1star" class="starrating ps-2">1<i class="bi bi-star-fill  pe-1"></i> & above</label><br>
+                            <input type="checkbox" id="twostar" class="starrating"  value="2">
+                            <label for="2star" class="starrating ps-2">2<i class="bi bi-star-fill pe-1"></i> & above</label><br>
+                            <input type="checkbox" id="threestar" class="starrating"  value="3">
+                            <label for="3star" class="starrating ps-2">3<i class="bi bi-star-fill pe-1"></i> & above</label><br>
+                            <input type="checkbox" id="fourstar" class="starrating"  value="4">
+                            <label for="4star" class="starrating ps-2">4<i class="bi bi-star-fill pe-1"></i> & above</label><br>
+                            </form>
+                        </div> 
+
+                            <hr>
+                            <i class="icon-control fa fa-chevron-up pe-3" id="showhidemainlist2"></i>
+                            <h6 class="ps-3 mb-2">PRICE RANGE </h6>
+                            <div id="collapse_3" class="ps-3">
+                                <div class="slider pt-2" style="width: 95%;">
+                                    <div class="progress"></div>
+                                </div>
+                                <div class="range-input">
+                                    <input type="range" class="range-min" min="0" max="50000" value="0" step="100">
+                                    <input type="range" class="range-max" min="0" max="50000" value="50000" step="100">
+                                </div>
+                                <!-- <input type="range" class="custom-range" min="0" max="100" name=""> -->
+                                <div class="form-row pt-2" style="margin-right: -30px;">
+                                    <div class="form-group col-md-6">
+                                        <label>Min</label>
+                                        <input class="form-control input-min" value="0" type="number" id="min-price">
+                                    </div>
+                                    <div class="form-group text-right col-md-5">
+                                        <label class="me-3">Max</label>
+                                        <input class="form-control" value="50000" type="number" id="max-price">
+                                    </div>
+                                </div>
+                                <button class="btn btn-block btn-primary" style="width:50%; margin-left: 60px;" id="apply-price-range-btn">Apply</button>
+                            </div>
+                   
+                            <!--offers-->
+                            <hr>
+                            <i class="icon-control fa fa-chevron-up text-dark pe-3" id="showhidemainlist3"></i>
+                            <h6 class="ps-3 mb-2">OFFERS</h6>
+                            <div class="ps-3" id="collapseoffers" >
+                                <input type="checkbox"><label class="myoffers ps-2">Buy More,Save More</label><br>
+                                <input type="checkbox"><label class="myoffers ps-2">Special Price</label>
+            
+                            </div>   
+                
+                            <hr>
+                            <i class="icon-control fa fa-chevron-down text-dark pe-3" id="showhidemainlist4"></i>
+                            <h6 class="ps-3 mb-2">DISCOUNT</h6>
+                            <div class="ps-3" id="collapsediscount">
+                                <input type="checkbox" class="percentage" value="50">
+                                <label class="ps-2">50% or more</label><br>
+                                <input type="checkbox" class="percentage" value="40"><label class="ps-2">40% or more</label><br>
+                                <input type="checkbox" class="percentage" value="30"><label class="ps-2">30% or more</label><br>
+                                <input type="checkbox" class="percentage" value="20"><label class="ps-2">20% or more</label><br>
+                                <input type="checkbox" class="percentage" value="10"><label class="ps-2">10% or more</label><br>
+                                <input type="checkbox" class="percentage" value="9"><label class="ps-2">10% or below</label><br>
+            
+                            </div>   
+                            <hr>
+            
+                </div>
+            </div>
+            
+            <div class="col-9 p-0 bg-white">
+                <div class="inside">
+                    <section class="section-name  padding-y-sm">
+                        <div class="container-fluid p-0 m-0" >
+                            <div class="d-flex justify-content-between">
+                                <div>
+                                    <nav class="breadspace" aria-label="breadcrumb">
+                                        <ol class="breadcrumb mb-0 py-2 ms-3">
+                                            <li class="breadcrumb-item">
+                                                <a href="/" class="twelve breadclr">Home</a>
+                                            </li>
+                                            <li class="breadcrumb-item" aria-current="page"><a class="twelve breadclr" href="/search_shop" ><%= brand.name %></a></li>
+                                        </ol>
+                                    </nav>
+                                    <div style="display: flex;">
+                                        <span class="ps-3 fw-bold" id="shop"><i class="bi bi-shop-window pe-3"></i><%= brand.name %></span> <br>
+                                        <% if(AverageRate[0].avg_rate == null){ %>
+                                            <span class="myrate green" style="margin-left: 10px; margin-top: 10px; font-size: 13px; height: 16px;">0<i class="bi bi-star-fill ps-1 ten"></i></span>
+                                        <% }else{ %>
+                                        <span class="myrate green"  style="margin-left: 10px; margin-top: 10px;font-size: 13px; height: 16px;"><%= AverageRate[0].avg_rate%><i class="bi bi-star-fill ps-1 ten"></i></span>
+                                        <% } %>
+                                    </div>
+                                  
+                                    <span class="ps-4"><i class="fa fa-location-arrow" aria-hidden="true"></i> <%=brandLocations[0].address_line_1 %>, <%=brandLocations[0].address_line_2 %>, <%=brandLocations[0].city_name %>, <%=brandLocations[0].state_name %>, <%=brandLocations[0].country_name %>, <%=brandLocations[0].zip %></span>
+                                    
+                                </div>
+                            <div>
+                                <% if(session.user){ %>
+                                <% if(rate.length) { %>
+                                    <span class="tt" style="float: right; margin-right: 10px;">
+                                    <i class="fa fa-bookmark" id="bookmark" aria-hidden="true" ></i>
+                                    <span class="ttext">Remove from wishlst</span></span>
+                                <% } %>
+
+                                <% if(!rate.length) { %>
+                                    <span class="tt" style="float: right; margin-right: 10px;">
+                                    <i class="bi bi-bookmark" id="bookmark" ></i>
+                                    <span class="ttext">Add to wishlist</span></span>
+                                    <% } %>
+                                    <% } %>
+
+                                <div >
+                                    <% if(session.user){ %>
+                                    <% for(var i=0; i < shopOrderLocation.length; i++){ %>
+                                        <% if(shopOrderLocation[i].location_id == lId){ %>
+                                    <form action="/shop_rate_review" method="post">
+                                        <input type="hidden" name="_csrf" value="<%= _csrf %>" />
+                                        <input value="<%= lId %>" type="hidden" name="brand_location_id" id="brand_location_id">
+                                        <input value="<%= bId %>" type="hidden" name="brand_id" id="brand_id">
+                                        <button class="btn btn-primary my-3 ms-4" id="rate-review-shop">Rate & Review</button>  
+                                    </form>
+                                    <% } %>
+                                    <% } %>
+                                    <% } %>
+                                </div>
+
+                            </div>
+                        </div>
+                       
+                        <div>
+                            <ul class="tabs">
+                                <li><a href="#panel1" class="mt-4">Shop Products</a></li>
+                                <li class="ms-2"><a href="#panel2" class="mt-4" style="padding-left: 10px; padding-right: 10px;" >Shop Review</a></li>
+                            </ul>
+
+                            <div class="panelContainer">
+                                <div id="panel1" class="panel">
+                                        <div class="mx-auto insideproduct" style="padding-top: 10px;">
+                                            <span class="text-start d-inline ps-3">Sort By</span>
+                                            <span class="sortfilter ps-3" value="1" id="sort1">Popularity</span>
+                                            <span class="sortfilter ps-3" value="2" id="sort2">Price-Low to High</span>
+                                            <span class="sortfilter ps-3" value="3" id="sort3">Price-High to Low</span>
+                                            <span class="sortfilter ps-3" value="4" id="sort4">Discount</span>
+                                            <span class="tablink ttt" style="margin-left: 190px; color: rgb(108, 108, 110); font-size: 22px;" onclick="openPage('grid', this, 'red')" id="defaultOpen"><i class="fa fa-th"></i><span class="tttext">Grid view</span></span>
+                                            <span class="tablink ttt" style="margin-left: 10px; color: rgb(108, 108, 110); font-size: 22px;" onclick="openPage('list', this, 'yellow')" ><i class="fa fa-th-list"></i><span class="tttext">List view</span></span>
+                                            </main>
+                                            <hr>
+                                            <main id="product-list"></main>
+                                        </div>    
+                                </div>   
+
+                                
+                                <div id="panel2" class="panel ms-3">
+                                    <hr>
+                                    <% if(review.length) {%>
+                                    <h5 class="ps-3">Shop All Reviews : </h5>
+
+                                    <% for(var i = 0; i < review.length; i++){ %>
+                                        <div class="mt-3 card">
+                                            <div class="container" >
+                                              <h4><%= review[i].shop_review %></h4> 
+                                              <div style="float: right;">
+                                              <p class=" mt-2 fw-bold" style="color: #2c2c2c;"><i class="fa fa-user"></i> <%= review[i].username %></p>
+                                              <p class="" style="margin-top: -18px;  font-size: 13px;">- <%= review[i].date %></p>
+                                            </div>
+                                            </div> 
+                                        </div>
+                                        <% } %>
+                                        <a  class="btn btn-dark show-more-review" style="float: right; margin-top: 10px; margin-right: 200px; color: rgb(78, 177, 243); cursor: pointer;">Show more</a>
+                                    <% } %> 
+
+                                    <% if(!review.length) {%>
+                                    <p class="mt-5" style="text-align: center; font-size: 22px; font-weight: bold;">No reviews</p>
+                                    <% } %> 
+                                </div>
+                            </div>
+                        </div>
+                                       
+                        </div>
+                    </div>
+                    </section>
+                </div>
+            </div>
+        
+        </div>
+    </div>
+</div>
+</body>
+    <%- include('../partials/footer.html') %>
+</html>
+<script type="text/javascript">
+    
+         function openPage(pageName,elmnt) {
+  var i, tabcontent, tablinks;
+  tabcontent = document.getElementsByClassName("tabcontent");
+  for (i = 0; i < tabcontent.length; i++) {
+    tabcontent[i].style.display = "none";
+  }
+  tablinks = document.getElementsByClassName("tablink");
+  for (i = 0; i < tablinks.length; i++) {
+    tablinks[i].style.backgroundColor = "";
+  }
+  document.getElementById(pageName).style.display = "block";
+//   elmnt.style.backgroundColor = color;
+}
+
+$("#panel2").find(".card").hide().slice(0, 5).show().addClass("aaa")
+
+$(".show-more-review").click(function (){
+    var card = $(".aaa").length
+    $("#panel2").find(".card").hide().slice(0, (card + 2)).show().addClass("aaa")
+})
+
+
+
+    $("#listsix").hide();
+    var track1 = localStorage.getItem('track1')
+            var track2 = localStorage.getItem("track2")
+            var track3 = localStorage.getItem("track3")
+            $('#bread1').text(track1)
+            $('#bread2').text(track2)
+            $('#bread3').text(track3)
+
+            //Price range
+            const rangeInput = document.querySelectorAll(".range-input input"),
+                priceInput = document.querySelectorAll(".form-row input"),
+                range = document.querySelector(".slider .progress");               
+                    let priceGap = 100;
+                    priceInput.forEach(input => {
+                        input.addEventListener("input", e => {
+                            let minPrice = parseInt(priceInput[0].value),
+                                maxPrice = parseInt(priceInput[1].value);
+                            if ((maxPrice - minPrice >= priceGap) && maxPrice <= rangeInput[1].max) {
+                                if (e.target.className === "form-control input-min") {
+                                    rangeInput[0].value = minPrice;
+                                    range.style.left = ((minPrice / rangeInput[0].max) * 100) + "%";
+                                } else {
+                                    rangeInput[1].value = maxPrice;
+                                    range.style.right = 100 - (maxPrice / rangeInput[1].max) * 100 + "%";
+                                }
+                            }
+                        });
+                    });
+
+
+                        rangeInput.forEach(input => {
+                            input.addEventListener("input", e => {
+                                let minVal = parseInt(rangeInput[0].value),
+                                    maxVal = parseInt(rangeInput[1].value);
+                                if ((maxVal - minVal) < priceGap) {
+                                    if (e.target.className === "range-min") {
+                                        rangeInput[0].value = maxVal - priceGap
+                                    } else {
+                                        rangeInput[1].value = minVal + priceGap;
+                                    }
+                                } else {
+                                    priceInput[0].value = minVal;
+                                    priceInput[1].value = maxVal;
+                                    range.style.left = ((minVal / rangeInput[0].max) * 100) + "%";
+                                    range.style.right = 100 - (maxVal / rangeInput[1].max) * 100 + "%";
+                                }
+                                
+                            });
+                        });
+
+
+   
+
+    let plusarray= document.getElementsByClassName("plusof");
+        for(var i=0; i<plusarray.length; i++)
+    {
+       
+        $(plusarray[i]).hide();
+    }
+
+
+    fetch('/api/v1/shop/gethomecategories', {  
+     method: "POST",
+     headers: {  'Content-Type': 'application/json','Accept':'application/json' },
+     body: JSON.stringify({
+      
+        parent_id: 1
+        
+    })
+    
+  })  
+  .then(res => res.json())
+  .then(data => {
+  
+     let grocerylist="";
+     data.products.map((e,index)=>{
+      
+      grocerylist+=`<li class="listitemsofmainmain" nm="${e.name}" data-innerid="${e.id}"><i class="bi bi-plus"></i><a class="sixteen">${e.name}</a></li><div id="m-list"></div>`;         
+     });
+     
+     document.getElementsByClassName("list-menu").innerHTML=grocerylist;
+     var flag=0       
+        if(flag==0)
+        {
+            var text1= 5; 
+            my1=$("#m-list");
+            getData1(text1,my1);
+        }
+
+     $('.listitemsofmainmain').click(function(){
+        $(this).css("font-weight","bolder");
+        $(this).prevAll().css("font-weight","normal");
+        $(this).nextAll().css("font-weight","normal");
+        $(this).prevAll("#m-list").empty();
+        $(this).nextAll("#m-list").empty();
+        // var text1 = $(this).attr(5);
+        
+        var text1 = $(this).attr("data-innerid");
+      
+        let my1=$(this).next("#m-list");       
+        getData1(text1,my1);
+        my1.show();  
+        
+    });
+     
+
+      
+    })
+
+        .catch(error => console.log(error))
+
+            const result1 = document.querySelector('#cat_list');
+            const getData1 = function(pqr,mydiv) {
+            flag=1;
+          
+            mydiv.show(); 
+      
+      
+      fetch('/api/v1/shop/gethomecategories', {  
+         // Adding method type
+         method: "POST",
+         // Adding body or contents to send
+         headers: {  'Content-Type': 'application/json','Accept':'application/json' },
+         body: JSON.stringify({
+          
+            parent_id: pqr
+            
+        })
+        
+      })
+
+
+      .then(res => res.json())
+      .then(data => {
+     
+         let grocerylist1 = "";
+         data.products.map((e1,index)=>{
+          
+           if(index==0){
+                    let r = e1.name;
+                    document.getElementById("slug").innerHTML = r;                   
+           }
+          grocerylist1+=`<li class="listitemsofmain1" id="subsublist" data-nm="${e1.name}" data-s="${e1.id}" data-index="${index}" data-slug="${e1.slug}"><a class="text-dark">${e1.name}</a></li>`;
+           
+         });
+         
+        
+         var p=$(mydiv).empty().append(grocerylist1);
+         let vre=document.getElementsByClassName("listitemsofmain1");          
+                let t=vre[0];
+                $(t).addClass("red");
+              
+                        $('.listitemsofmain1').click(function(){
+                        let vre=document.getElementsByClassName("listitemsofmain1");
+                        
+                        let tp=vre[0];
+                        $(this).addClass("red");
+                        $(this).prevAll().removeClass("red");
+                        $(this).nextAll().removeClass("red");
+                        //    $(this).addClass("red");
+                        //    $(tp).removeClass("red");
+                        let t = $(this).attr("data-nm");
+                        document.getElementById("slug").innerHTML = t;
+                    
+                       
+                        changedata($(this));
+                    });
+       
+        
+         });
+         function changedata(val)
+        {
+          
+            
+            let t = $(val).attr("data-nm");
+            document.getElementById("slug").innerHTML = t;  
+        }
+    
+        }
+
+       
+        $("#showhidemainlist1").click(function () {
+                var collapsablediv = document.getElementById("ratingcollapse");
+                if (collapsablediv.style.display == "none") {
+                    $("#ratingcollapse").show();
+                    $("#showhidemainlist1").toggleClass('fa fa-chevron-up fa fa-chevron-down')
+
+                }
+                else {
+                    $("#ratingcollapse").hide();
+                    $("#showhidemainlist1").toggleClass('fa fa-chevron-down fa fa-chevron-up ')
+                }
+            });
+
+
+            $("#showhidemainlist").click(function () {
+                var collapsablediv = document.getElementById("collapse_1");
+                if (collapsablediv.style.display == "none") {
+                    $("#collapse_1").show();
+                    $("#showhidemainlist").toggleClass('fa fa-chevron-up fa fa-chevron-down')
+
+                }
+                else {
+                    $("#collapse_1").hide();
+                    $("#showhidemainlist").toggleClass('fa fa-chevron-down fa fa-chevron-up ')
+                }
+            });
+
+            //PRICE RANGE
+            $("#showhidemainlist2").click(function () {
+                var collapsablediv = document.getElementById("collapse_3");
+                if (collapsablediv.style.display == "none") {
+                    $("#collapse_3").show();
+                    $("#showhidemainlist2").toggleClass('fa fa-chevron-up fa fa-chevron-down')
+                }
+                else {
+                    $("#collapse_3").hide();
+                    $("#showhidemainlist2").toggleClass('fa fa-chevron-down fa fa-chevron-up ')
+                }
+            });
+
+            //offers
+            $("#showhidemainlist3").click(function () {
+
+                var collapsablediv = document.getElementById("collapseoffers");
+                if (collapsablediv.style.display == "none") {
+                    $("#collapseoffers").show();
+                    $("#showhidemainlist3").toggleClass('fa fa-chevron-up fa fa-chevron-down')
+
+                }
+                else {
+                    $("#collapseoffers").hide();
+                    $("#showhidemainlist3").toggleClass('fa fa-chevron-down fa fa-chevron-up ')
+                }
+
+                
+            });
+            $("#collapsediscount").hide();
+            $("#showhidemainlist4").click(function () {
+
+                var collapsablediv = document.getElementById("collapsediscount");
+                if (collapsablediv.style.display == "none") {
+                    $("#collapsediscount").show();
+                    $("#showhidemainlist4").toggleClass('fa fa-chevron-up fa fa-chevron-down')
+                }
+                else {
+                    $("#collapsediscount").hide();
+                    $("#showhidemainlist4").toggleClass('fa fa-chevron-down fa fa-chevron-up ')
+                }
+
+            });
+
+            var valueforsort;
+           
+                $("#sort1").click(function(){
+                    valueforsort= $("#sort1").attr("value");
+                    $("#sort1"). css({"color": "green","font-weight":"bold"});
+                    $("#sort2"). css({"color": "black","font-weight":"normal"});
+                    $("#sort3"). css({"color": "black","font-weight":"normal"});
+                    $("#sort4"). css({"color": "black","font-weight":"normal"});
+                    getProducts()
+                    // return valueforsort
+                });         
+                $("#sort2").click(function(){
+                    valueforsort= $("#sort2").attr("value");
+                       $("#sort2"). css({"color": "green","font-weight":"bold"}); 
+                       $("#sort1"). css({"color": "black","font-weight":"normal"});
+                       $("#sort3"). css({"color": "black","font-weight":"normal"});
+                       $("#sort4"). css({"color": "black","font-weight":"normal"});
+                       getProducts()
+                });
+                $("#sort3").click(function(){
+                    valueforsort= $("#sort3").attr("value");
+                    $("#sort3"). css({"color": "green","font-weight":"bold"});
+                    $("#sort1"). css({"color": "black","font-weight":"normal"});
+                    $("#sort2"). css({"color": "black","font-weight":"normal"});
+                    $("#sort4"). css({"color": "black","font-weight":"normal"});
+                    getProducts()
+                });
+                $("#sort4").click(function(){
+                    valueforsort= $("#sort4").attr("value");
+                    $("#sort4"). css({"color": "green","font-weight":"bold"});
+                    $("#sort2"). css({"color": "black","font-weight":"normal"});
+                    $("#sort3"). css({"color": "black","font-weight":"normal"});
+                    $("#sort1"). css({"color": "black","font-weight":"normal"});
+                    getProducts()
+                });
+        
+
+
+//sort by filter
+function getProducts() {
+              
+           
+                  let categoryfilter = document.getElementsByClassName("catfilter");
+                  var j = 0;
+                  var a = [];
+                  var catvalarray = [];
+                  var k = 0;
+                  for (var i = 0; i < categoryfilter.length; i++) {
+
+                      if ($(categoryfilter[i]).is(":checked")) {
+                          a[j] = categoryfilter[i];
+                          catvalarray[k] = a[j].defaultValue;
+                          j++;
+                          k++;
+                      }
+
+                  }
+
+                  let offerfilter = document.getElementsByClassName("myoffers");
+                  var j = 0;
+                  var a = [];
+                  var offervalarray = [];
+                  var k = 0;
+                  for (var i = 0; i < offerfilter.length; i++) {
+
+                      if ($(offerfilter[i]).is(":checked")) {
+                          a[j] = offerfilter[i];
+                          offervalarray[k] = a[j].defaultValue;
+                          j++;
+                          k++;
+                      }
+
+                  }
+                 
+
+                  var percentfilter = document.getElementsByClassName("percentage");
+                  var j = 0;
+                  var a = [];
+                  var percentagevalarray = [];
+                  var k = 0;
+                  for (var i = 0; i < percentfilter.length; i++) {
+
+                      if ($(percentfilter[i]).is(":checked")) {
+                          a[j] = percentfilter[i];
+                     
+                          percentagevalarray[k] = a[j].defaultValue;
+                          j++;
+                          k++;
+                      }
+
+                  }
+                  
+                var ratingfilter = document.getElementsByClassName("starrating");
+                var q = 0;
+                var b = [];
+                var ratingvalarray = [];
+                var r = 0;
+                  for (var p = 0; p < ratingfilter.length; p++) {
+
+                      if ($(ratingfilter[p]).is(":checked")) {
+                          b[q] = ratingfilter[p];
+                      
+                          ratingvalarray[r] = b[q].defaultValue;
+                          q++;
+                          r++;
+                      }
+
+                  }
+                  
+                  var searchValue = $('#search-product').val();
+                  var minPrice = ($('#min-price').val()) ? ($('#min-price').val()) : (null);
+                  var maxPrice = ($('#max-price').val()) ? ($('#max-price').val()) : (null);
+                  var  brand_id = parseInt($("#brand-id").val())
+                  var  brand_location_id = parseInt($("#brand-location-id").val())
+                
+                    $.ajax({                   
+                    url: '/get-shop-product',
+                    method: 'POST',
+                    data: {
+                        _csrf : '<%= _csrf %>',
+                        searchValue,
+                        minPrice,
+                        maxPrice,
+                        brand_id,
+                        brand_location_id,
+                        valueforsort,
+                        catvalarray,
+                        ratingvalarray,
+                        percentagevalarray,
+                        offervalarray
+                    },
+                    success: function (data) {
+                       
+                        $('#product-list').empty().append(data);
+                        // if (data.success === false) {
+                        //     alert('Some error occurred')
+                        // } else {
+                         
+                        //     $('#product-list').empty().append(data);
+                          
+
+                        // }
+                    }
+                });
+                              
+          }
+          
+
+
+            $(document).ready(function () {
+                getProducts()
+                $("#filters").click(function () {
+                   
+                    let categoryfilter = document.getElementsByClassName("catfilter");
+                    var j = 0;
+                    var a = [];
+                    var catvalarray = [];
+                    var k = 0;
+                    for (var i = 0; i < categoryfilter.length; i++) {
+                        if ($(categoryfilter[i]).is(":checked")) {
+                            a[j] = categoryfilter[i];
+                            catvalarray[k] = a[j].defaultValue;
+                            j++;
+                            k++;
+                        }
+                    }
+
+                    let ratingfilter = document.getElementsByClassName("starrating");
+                  
+                    var q = 0;
+                    var b = [];
+                    var ratingvalarray = [];
+                    var r = 0;
+                    for (var p = 0; p < ratingfilter.length; p++) {
+                        if ($(ratingfilter[p]).is(":checked")) {
+
+                            b[q] = ratingfilter[p];
+                            ratingvalarray[r] = b[q].defaultValue;
+                            q++;
+                            r++;
+                        }
+                    }
+                   
+                    let percentfilter = document.getElementsByClassName("percentage");
+                    var j = 0;
+                    var a = [];
+                    var percentagevalarray = [];
+                    var k = 0;
+                    for (var i = 0; i < percentfilter.length; i++) {
+                        if ($(percentfilter[i]).is(":checked")) {
+                            a[j] = percentfilter[i];
+                            percentagevalarray[k] = a[j].defaultValue;
+                            j++;
+                            k++;
+                        }
+                    }
+              
+                    getProducts();
+                    })
+                        $('#search-product').keyup(function () {
+                            var searchValue = $(this).val();
+                            if (searchValue.length > 3) {
+                                getProducts();
+                                //getProducts();
+                            }
+                        })
+                        $('#apply-price-range-btn').click(function () {
+                            const checked = document.querySelectorAll('input[type="checkbox"]:checked')
+                            selected = Array.from(checked).map(x => x.value)
+                            getProducts();
+                        })
+
+
+        $("#bookmark").click(function(){
+        var brand_id = $("#brand-id").val();
+        var brand_location_id = $("#brand-location-id").val()
+      
+        if($(this).attr('class') == 'bi bi-bookmark'){
+                              
+                              $.ajax({
+                                  url: `/addShopWishlist`,
+                                  method: "POST",
+                                  data: {
+                                      _csrf: '<%= _csrf %>',
+                                      brand_id,
+                                      brand_location_id
+                                     
+                                  },
+                                  success: function(data){
+                                      if(data.success){
+                                          
+                                          alert("shop added in wishlist")
+                                          location.reload();
+                                      }else{
+                                          alert("something went wrong")
+                                      }
+                                  }
+                              })
+
+                          }else if($(this).attr('class') == 'fa fa-bookmark'){
+                         
+                              $.ajax({
+                                  url: `/my-account/remove-shop-wishlist`,
+                                  method: "POST",
+                                  data: {
+                                      _csrf: '<%= _csrf %>',
+                                      brand_id,
+                                      brand_location_id
+                                  },
+                                  success: function(data){
+                                      if(data.success) {
+                                          alert("shop remove from wishlist")
+                                          location.reload();
+                                      }else{
+                                      alert("something went wrong")
+                                      }
+                                  }
+                              })
+                          }        
+
+    })
+
+
+    $('.tabs a').click(function(){
+  
+  $('.panel').hide();
+  $('.tabs a.active').removeClass('active');
+  $(this).addClass('active');
+  
+  var panel = $(this).attr('href');
+  $(panel).fadeIn(1000);
+  
+  return false;  // prevents link action
+ 
+});  // end click 
+
+  $('.tabs li:first a').click();
+
+            })
+
+            $(document).ready(function () {
+            $('.addbtn').click(function(){
+                    var productId = $(this).closest('figcaption').find('.addbtn').attr('pid');
+                    var variationId = $(this).closest('figcaption').find('.addbtn').attr('varid');
+                    var quantity =parseInt($(this).closest('figcaption').find('.quantityclass').val());
+                    var x=$(this);
+                    $(this).hide();
+                    let y=$(this).next("#plusdiv");
+                    $(y).show();
+                    let r=$(y).find("#button-minus");
+                 
+                    $(r).click(function(){
+                        var quantity = $(this).closest('figcaption').find('.quantityclass').val();
+                     
+                        if (quantity=="0"){
+                       
+                        $('input[name=quant]').val(parseInt(quantity)+1)
+                        $(y).hide();
+                        $(x).show();
+                        }
+                    })  
+                    addtocart(productId, variationId, quantity);
+                })
+
+                $('.button-plus').click(function () {
+                    var productId = $(this).closest('figcaption').find('.button-plus').attr('pid');
+                    var variationId = $(this).closest('figcaption').find('.button-plus').attr('vid');
+                    var existingQuantity =parseInt($(this).closest('figcaption').find('.quantityclass').val());
+                  
+                    $(this).closest('figcaption').find('.quantityclass').val(existingQuantity+1)
+                    var quantity = parseInt($(this).closest('figcaption').find('.quantityclass').val());                   
+                    updateCartQuantity(productId, variationId, quantity);
+                })
+
+                $('.button-minus').click(function () {
+                    var productId = $(this).closest('figcaption').find('.button-minus').attr('pid');
+                    var variationId = $(this).closest('figcaption').find('.button-minus').attr('vid');
+                    var existingQuantity =parseInt($(this).closest('figcaption').find('.quantityclass').val());
+              
+                    if(existingQuantity==1){
+                        $(this).closest('figcaption').find('.quantityclass').val(existingQuantity-1);
+                        removefromcart(productId,variationId)
+                    } else {
+                    $(this).closest('figcaption').find('.quantityclass').val(existingQuantity-1);
+                    var quantity = $(this).closest('figcaption').find('.quantityclass').val();
+                
+                    updateCartQuantity(productId, variationId, quantity);
+                    }
+                })
+
+            })  
+            
+            function updateCartQuantity(productId, variationId, quantity){
+                    $.ajax({
+                        url: '/shop/add-to-cart',
+                        method: 'POST',
+                        data: {
+                            _csrf : '<%= _csrf %>',
+                            productId: productId,
+                            quantity: quantity
+                        },
+                        success: function (data) {
+                            if (data.success) {
+                                //toastr.success('Cart Updated Successfully')
+                                $('figcaption').each(function(){
+                                    var quantity = $(this).find('.quantity').val();
+                                })
+                            }else{
+                                toastr.error('Sorry there was an error in updating the quantity')
+                            }
+                        }
+                    });
+                }
+
+                MY_WISHLIST.init({
+        _csrf: '<%= _csrf %>'
+        
+    })
+</script>

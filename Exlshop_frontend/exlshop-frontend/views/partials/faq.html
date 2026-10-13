@@ -1,0 +1,212 @@
+ 
+
+    <style>
+        :root{
+        --nav-bck:#F24A72;
+        --log-bck:#fff;
+        --cart-color:#fff;
+        --txt-color:#0000;
+        
+    }
+    .innerdiv
+            {
+                background-color: white;
+                height: 90vh;
+                width: 100%;
+            }
+            body
+            {
+                background-color: #F0F0F0;
+            }
+            .QandA,.order,.payment
+            {
+                padding-left: 70px;
+            }
+            .return-policy table{
+            border: 1px solid #000;
+            padding: 8px;
+            box-sizing: border-box;
+            border: collapse;
+    
+            }
+            .return-policy thead{
+                    box-sizing: border-box;
+            }
+            .return-policy tr{
+            box-sizing: border-box;
+            border-collapse: collapse;
+            font-size: 15px;
+            }
+    .cancel,.policies,.o,.p,.r
+    {
+        cursor: pointer;
+    }
+    .return-policy td{
+        box-sizing: border-box;
+        border: 1px solid #000;
+        border-collapse: collapse;
+        padding: 8px;
+        font-size: 15px;
+        font-weight: 600;
+    }
+    .return-policy h1{
+        font-size: 22px;
+    text-align: center;
+    margin-bottom: 5px;
+    font-weight: 600;
+    }
+    .policy-content{
+        line-height: 1.5;
+        margin-top: 15px;
+        font-size: 15px;
+        font-weight: 600;
+    }
+    .return-policy{
+        background-color: #F7F6F2;
+    }
+    .return-policy-wrapper{
+        background-color: #fff;
+    }
+    .faq-container
+    {
+        margin-left: auto;
+    }
+    
+    
+    
+    
+    </style> 
+    
+    <%- include('../partials/header.html') %>
+        <div class="container pt-5">
+            <div class="row">
+            <div class="col-4 faq-container">
+                <div class="innerdiv pt-5 ps-5">
+                <h3>F.A.Q.</h3>
+                <p class="pt-3 cancel">1.Cancellation</p>
+                <p class="r">2.Return policy</p>
+                <p class="o">3.Order</p>
+                <p class="p">4.Payment</p>
+                </div>
+            </div>
+            <div class="col-8 faq-container bg-white">
+                <div class="innerdiv QandA pt-5">
+                <h3>Cancellation Queries</h3>
+                <h4>Lorem ipsum dolor sit amet consectetur adipisicing elit. Animi sequi?</h4>
+                <p>Lorem, ipsum dolor sit amet consectetur adipisicing elit. Eum exercitationem culpa consequatur repellat beatae temporibus officia! Aliquid excepturi, perferendis velit.</p>
+                <h4>Lorem ipsum dolor sit amet consectetur adipisicing elit. Animi sequi?</h4>
+                <p>Lorem, ipsum dolor sit amet consectetur adipisicing elit. Eum exercitationem culpa consequatur repellat beatae temporibus officia! Aliquid excepturi, perferendis velit.</p>
+                <h4>Lorem ipsum dolor sit amet consectetur adipisicing elit. Animi sequi?</h4>
+                <p>Lorem, ipsum dolor sit amet consectetur adipisicing elit. Eum exercitationem culpa consequatur repellat beatae temporibus officia! Aliquid excepturi, perferendis velit.</p>
+                </div>
+                <div class="innerdiv order pt-5">
+                <h3>Order</h3>
+                <h4>Lorem ipsum dolor sit amet consectetur adipisicing elit. Animi sequi?</h4>
+                <p>Lorem, ipsum dolor sit amet consectetur adipisicing elit. Eum exercitationem culpa consequatur repellat beatae temporibus officia! Aliquid excepturi, perferendis velit.</p>
+                <h4>Lorem ipsum dolor sit amet consectetur adipisicing elit. Animi sequi?</h4>
+                <p>Lorem, ipsum dolor sit amet consectetur adipisicing elit. Eum exercitationem culpa consequatur repellat beatae temporibus officia! Aliquid excepturi, perferendis velit.</p>
+                <h4>Lorem ipsum dolor sit amet consectetur adipisicing elit. Animi sequi?</h4>
+                <p>Lorem, ipsum dolor sit amet consectetur adipisicing elit. Eum exercitationem culpa consequatur repellat beatae temporibus officia! Aliquid excepturi, perferendis velit.</p>
+                </div>
+                <div class="innerdiv payment pt-5">
+                <h3>Payment</h3>
+                <h4>Lorem ipsum dolor sit amet consectetur adipisicing elit. Animi sequi?</h4>
+                <p>Lorem, ipsum dolor sit amet consectetur adipisicing elit. Eum exercitationem culpa consequatur repellat beatae temporibus officia! Aliquid excepturi, perferendis velit.</p>
+                <h4>Lorem ipsum dolor sit amet consectetur adipisicing elit. Animi sequi?</h4>
+                <p>Lorem, ipsum dolor sit amet consectetur adipisicing elit. Eum exercitationem culpa consequatur repellat beatae temporibus officia! Aliquid excepturi, perferendis velit.</p>
+                <h4>Lorem ipsum dolor sit amet consectetur adipisicing elit. Animi sequi?</h4>
+                <p>Lorem, ipsum dolor sit amet consectetur adipisicing elit. Eum exercitationem culpa consequatur repellat beatae temporibus officia! Aliquid excepturi, perferendis velit.</p>
+                </div>
+        
+        
+    
+            </div>
+        </div>
+        </div> 
+    
+    
+        <%- include('../partials/footer.html') %>
+       
+    
+    
+        <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-ka7Sk0Gln4gmtz2MlQnikT1wXgYsOg+OMhuP+IlRH9sENBO0LRn5q+8nbTov4+1p" crossorigin="anonymous"></script>
+    
+        <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+        <script>
+            $('.home-1,.home-2,.home-3,.home-4,.home-5').hide();
+    
+      // var i=0;
+      for(i=1;i<=17;i++){
+        $('.subcat-'+i).hide();
+      }
+    $(document).ready(function(){
+    
+      
+    
+      $(".create-new").fadeOut();
+      $(".modal-body a").click(function(){
+        $(".create-new").fadeIn();
+      $(".part-1-login").fadeOut();
+       
+      });
+      // logged in hide-show ends
+      $('.main-nav ul li a').hover(function(){
+        var classname=$(this).attr('data-class');
+        $("."+classname).fadeIn();
+      },function(){
+        var classname=$(this).attr('data-class');
+        $("."+classname).fadeOut();
+      });
+      $('.drop-content').mouseover(function(){
+        $(this).stop();
+      });
+      $('.drop-content').mouseout(function(){
+        $(this).fadeOut();
+      });
+    
+      $('.list-item ol li a').mouseover(function(){
+        for(i=1;i<=17;i++){
+          $('.subcat-'+i).hide();
+        }
+        var div=$(this).attr('data-add-content');
+        $('.'+div).show();
+      });
+    
+      // to include
+    $(function () {
+      $("#footer").load("footer.html");
+      $("#header").load("header.html");
+    });
+    
+    });
+    
+            $(document).ready(function(){
+                // $(".QandA").fadeIn();
+                 $(".return-policy-wrapper").fadeOut();
+                 $(".order").fadeOut();
+                 $(".payment").fadeOut();
+             $(".r").click(function(){
+             $(".QandA").fadeOut();
+             $(".return-policy-wrapper").fadeIn();
+             
+          });
+           $(".cancel").click(function(){
+             $(".QandA").fadeIn();
+             $(".return-policy-wrapper").fadeOut();
+             
+          });
+           $(".o").click(function(){
+             $(".order").fadeIn();
+              $(".QandA").fadeOut();
+             $(".return-policy-wrapper").fadeOut();
+             $(".payment").fadeOut();
+          });
+           $(".p").click(function(){
+            
+              $(".order").fadeOut();
+              $(".QandA").fadeOut();
+              $(".return-policy-wrapper").fadeOut();
+              $(".payment").fadeIn();
+          });
+        });
+        </script>

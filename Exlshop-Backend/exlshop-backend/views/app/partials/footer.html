@@ -1,0 +1,214 @@
+<!-- Footer -->
+<footer class="site-footer">
+    <div class="site-footer-legal">&copy; <%= formatDate(new Date(), 'YYYY') %> <a href="#">Exlshop</a></div>
+    <div class="site-footer-right">
+        Crafted with <i class="red-600 wb wb-heart"></i> by <a href="https://tapsoft.in/">Tapsoft</a>
+    </div>
+</footer>
+<script src="/global/vendor/jquery/jquery.js"></script>
+<script src="/global/vendor/JSON5.min.js"></script>
+<script src="/global/vendor/babel-external-helpers/babel-external-helpers.js"></script>
+<script src="/global/vendor/moment/moment.min.js"></script>
+
+<script src="/global/vendor/popper-js/umd/popper.min.js"></script>
+<script src="/global/vendor/bootstrap/bootstrap.js"></script>
+<script src="/global/vendor/animsition/animsition.js"></script>
+<script src="/global/vendor/mousewheel/jquery.mousewheel.js"></script>
+<script src="/global/vendor/asscrollbar/jquery-asScrollbar.js"></script>
+<script src="/global/vendor/asscrollable/jquery-asScrollable.js"></script>
+<script src="/global/vendor/ashoverscroll/jquery-asHoverScroll.js"></script>
+<script src="/global/vendor/slidepanel/jquery-slidePanel.js"></script>
+<script src="/global/vendor/switchery/switchery.js"></script>
+
+<script src="/global/js/Component.js"></script>
+<script src="/global/js/Plugin.js"></script>
+<script src="/global/js/Base.js"></script>
+<script src="/global/js/Config.js"></script>
+
+<script src="/global/js/Plugin/switchery.js"></script>
+
+<script src="/assets/js/Section/Menubar.js"></script>
+<script src="/assets/js/Section/GridMenu.js"></script>
+<script src="/assets/js/Section/Sidebar.js"></script>
+<script src="/assets/js/Section/PageAside.js"></script>
+<script src="/assets/js/Plugin/menu.js"></script>
+
+<script src="/assets/js/Site.js"></script>
+<script src="/global/js/Plugin/slidepanel.js"></script>
+<script src="/js/page-level/init.js"></script>
+<script src="/global/vendor/bootstrap-datepicker/bootstrap-datepicker.js"></script>
+<script src="/global/js/Plugin/bootstrap-datepicker.js"></script>
+<script src="/assets/examples/js/forms/advanced.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/toastr.min.js"></script>
+
+<%- typeof scripts !== 'undefined' ? addScript(scripts) : ''; %>
+<div class="modal fade" id="change-password" aria-hidden="false" aria-labelledby="change-password" role="dialog" tabindex="-1">
+    <div class="modal-dialog modal-sm">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">×</span>
+                </button>
+                <h4 class="modal-title">Change Password</h4>
+            </div>
+            <div class="modal-body">
+                <%- csrf_html %>
+                <div class="row">
+                    <div class='col-md-12'>
+                    	<label>Existing Password</label>
+                        <input type="password" name="old_password" id="old-password" class="form-control" required>
+                    </div>
+                </div>
+                <br>
+                <div class="row">
+                    <div class='col-md-12'>
+                    	<label>New Password</label>
+                        <input type="password" name="new_password" id="new-password" class="form-control">
+                    </div>
+                </div>
+                <br>
+                <div class="row">
+                    <div class='col-md-12'>
+                    	<label>Confirm Password</label>
+                        <input type="password" name="confirm_password" id="confirm-password" class="form-control">
+                    </div>                    
+                </div>
+                <br>
+                <div class="row">
+                    <div class='col-md-12'>
+                        <button type="submit" class="btn btn-primary" id="change-password-btn"> Change Password</button>
+                    </div>                    
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+
+</body>
+<script>
+	$(document).ready(function(){
+		$('#change-password-btn').click(function(){
+			if($('#old-password').val() && $('#new-password').val() && $('#confirm-password').val()){
+				if($('#new-password').val() == $('#confirm-password').val()){
+					$.ajax({
+						url: '/app/users/change-password',
+						method: 'POST',
+						data:{
+							_csrf: '<%= _csrf %>',
+							newPassword: $('#new-password').val(),
+							oldPassword: $('#old-password').val()
+						},
+						success: function(data){
+							if(data.success && data.isMatch){
+								alert('Your Password has been Successfully Changed!');
+							}else if(!data.isMatch){
+								alert('Your existing Password does not match with our Records. Please check the existing Password and try again! ');
+							}else{
+								alert('Some Error occurred while changing your password. Please try again later.');
+							}
+							window.location.reload();
+						}
+					})
+				}else{
+					alert('New and the Confirm Passwords dont Match. Please check the same.');
+				}
+			}else{
+				alert('Please fill all the Fields!')
+			}
+		})
+        
+    })
+
+  
+
+    function myFunction(){
+        $.ajax({
+            url: '/app/orders/getstatus',
+            method: 'POST',
+            data: {
+                _csrf: '<%= _csrf %>'
+            },
+            success: function (data) {
+                if (data.success) {
+                    $(".wb-bell").next().text(data.record.length)
+                    var newData = ''
+                    if(data.record.length){
+                        data.record.forEach((r) => {
+                            if(r.order_status_id == 1) {
+                                newData += `<a class="list-group-item dropdown-item" href="javascript:void(0)" role="menuitem">
+                                        <div class="media">
+                                            <div class="pr-10">
+                                                <i class="icon wb-order bg-red-600 white icon-circle" aria-hidden="true"></i>
+                                            </div>
+                                            <div class="media-body">
+                                                <h6 class="media-heading">A new order recieved with Order Id : ${r.id}</h6>
+                                                <time class="media-meta" datetime="2018-06-12T20:50:48+08:00">${moment(r.created_date).format('DD-MM-YYYY hh:mm a')}</time>
+                                            </div>
+                                        </div>
+                                    </a>`
+                            } else {
+                                newData += `<a class="list-group-item dropdown-item" href="javascript:void(0)" role="menuitem">
+                                        <div class="media">
+                                            <div class="pr-10">
+                                                <i class="icon wb-user bg-green-600 white icon-circle" aria-hidden="true"></i>
+                                            </div>
+                                            <div class="media-body">
+                                                <h6 class="media-heading">Order Status Updated for Order Id : ${r.id}</h6>
+                                                <time class="media-meta" datetime="2018-06-11T18:29:20+08:00">${moment(r.updated_at).format('DD-MM-YYYY hh:mm a')}</time>
+                                            </div>
+                                        </div>
+                                    </a>`
+                                    // <a class="list-group-item dropdown-item" href="javascript:void(0)" role="menuitem">
+                                    //     <div class="media">
+                                    //         <div class="pr-10">
+                                    //             <i class="icon wb-chat bg-orange-600 white icon-circle" aria-hidden="true"></i>
+                                    //         </div>
+                                    //         <div class="media-body">
+                                    //             <h6 class="media-heading">Message received</h6>
+                                    //             <time class="media-meta" datetime="2018-06-10T12:34:48+08:00">3 days ago</time>
+                                    //         </div>
+                                    //     </div>
+                                    // </a>`
+                            }
+                        })
+                        newData += `<a class="list-group-item dropdown-item" href="javascript:void(0)" role="menuitem">
+                                        <div class="media">
+                                            <div class="media-body">
+                                                <h6 class="media-heading" style="margin-top: 5px;" id="clearall">Clear All</h6>
+                                            </div>
+                                        </div>
+                                    </a>`
+                        $("#notifications").append(newData)
+                    } else {
+                        newData += `<a class="list-group-item dropdown-item" href="javascript:void(0)" role="menuitem">
+                                        <div class="media">
+                                            <div class="pr-10">
+                                                <i class="icon wb-bell bg-grey-600 white icon-circle" aria-hidden="true"></i>
+                                            </div>
+                                            <div class="media-body">
+                                                <h6 class="media-heading" style="margin-top: 5px;">No New Notifications</h6>
+                                                <time class="media-meta" datetime="2018-06-11T18:29:20+08:00"></time>
+                                            </div>
+                                        </div>
+                                    </a>`
+                        $("#notifications").append(newData)
+                    }
+                }
+            }
+        });
+    }
+    $(document).on('click',"#clearall", function() {
+        $("#notifications").empty()
+        $(".wb-bell").next().text(0)
+        $("#notifications").closest('li').trigger('click')
+    })
+
+    myFunction();
+
+    setInterval(function(){
+        myFunction()
+    }, 30000)
+</script>
+</html>

@@ -1,0 +1,1165 @@
+
+
+<%- include('../partials/header.html') %>
+    <style>
+        .menu-bar {
+            text-align: center;
+            font-size: larger;
+            font-weight: bolder;
+            font-weight: 900;
+            padding-top: 0px;
+            margin-top: 0px;
+            width: 100%;
+            margin-right: 20px;
+            
+        }
+
+        .menu-bar ul {
+            display: inline-flex;
+            list-style: none;
+            /* color: #fff; */
+        }
+
+        .menu-bar ul li {
+            width: auto;
+            padding: 15px;
+            margin: 20px;
+            color: cornflowerblue;
+            /* font-size:20px; */
+
+        }
+
+        .menu-bar ul li a {
+            text-decoration: none;
+            color: #fff;
+        }
+
+        .active,
+        .menu-bar ul li:hover {
+            background: gray;
+            border-radius: 3px;
+
+        }
+
+        .sub-menu-1 {
+            font-size: 15px;
+            display: none;
+            width: 200px;
+            font-weight: bold;
+
+            /* height: 500px; */
+            /* Overflow-x:scroll; */
+            /* Overflow-y:scroll;  */
+            /* overflow:auto */
+        }
+
+        .menu-bar ul li:hover .sub-menu-1 {
+            display: block;
+            position: absolute;
+            background: rgb(9, 87, 48);
+            margin-top: 5px;
+            margin-left: -15px;
+
+        }
+
+        .menu-bar ul li:hover .sub-menu-1 ul {
+            display: block;
+            margin: 0px;
+
+        }
+
+        .menu-bar ul li:hover .sub-menu-1 ul li {
+
+            background: transparent;
+            border-radius: 0;
+            margin: 20px;
+            text-align: left;
+            height: 2px;
+            width: 300px;
+            color: rgb(1, 4, 10);
+        }
+
+        .fa-angle-right {
+            float: right;
+        }
+
+        .sub-menu-2 {
+            display: none;
+            width: 200px;
+            padding-left: 20px;
+            font-weight: bold;
+            font-size: 13px;
+            background: rgb(1, 4, 10);
+        }
+
+
+        .menu-bar ul li:hover .sub-menu-2 ul li {
+            text-align: left;
+            /* margin-left: 5px; */
+            color: rgb(225, 231, 243);
+
+        }
+
+        .hover-me:hover .sub-menu-2 {
+            position: absolute;
+            display: block;
+            margin-top: -40px;
+            margin-left: 50px;
+            background: rgb(1, 22, 12);
+
+        }
+        /*----------------------MY CSS-------------------------*/
+
+
+
+
+:root
+{
+    --bg-grey:#F0F0F0;
+    --color-green:#388E3C;
+    --nav-bck:#F24A72;
+    --log-bck:#fff;
+    --cart-color:#fff;
+    --txt-color:#0000;
+   
+}
+.log
+{
+    padding: 8px 16px;
+}
+
+
+ .slider img
+ {
+     height: 100%;
+     width: 100%;
+ }
+ .slides
+ {
+     bottom:-30%;
+     right: 45%;
+ }
+ .slides1
+ {
+      bottom:17%;
+      right: 45%;
+ }
+ .nokia
+ {
+     overflow-y: hidden;
+     overflow-x: auto;
+ }
+ .slides div,.slides1 div
+ {
+     height: 25px;
+     width: 25px;
+     border-radius: 50%;
+     background-color: white;
+ }
+
+ .slider,.slider1
+ {
+     width: 100vw;
+     height: 60vh;
+     overflow: hidden;
+ }
+ body
+ {
+     overflow-x: hidden;
+ }
+.seasonal
+{
+    height: 360px;
+    flex-wrap: nowrap !important;
+    overflow-x: hidden;
+}
+.seasonal:hover
+{
+    overflow-x: scroll;
+    scrollbar-width:thin;
+    border-radius: 5px; 
+}
+.offer
+{
+    color: var(--color-green);
+}
+
+.seasonal img
+{
+    height: 200px;
+}
+.rounded-circle
+{
+    height: 80px;
+    width: 80px;
+    background-color: blue;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+#my-list ul
+{
+    list-style-type: none;
+}
+#my-list li
+{
+    padding: 10px 10px;
+    border-bottom: 1px solid #ccc;
+}    
+
+
+#usernm
+{
+    cursor: pointer;
+}
+
+/* new */
+#my-heading {
+  
+  color: white;
+  /* padding: 20px; */
+  font-size: 20px;
+  border: none;
+
+}
+.navigation
+{
+    box-sizing: border-box;
+}
+#usernm {
+  position: relative;
+  /* display: inline-block; */
+}
+ul.no-bullets
+{
+    list-style-type: none;
+}
+.dropdown-content a {
+  color: black;
+  padding: 12px 16px;
+  text-decoration: none;
+  display: block;
+}
+#usernm:hover #my-list
+{
+    display: block;
+}
+.dropdown-content a:hover {background-color: #ddd;}
+
+#usernm:hover .dropdown-content {display: block;}
+#my-list a
+{
+    text-align: left;
+}
+:root
+{
+    --bg-grey:#F0F0F0;
+    --color-green:#388E3C;
+    --nav-bck:#F24A72;
+    --log-bck:#fff;
+    --cart-color:#fff;
+    --txt-color:#0000;
+   
+}
+
+/* styling for header starts */
+
+/* styling for navbar */
+
+
+.logo{
+    width: 87px;
+height: 50px;
+}
+
+.logo img{
+    width: 100%;
+    height: 120%;
+    
+}
+.search{
+height: 37px;
+
+}
+.navigation a:nth-child(1){
+    text-decoration: none;
+
+}
+/* .cart i,span{
+    color:var(--cart-color) ;
+} */
+.cart{
+    text-decoration: none;
+}
+
+
+.cart span{
+    color: #fff;
+font-size: 18px;
+font-weight: 600;
+}
+.navigation{
+    padding: 23px 0px;
+}
+
+
+.login button{
+    padding: 7px 29px;
+}
+
+.login-1{
+    padding:9px 94px 9px 93px;
+}
+.modal-button{
+    margin-top: 30px;
+}
+.part-1{
+    background-color: #2874f0;
+padding-top: 15px;
+padding-bottom: 15px;
+}
+#exampleModalLabel{
+    font-size: 28px;
+font-weight: 600;
+color: #fff;
+}
+.part-1 p{
+    font-size: 18px;
+line-height: 150%;
+color: #dbdbdb;
+}
+/* styling for navbar ends */
+
+/* styling for menu */
+
+.main-nav {
+    display: flex;
+     width: 100%;
+     height: 70px;
+     box-shadow: 0 8px 6px -9px black;
+     
+     
+ }
+ .main-nav ul {
+     display: flex;
+     margin: 0;
+     padding: 0;
+     width: 100%;
+     height: 100%;
+     justify-content: space-evenly;
+     align-items: center;
+     list-style: none;
+ }
+ 
+ .main-nav ul li a {
+     color: #fff;
+     text-decoration: none;
+     color: black;
+ }
+ .main-nav ul li{
+     list-style: none;
+     text-decoration: none;
+ }
+
+ .list-item,
+ .list-link {
+     width: 50%;
+     height: 110%;
+     background: #eee;
+     /* border: 1px solid #000; */
+ }
+
+ .list-item:hover{
+     box-shadow: 0.5 0.5 20px;
+ }
+ .list-item ol li a{
+    font-weight: 600;
+    font-size: 14px;
+    color: black;
+    list-style: none;
+    text-decoration: none;
+ }
+ .list-link ol li a{
+    font-weight: 600;
+    font-size: 14px;
+    color: black;
+    list-style: none;
+    text-decoration: none;
+ }
+ 
+ .home-1,.home-2,.home-3,
+ .home-4 {
+     display: flex;
+     width: 30%;
+     height: 400px;
+     position: relative;
+ }
+ 
+ .home-1 {
+ 
+     left: 12%;
+ 
+ }
+ 
+ .home-2 {
+     left: 30%;
+ }
+ 
+ .home-3 {
+     left: 50%;
+ }
+ 
+ .home-4 {
+     left: 70%;
+ }   
+ #category-2{
+    width: 107%;
+    padding-top: 9px;
+    text-align: center  ;
+}
+#category-2 img{
+   width: 100%;
+}
+
+#category-3{
+    width: 104%;
+    padding-top: 20px;
+    text-align: center;
+}
+#cateory-3 img{
+ width: 100%;
+}
+#category-3 p{
+    text-align: center;
+}
+#category-1{
+    width: 104%;
+    margin-top: 13px;
+    text-align: center;
+}
+#category-4{
+    height: 143px;
+width: 108%;
+margin-bottom: 38px;
+margin-top: 16px;
+text-align: center;
+}
+ .abc li{
+    width:100px;
+    height:100%;
+ }
+ .abc li img{
+     width:100%;
+     height:35%;
+ }
+.list-item{
+    box-shadow:5px 0px 4px 0px rgba(0,0,0,0.4);
+    position: relative;
+    z-index:3;
+}
+.main-nav{
+    height: 50%;
+}
+.login-1-a button{
+    padding: 10px 84px;
+    background: #fb641b;
+    border: none;
+    color: #fff;
+        font-weight: 600;
+        cursor: pointer;
+        font-size: 15px;
+}
+.otp-1-a button{
+        padding: 10px 58px;
+        color: #2874f0;
+background-color: #fff;
+font-size: 15px;
+box-shadow: 0 2px 4px 0 rgba(0,0,0,.2);
+font-weight: 600;
+}
+.modal-body label{
+    color: #878787;
+font-size: 16px;
+font-weight: 400;
+pointer-events: none;
+}
+.modal-button span{
+    display: block;
+text-align: center;
+color: #878787;
+font-size: 16px;
+font-weight: 400;
+pointer-events: none;
+}
+.modal-button a{
+    text-decoration: none;
+    color: #2874f0;
+    font-size: 15px;
+    font-weight: 600;
+    
+}
+.modal-button p{
+    margin-top:20px;
+}
+
+/* loggedin modal */
+.login-2-a button{
+    padding: 10px 73px;
+    background: #fb641b;
+    border: none;
+    color: #fff;
+    font-weight: 600;
+    cursor: pointer;
+    font-size: 15px;
+}
+.otp-2-a button{
+    padding: 10px 32px;
+color: #2874f0;
+background-color: #fff;
+font-size: 15px;
+box-shadow: 0 2px 4px 0 rgba(0,0,0,.2);
+font-weight: 600;
+}
+
+#cat
+{
+    text-align: center;
+}
+.myproducts
+{
+    box-shadow: 7px 4px 20px -5px lightgray;
+    border-radius: 5px;
+    width: 98%;
+    margin: 0px auto;
+}
+/* styling for EXL-PRODUCTS in header ends */
+  #slideRight,#slideLeft,#slideRight1,#slideLeft1,#slideLeft2,#slideRight2
+  {
+        height: 30px;
+         width: 30px;
+         border-radius: 50%;
+         box-shadow: 0px 4px 20px -5px;
+         /* display: flex; */
+         justify-content: center;
+        align-items: center;
+         position: absolute;
+        left: 95%;
+        top: 195px;
+        z-index: 40;
+  }
+  #slideLeft,#slideLeft1,#slideLeft2
+  {
+    left: 1%;
+  }
+  .product-slider
+  {
+      font-size: 18px;
+    color: #363636;
+  }
+  .seasonal
+  {
+      width:90%;
+      margin: 0px auto;
+  }
+  .s{
+    padding-top: 17px;
+  }
+  .p
+  {
+      margin-top: 17px;
+  }
+  #demo
+  {
+      font-size: 19px;
+  }
+  img
+  {
+    height: 200px;
+  }
+  .hidden {
+	display: none;
+}
+.hidden1 {
+	display: none;
+}
+.hidden2 {
+	display: none;
+}
+
+
+
+</style>
+
+<div class="container-fluid m-0 p-0">
+        <div class="slides position-absolute d-flex justify-content-center">
+        <!--radio buttons start-->
+        <div onclick="firstbtn()" id="f" class="mx-3"></div>
+        <div onclick="secbtn()" class="mx-3"></div>
+        <div onclick="thirdbtn()" class="mx-3"></div>
+        <!-- <div onclick="fourbtn()" class="mx-3"></div> -->
+        <!--radio buttons end-->
+     </div>
+    <!--image slider start-->
+    <div class="slider">
+     
+        <!--slide images start-->
+        <div class="slide first" id="first">
+            <!--<a href="selectedproduct mobile.html"> -->
+                <img src="images/carousel1.jpg" class="img-fluid" alt="" >
+           <!-- </a>-->
+        </div>
+        <div class="slide" id="second">
+          <a href="#"><img src="images/carousel2.jpg" class="img-fluid" alt=""></a>
+        </div>
+        <div class="slide" id="third">
+          <a href="#"><img src="images/carousel3.jpg" class="img-fluid" alt=""></a>
+        </div>
+        <!-- <div class="slide" id="fourth">
+          <a href="#"><img srcs="images/carousel4.jpg" class="img-fluid" alt=""></a>
+        </div> -->
+        <!--slide images end-->
+       
+      </div>
+     </div>
+
+
+
+    <div class=" myproducts my-3 position-relative allcontainer" id="myproducts">
+         <div class="d-flex justify-content-between align-items-center ">
+             <h2 class=" ps-5 s">Deals of the day <i class="bi bi-stopwatch ps-5 pe-2 text-danger"></i><span id="demo" class="fourteen pe-1 text-secondary"></span></h2>
+             
+             <div class="">
+                <a href="/my-account/seasonal"><button type="button" class="green p log text-white me-5">View All</button></a>
+            </div>
+        </div>
+        <hr>
+         <div id="slideLeft" class="hidden"><i class="bi bi-chevron-left product-slider" style="padding-left: 5px;"></i></div>
+         <div id="slideRight"><i class="bi bi-chevron-right product-slider" style="padding-left: 5px;"></i></div>
+         <div class="row seasonal pt-4" id="seasonal-products">
+              <% deals_of_the_day.forEach((p) => { %>
+                
+                <div class="col-md-3 item">
+                    <div class=""></div>
+                    <div href="/shop/<%= p.slug %>/<%= p.id %>" class="card border-0 card border-0-product-grid">
+                        <a href="/shop/<%= p.slug %>/<%= p.id %>" class="img-wrap" style="height: 200px;">
+                            <% if(p.file_name){ %>
+                            <img src="<%=session.imgURL %><%= p.file_name %>" alt="<%= p.name %>">
+                            <%}else{%>
+                            <img src="<%= coreHostname %>/images/logo.png" alt="<%= p.name %>">
+                            <%}%>
+                        </a>
+                        <figcaption class="info-wrap text-center">                        
+                            <a href="/shop/<%= p.slug %>/<%= p.id %>" class="title text-dark my-2 d-block fourteen"="<%= p.name %>"><%= p.name %></a>
+                            <div class="myrate green"><%= p.avg_rate%><i class="bi bi-star-fill ps-1 ten"></i></div>
+                            <span class="price mt-1">
+                                Rs. <%= p.regular_price-p.discount_price %><del class="ps-2 information">Rs. <%= p.regular_price %></del>
+                                <p class="text-success"><%=Math.round(p.discount_price*100 /p.regular_price) %>% off</p>
+                            </span>
+                        </figcaption>
+                    </div>
+                </div>
+                
+                <% }) %>
+        </div>
+        </div>    <!--closing of container-->
+
+         <div class=" myproducts my-3 position-relative  allcontainer" id="myproducts1">
+            <div class="d-flex justify-content-between align-items-center ">
+                <h2 class="ps-5 s">Best Sellers</h2>
+                <div class="">
+                   <a href="/bestseller_products"><button type="button" class="green log p text-white me-5">View All</button></a>
+               </div>
+           </div>   
+           <hr> 
+         <!-- <h2 class="fw-bolder py-4">Popular products</h2> -->
+         <div id="slideLeft1" class="hidden1"><i class="bi bi-chevron-left product-slider" style="padding-left: 5px;"></i></div>
+         <div id="slideRight1"><i class="bi bi-chevron-right product-slider" style="padding-left: 5px;"></i></div>
+         <div class="row seasonal pt-4" id="popular-products" >
+            <% bestSeller_product.forEach((p) => { %>
+              <% if(p.product_type == 1) { %>
+              <div class="col-md-3 item1">
+                  <div class=""></div>
+                  <div href="/shop/<%= p.slug %>/<%= p.id %>" class="card border-0 card border-0-product-grid">
+                      <a href="/shop/<%= p.slug %>/<%= p.id %>" class="img-wrap" style="height: 200px;">
+                          <% if(p.file_name){ %>
+                          <img src="<%=session.imgURL %><%= p.file_name %>" alt="<%= p.name %>">
+                          <%}else{%>
+                          <img src="<%= coreHostname %>/images/logo.png" alt="<%= p.name %>">
+                          <%}%>
+                      </a>
+                      <figcaption class="info-wrap text-center">                        
+                          <a href="/shop/<%= p.slug %>/<%= p.id %>" class="title fourteen  text-dark my-2 d-block" title fourteen="<%= p.name %>"><%= p.name %></a>
+                          <div class="myrate green"><%= p.avg_rate%><i class="bi bi-star-fill ps-1 ten"></i></div>
+                          <span class="price mt-1">
+                              Rs. <%= p.regular_price-p.discount_price %><del class="ps-2 information">Rs. <%= p.regular_price %></del>
+                              <p class="text-success"><%=Math.round(p.discount_price*100 /p.regular_price) %>% off</p>
+                          </span>
+                      </figcaption>
+                  </div>
+              </div>
+              <% } else { %>
+              <div class="col-md-3 item1">
+                  <div href="/shop/<%= p.slug %>/<%= p.id %>" class="card border-0 card border-0-product-grid">
+                      <a href="/shop/<%= p.slug %>/<%= p.id %>" class="img-wrap" style="height: 200px;">
+                          
+                          <% if(p.file_name){ %>
+                          <img src="<%=session.imgURL %><%= p.file_name %>">
+                          <%}else{%>
+                          <img class="logo" src="/images/logo.png">
+                          <%}%>
+                      </a>
+                      <figcaption class="info-wrap text-center">                        
+                          <a href="/shop/<%= p.slug %>/<%= p.id %>" class="title fourteen text-dark my-2 d-block"><%= p.name %></a>                        
+                          <span class="price mt-1">
+                          </span>
+                      </figcaption>
+                  </div>
+              </div>
+              <% } %>
+              <% }) %>
+           
+  
+          </div>
+      </div>
+      <!--POPULAR PRODUCTS  ARE-->
+
+      <div class=" myproducts my-3 position-relative  allcontainer" id="myproducts2">
+        <div class="d-flex justify-content-between align-items-center ">
+            <h2 class="ps-5 s">Popular Products</h2>
+            <div class="">
+               <a href="/popular_products"><button type="button" class="green log p text-white me-5">View All</button></a>
+           </div>
+       </div>   
+       <hr> 
+     <!-- <h2 class="fw-bolder py-4">Popular products</h2> -->
+     <div id="slideLeft2" class="hidden2"><i class="bi bi-chevron-left product-slider" style="padding-left: 5px;"></i></div>
+     <div id="slideRight2"><i class="bi bi-chevron-right product-slider" style="padding-left: 5px;"></i></div>
+     <div class="row seasonal pt-4" id="popular-products1">
+        <% popular_products.forEach((p) => { %>
+          <% if(p.product_type == 1) { %>
+          <div class="col-md-3 item2">
+              <div class=""></div>
+              <div href="/shop/<%= p.slug %>/<%= p.id %>" class="card border-0 card border-0-product-grid">
+                  <a href="/shop/<%= p.slug %>/<%= p.id %>" class="img-wrap" style="height: 200px;">
+                      <% if(p.file_name){ %>
+                      <img src="<%=session.imgURL %><%= p.file_name %>" alt="<%= p.name %>">
+                      <%}else{%>
+                      <img src="<%= coreHostname %>/images/logo.png" alt="<%= p.name %>">
+                      <%}%>
+                  </a>
+                  <figcaption class="info-wrap text-center">                        
+                      <a href="/shop/<%= p.slug %>/<%= p.id %>" class="title fourteen  text-dark my-2 d-block" title fourteen="<%= p.name %>"><%= p.name %></a>
+                      <div class="myrate green"><%= p.avg_rate%><%=p.length%><i class="bi bi-star-fill ps-1 ten"></i></div>
+                      <span class="price mt-1">
+                          Rs. <%= p.regular_price-p.discount_price %><del class="ps-2 information">Rs. <%= p.regular_price %></del>
+                          <p class="text-success"><%=Math.round(p.discount_price*100 /p.regular_price) %>% off</p>
+                      </span>
+                  </figcaption>
+              </div>
+          </div>
+          <% } else { %>
+          <div class="col-md-3 item2">
+              <div href="/shop/<%= p.slug %>/<%= p.id %>" class="card border-0 card border-0-product-grid">
+                  <a href="/shop/<%= p.slug %>/<%= p.id %>" class="img-wrap" style="height: 200px;">
+                      
+                      <% if(p.file_name){ %>
+                      <img src="<%=session.imgURL %><%= p.file_name %>">
+                      <%}else{%>
+                      <img class="logo" src="/images/logo.png">
+                      <%}%>
+                  </a>
+                  <figcaption class="info-wrap text-center">                        
+                      <a href="/shop/<%= p.slug %>/<%= p.id %>" class="title fourteen text-dark my-2 d-block"><%= p.name %></a>                        
+                      <span class="price mt-1">
+                      </span>
+                  </figcaption>
+              </div>
+          </div>
+          <% } %>
+          <% }) %>
+       
+
+      </div>
+  </div>
+
+
+
+
+
+      <!--END OF POPULAR-->
+      <!-- <div class=" myproducts my-3 py-4 allcontainer">
+         <h2 class=" ps-5">Features</h2>
+         <div class="row">
+             <div class="col-6 col-md-3 text-center">
+             <div class="rounded-circle mx-auto"><i class="display-4 text-white bi bi-truck"></i></div>
+             <h4>On time delivery</h4>
+            </div>
+             
+            <div class="col-6 col-md-3 text-center">
+                 <div class="rounded-circle mx-auto"><i class="display-4 text-white bi bi-watch"></i></div>
+                 <h4>24 * 7 available</h4>
+            </div>
+
+             <div class="col-6 col-md-3 text-center">
+                 <div class="rounded-circle mx-auto"><i class="display-4 text-white bi bi-currency-dollar"></i></div>
+                 <h4>Affordable price</h4>
+             </div>
+             
+
+             <div class="col-6 col-md-3 text-center">
+                <div class="rounded-circle mx-auto"><i class="display-4 text-white bi bi-telephone"></i></div>
+                <h4>Customer care support</h4>
+            </div>
+        </div>
+        </div>
+         -->
+    <%- include('../partials/footer.html') %>
+    <script type="text/javascript">
+        
+    // const buttonRight = document.getElementById('slideRight');
+    // const buttonLeft = document.getElementById('slideLeft');
+
+    // var newScrollLeft=760;
+    //   var divWidth = $('#seasonal-products').outerWidth();
+    //   var scrollwidth =$('#seasonal-products').get(0).scrollWidth;
+   
+    //   if(newScrollLeft === scrollwidth - divWidth){
+      
+    //   }
+    // buttonRight.onclick = function () {
+    //     document.getElementById('seasonal-products').scrollLeft += 760;
+    //     buttonLeft.style.display = "flex";
+    //     if (document.getElementById('seasonal-products').lastElementChild) {
+    //         buttonRight.style.display = "none";
+    //     }
+    // };
+    // buttonLeft.onclick = function () {
+    //     document.getElementById('seasonal-products').scrollLeft -= 760;
+    //     buttonRight.style.display = "flex";
+    //     if (document.getElementById('seasonal-products').firstElementChild) {
+    //         buttonLeft.style.display = "none";
+    //     }
+    // };
+
+    // const buttonRight1 = document.getElementById('slideRight1');
+    // const buttonLeft1 = document.getElementById('slideLeft1');
+
+    // buttonRight1.onclick = function () {
+    //     document.getElementById('popular-products').scrollLeft += 560;
+    //     buttonLeft1.style.display = "flex";
+    //     if (document.getElementById('popular-products').lastElementChild) {
+    //         buttonRight1.style.display = "none";
+    //     }
+    // };
+    // buttonLeft1.onclick = function () {
+    //     document.getElementById('popular-products').scrollLeft -= 560;
+    //     buttonRight1.style.display = "flex";
+    //     if (document.getElementById('popular-products').firstElementChild) {
+    //         buttonLeft1.style.display = "none";
+    //     }
+    // };
+
+    // const buttonRight2 = document.getElementById('slideRight2');
+    // const buttonLeft2 = document.getElementById('slideLeft2');
+
+    // buttonRight2.onclick = function () {
+    //     document.getElementById('popular-products1').scrollLeft += 560;
+    //     buttonLeft2.style.display = "flex";
+    //     if (document.getElementById('popular-products1').lastElementChild) {
+    //         buttonRight2.style.display = "none";
+    //     }
+    // };
+    // buttonLeft2.onclick = function () {
+    //     document.getElementById('popular-products1').scrollLeft -= 560;
+    //     buttonRight2.style.display = "flex";
+    //     if (document.getElementById('popular-products1').firstElementChild) {
+    //         buttonLeft2.style.display = "none";
+    //     }
+    // };
+        
+         var i = 1; //Automation of slider
+ setInterval(function myfun() {
+   if (i == 1) {
+     var ele1 = document.getElementById("first");
+     ele1.style.display = "none";
+     var ele = document.getElementById("second");
+     ele.style.display = "block";
+     i++;
+   } else if (i == 2) {
+     var ele2 = document.getElementById("second");
+     ele2.style.display = "none";
+     var ele3 = document.getElementById("third");
+     ele3.style.display = "block";
+
+     i++;
+   } 
+    else {
+     i = 1;
+     var ele2 = document.getElementById("first");
+     ele2.style.display = "block";
+   }
+ }, 3000);
+
+
+ ////////////////////////////WATCH//////////////////
+
+// Set the date we're counting down to
+var countDownDate = new Date("July 29, 2022 2:37:25").getTime();
+
+// Update the count down every 1 second
+var x = setInterval(function() {
+
+  // Get today's date and time
+  var now = new Date().getTime();
+    
+  // Find the distance between now and the count down date
+  var distance = countDownDate - now;
+    
+  // Time calculations for days, hours, minutes and seconds
+  var days = Math.floor(distance / (1000 * 60 * 60 * 24));
+  var hours = Math.floor((distance % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
+  var minutes = Math.floor((distance % (1000 * 60 * 60)) / (1000 * 60));
+  var seconds = Math.floor((distance % (1000 * 60)) / 1000);
+    
+  // Output the result in an element with id="demo"
+  document.getElementById("demo").innerHTML =  hours +  " : "
+   + minutes +  " : "  + seconds + "Left";
+    
+  // If the count down is over, write some text 
+  if (distance < 0) {
+    clearInterval(x);
+    document.getElementById("demo").innerHTML = "EXPIRED";
+  }
+}, 1000);
+
+// var c=popular_products.len;
+       
+
+/////////////////////////////////////////////////scroll div/////////////////////////////////////////////
+
+// duration of scroll animation
+var scrollDuration = 300;
+// paddles
+var leftPaddle = document.getElementById('slideLeft');
+var rightPaddle = document.getElementById('slideRight');
+
+// get items dimensions
+var itemsLength = $('.item').length;
+var itemSize = $('.item').outerWidth(true);
+// get some relevant size for the paddle triggering point
+var paddleMargin = 20;
+
+// get wrapper width
+var getMenuWrapperSize = function() {
+	return $('#myproducts').outerWidth();
+}
+var menuWrapperSize = getMenuWrapperSize();
+// the wrapper is responsive
+$(window).on('resize', function() {
+	menuWrapperSize = getMenuWrapperSize();
+});
+// size of the visible part of the menu is equal as the wrapper size 
+var menuVisibleSize = menuWrapperSize;
+
+// get total width of all menu items
+var getMenuSize = function() {
+	return itemsLength * itemSize;
+};
+var menuSize = getMenuSize();
+// get how much of menu is invisible
+var menuInvisibleSize = menuSize - menuWrapperSize;
+
+// get how much have we scrolled to the left
+var getMenuPosition = function() {
+	return $('#seasonal-products').scrollLeft();
+};
+
+// finally, what happens when we are actually scrolling the menu
+$('#seasonal-products').on('scroll', function() {
+
+	// get how much of menu is invisible
+	menuInvisibleSize = menuSize - menuWrapperSize;
+	// get how much have we scrolled so far
+	var menuPosition = getMenuPosition();
+
+	var menuEndOffset = menuInvisibleSize - paddleMargin;
+
+	// show & hide the paddles 
+	// depending on scroll position
+	if (menuPosition <= paddleMargin) {
+		$(leftPaddle).addClass('hidden');
+		$(rightPaddle).removeClass('hidden');
+	} else if (menuPosition < menuEndOffset) {
+		// show both paddles in the middle
+		$(leftPaddle).removeClass('hidden');
+		$(rightPaddle).removeClass('hidden');
+	} else if (menuPosition >= menuEndOffset) {
+		$(leftPaddle).removeClass('hidden');
+		$(rightPaddle).addClass('hidden');
+}
+
+});
+
+// scroll to left
+$(rightPaddle).on('click', function() {
+	$('#seasonal-products').animate( { scrollLeft: menuInvisibleSize}, scrollDuration);
+});
+
+// scroll to right
+$(leftPaddle).on('click', function() {
+	$('#seasonal-products').animate( { scrollLeft: '0' }, scrollDuration);
+});
+   
+
+///////////////////////////////////////////////best seller //////////////////////////////////////////
+
+var scrollDuration1 = 300;
+// paddles
+var leftPaddle1 = document.getElementById('slideLeft1');
+var rightPaddle1 = document.getElementById('slideRight1');
+
+// get items dimensions
+var itemsLength1 = $('.item1').length;
+var itemSize1 = $('.item1').outerWidth(true);
+// get some relevant size for the paddle triggering point
+var paddleMargin1 = 20;
+
+// get wrapper width
+var getMenuWrapperSize1 = function() {
+	return $('#myproducts1').outerWidth();
+}
+var menuWrapperSize1 = getMenuWrapperSize1();
+// the wrapper is responsive
+$(window).on('resize', function() {
+	menuWrapperSize1 = getMenuWrapperSize1();
+});
+// size of the visible part of the menu is equal as the wrapper size 
+var menuVisibleSize1 = menuWrapperSize1;
+
+// get total width of all menu items
+var getMenuSize1 = function() {
+	return itemsLength1 * itemSize1;
+};
+var menuSize1 = getMenuSize1();
+// get how much of menu is invisible
+var menuInvisibleSize1 = menuSize1 - menuWrapperSize1;
+
+// get how much have we scrolled to the left
+var getMenuPosition1 = function() {
+	return $('#popular-products').scrollLeft();
+};
+
+// finally, what happens when we are actually scrolling the menu
+$('#popular-products').on('scroll', function() {
+
+	// get how much of menu is invisible
+	menuInvisibleSize1 = menuSize1 - menuWrapperSize1;
+	// get how much have we scrolled so far
+	var menuPosition1 = getMenuPosition1();
+
+	var menuEndOffset1 = menuInvisibleSize1 - paddleMargin1;
+
+	// show & hide the paddles 
+	// depending on scroll position
+	if (menuPosition1 <= paddleMargin1) {
+		$(leftPaddle1).addClass('hidden1');
+		$(rightPaddle1).removeClass('hidden1');
+	} else if (menuPosition1 < menuEndOffset1) {
+		// show both paddles in the middle
+		$(leftPaddle1).removeClass('hidden1');
+		$(rightPaddle1).removeClass('hidden1');
+	} else if (menuPosition1 >= menuEndOffset1) {
+		$(leftPaddle1).removeClass('hidden1');
+		$(rightPaddle1).addClass('hidden1');
+}
+
+});
+
+// scroll to left
+$(rightPaddle1).on('click', function() {
+	$('#popular-products').animate( { scrollLeft: menuInvisibleSize}, scrollDuration);
+});
+
+// scroll to right
+$(leftPaddle1).on('click', function() {
+	$('#popular-products').animate( { scrollLeft: '0' }, scrollDuration);
+});
+
+
+////////////////////////////////////////////third scroll//////////////////////////////
+
+var scrollDuration2 = 300;
+// paddles
+var leftPaddle2 = document.getElementById('slideLeft2');
+var rightPaddle2 = document.getElementById('slideRight2');
+
+// get items dimensions
+var itemsLength2 = $('.item2').length;
+var itemSize2 = $('.item2').outerWidth(true);
+// get some relevant size for the paddle triggering point
+var paddleMargin2 = 20;
+
+// get wrapper width
+var getMenuWrapperSize2 = function() {
+	return $('#myproducts2').outerWidth();
+}
+var menuWrapperSize2 = getMenuWrapperSize2();
+// the wrapper is responsive
+$(window).on('resize', function() {
+	menuWrapperSize2 = getMenuWrapperSize2();
+});
+// size of the visible part of the menu is equal as the wrapper size 
+var menuVisibleSize2 = menuWrapperSize2;
+
+// get total width of all menu items
+var getMenuSize2 = function() {
+	return itemsLength2 * itemSize2;
+};
+var menuSize2 = getMenuSize2();
+// get how much of menu is invisible
+var menuInvisibleSize2 = menuSize2 - menuWrapperSize2;
+
+// get how much have we scrolled to the left
+var getMenuPosition2 = function() {
+	return $('#popular-products1').scrollLeft();
+};
+
+// finally, what happens when we are actually scrolling the menu
+$('#popular-products1').on('scroll', function() {
+
+	// get how much of menu is invisible
+	menuInvisibleSize2 = menuSize2 - menuWrapperSize2;
+	// get how much have we scrolled so far
+	var menuPosition2 = getMenuPosition2();
+
+	var menuEndOffset2 = menuInvisibleSize2 - paddleMargin2;
+
+	// show & hide the paddles 
+	// depending on scroll position
+	if (menuPosition2 <= paddleMargin2) {
+		$(leftPaddle2).addClass('hidden2');
+		$(rightPaddle2).removeClass('hidden2');
+	} else if (menuPosition2 < menuEndOffset2) {
+		// show both paddles in the middle
+		$(leftPaddle2).removeClass('hidden2');
+		$(rightPaddle2).removeClass('hidden2');
+	} else if (menuPosition2 >= menuEndOffset2) {
+		$(leftPaddle2).removeClass('hidden2');
+		$(rightPaddle2).addClass('hidden2');
+}
+
+});
+
+// scroll to left
+$(rightPaddle2).on('click', function() {
+	$('#popular-products1').animate( { scrollLeft: menuInvisibleSize}, scrollDuration);
+});
+
+// scroll to right
+$(leftPaddle2).on('click', function() {
+	$('#popular-products1').animate( { scrollLeft: '0' }, scrollDuration);
+});
+
+
+   </script>

@@ -1,0 +1,380 @@
+<%- include("./partials/header.html") %>
+<%- include("./partials/topnav.html") %>
+<%- include("./partials/sidebar.html") %>
+
+<style>
+    .panel
+   {
+    background-color: white;
+    padding: 20px 10px;
+    border-radius: 3px;
+   }
+   .panel-actions
+   {
+    position: static;
+    padding-top: 25px;
+   }
+   .resetBtn
+   {
+    margin-left: auto;
+   }
+   .required {
+    position: absolute;
+    margin-top: -50px;
+    color: #FB0000;
+    font-size: 15px;
+    }
+</style>
+<div class="page">    
+    <div class="page-content container-fluid">
+        <ul class="nav nav-tabs nav-tabs-line tabs-line-top mb-10" role="tablist">
+            <h3>Branch Management</h3>
+             <!-- <li class="nav-item" role="presentation"><a class="nav-link " data-toggle="tab"
+                     href="#Category_details" aria-controls="Category-details" role="tab"
+                     title="Category-details">
+                     <h4 aria-hidden="true">Category</h4>
+                 </a></li> -->
+         </ul>
+        <div class="panel">
+            <div class="panel-heading">
+               
+                <div class="panel-actions text-white d-flex justify-space-between">
+                    <div><a class="btn btn-primary" data-target="#add-new-branch" data-toggle="modal">
+                        <span class="hidden-sm-down">Add New Branch</span>
+                        <i class="icon fa-plus" aria-hidden="true"></i>
+                    </a></div>
+                    <div class="resetBtn">
+                        <button class="text-dark mr-10" id="reset-filter-btn">Reset Filter <i class="fa fa-times-circle"></i></button>
+                        <button class="btn btn-primary" id="filter-btn" data-toggle="modal" data-target="#filter">Filter <i class="fa fa-filter"></i></button>
+                    </div> 
+                    
+                </div>
+            </div>
+          
+            <div class="panel-body">
+                <table class="table table-hover dataTable table-bordered w-full" id="leads-list">
+                    <thead>
+                        <tr>
+                            <th>ID</th>
+                            <th>Location Name</th>
+                            <th>Email</th>
+                            <th>Phone-No</th>
+                            <th>Operating-Hour-From</th>
+                            <th>Operating-Hour-To</th>
+                            <th>Action</th>
+                            <th>Is Active</th>
+                        </tr>
+                    </thead>                    
+                    <tbody>
+                        <tr>
+                            <td></td>
+                            <td></td>
+                            <td></td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>       
+    </div>
+</div>
+
+<div class="modal fade" id="filter" aria-hidden="false" aria-labelledby="filter" role="dialog" tabindex="-1">
+    <div class="modal-dialog modal-simple">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">×</span>
+                </button>
+                <h4 class="modal-title">Filters</h4>
+            </div>
+            <div class="modal-body">
+                <div class="row">
+                    <div class="form-group col-xl-6">
+                        <label class="form-control-label">Operating-Hour-From </label>
+                        <input type="time" class="form-control" id="fromhr" name="from_date" />
+                    </div>
+                    <div class="form-group col-xl-6">
+                        <label class="form-control-label">Operating-Hour-To</label>
+                        <input type="time" class="form-control" id="tohr" name="to_date" />
+                    </div>
+                    <div class="form-group col-xl-6">
+                        <label class="form-control-label">Location Name</label>
+                        <input class="form-control" id="location_id" name="location_name"> 
+                    </div>
+                    <div class="form-group col-xl-6">
+                        <label class="form-control-label">Email-Id</label>
+                        <input class="form-control" id="email_id" name="email_name">
+                    </div>
+                    <div class="form-group col-xl-6">
+                        <label class="form-control-label">Phone Number</label>
+                        <input class="form-control" id="phone_id" name="phone_name">
+                    </div>
+                   
+                    <div class="form-group col-xl-12 text-right">
+                        <%- csrf_html %>
+                        <button class="btn btn-primary" id="apply-filter">Apply</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>  
+
+<div class="modal fade" id="add-new-branch" aria-hidden="false" aria-labelledby="add-new-branch" role="dialog" tabindex="-1">
+    <div class="modal-dialog modal-simple">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">×</span>
+                </button>
+                <h4 class="modal-title">Add New Branch</h4>
+            </div>
+            <div class="modal-body">
+                <form action="/app/marketing/leads/add" method="POST" enctype="multipart/form-data">
+                    <div class="row">
+                        <div class="form-group col-xl-6">
+                            <input type="hidden" class="form-control" id="brands_id" name="brandid" value= "<%= brand_id %>" hidden>
+                            <input type="text" class="form-control" id="location_name" name="locationname" placeholder="location name" required/>
+                        </div>
+                        <div class="form-group col-xl-6">
+                            <input type="text" class="form-control" id="udyog_card_no" name="udyogcard_no" placeholder="udyog card no." required/>
+                        </div>
+                        <div class="form-group col-xl-6">
+                            <input type="text" class="form-control" id="pan_card_no" name="pancard_no" placeholder="pancard no." required/>
+                        </div>
+                        <div class="form-group col-xl-6">
+                            <input type="text" class="form-control" id="gst_no" name="gst_number" placeholder="GST no." required/>
+                        </div>
+                        <div class="form-group col-xl-6">
+                            <input type="text" class="form-control" id="phone" name="phone" placeholder="phone number " required/>
+                        </div>
+                        <div class="form-group col-xl-6">
+                            <input type="email" class="form-control" id="email" name="email" placeholder="email-id" required/>
+                        </div>
+                        <div class="form-group col-xl-6">
+                            <input type="text" class="form-control" id="address_line1" name="addressline11" placeholder="address line1" value="" required/>
+                        </div>
+                        <div class="form-group col-xl-6">
+                            <input type="text" class="form-control" id="address_line2" name="addressline22" placeholder="address line2" required/>
+                        </div>
+                        <div class="form-group col-xl-6">
+                            <input type="text" class="form-control" id="pincode_id" pattern="^[1-9][0-9]{5}$" name="pincode" placeholder="pincode" required/>
+                        </div>
+                        <div class="form-group col-xl-6">
+                            <select class="form-control" id="state_id" name="state" required>
+                                <option>Select State</option>
+                                <% states.forEach((s)=>{ %>
+                                <option value="<%= s.id %>"><%= s.name %></option>
+                                <% }) %>
+                            </select>
+                        </div>
+                        <div class="form-group col-xl-6">
+                            <select onchange = "getlatlong()" class="form-control" id="city_id" name="city" required>
+                                <option value="">Select City</option>  
+                            </select>
+                        </div>
+                        <div class="form-group col-xl-6"></div>
+                        <div class="form-group col-xl-6">
+                            <p>Latitude:
+                                <input class="form-control" type="text" id="latitude" name ="lat" readonly />
+                            </p>
+                        </div>
+                        <div class="form-group col-xl-6">  
+                            <p>Longitude:
+                                <input class="form-control" type="text" id="longitude" name = "lng" readonly />
+                            </p>
+                        </div>
+                        <div class="text-center" style="width: 100%;"><label style="align-self:center ;">Operating Hours</label></div>
+                        <div class="form-group col-xl-6">
+                            <label >From</label>
+                            <input type="time" class="form-control" id="operatinghr_from" name="operatinghrfrom" placeholder="operating hr from" required/><br>
+                        </div>
+                        <div class="form-group col-xl-6">
+                            <label >To</label>
+                            <input type="time" class="form-control" id="operatinghr_to" name="operatinghrto" placeholder="operating hr to" required/>
+                        </div>
+                        <div class="form-group col-xl-6">
+                            <label>Upload PAN Card File</label>
+                            <input type="file" class="form-control" name="pan_file" id="pan-file" required/>     
+                        </div>
+                        <div class="form-group col-xl-6">
+                            <label>Upload GST Document</label>                           
+                            <input type="file" class="form-control" name="gst_file" id="gst-file" required/>                           
+                        </div>
+                        
+                        <div class="form-group col-xl-12" style="text-align: center;">
+                            <%- csrf_html %>
+                            <button class="btn btn-primary" id="add-lead-btn" disabled>Add Branch</button>
+                        </div>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+<div class="modal fade" id="delete-branch" aria-hidden="false" aria-labelledby="delete-branch" role="dialog" tabindex="-1">
+    <div class="modal-dialog modal-simple">
+        <div class="modal-content" >
+           <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">×</span>
+                </button>
+                <h4 class="modal-title">Delete Branch</h4>
+            </div>
+            <div class="modal-body">
+                <div class="row">
+                        
+                        <input type="hidden" name="location-id" id="location-id"> 
+                    <div class="col-lg-12">
+                        <p>Do you really want to Delete the selected Branch ?</p>
+                    
+                    </div>
+                    <div class="form-group col-xl-12">
+                        <button class="btn btn-round btnSelect" id="delete-branch-btn" value="<%= location.id %>">Delete</button>
+                    </div>
+                </div>                
+            </div>            
+        <!-- </form> -->
+
+    </div>
+
+        </div>
+
+</div>
+<div class="modal fade" id="update-branch" aria-hidden="false" aria-labelledby="update-branch" role="dialog" tabindex="-1">
+    <div class="modal-dialog modal-simple">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">×</span>
+                </button>
+                <h4 class="modal-title">Update Branch</h4>
+            </div>
+            <div class="modal-body">
+                <div class="row">
+                    <div class="form-group col-xl-6">
+                        <input type="hidden" name="location-id" id="location-id">
+                
+                        <input type="text" id="location-name" class="form-control" name="location-name" placeholder="Location Name"
+                            value="" required />
+                    </div>
+                    <div class="form-group col-xl-6">
+                        <input type="text" class="form-control" id="udyog_card_no1" name="udyogcard_no" placeholder="udyog card no."
+                            required />
+                    </div>
+                    <div class="form-group col-xl-6">
+                        <input type="text" class="form-control" id="pan_card_no1" name="pancard_no" placeholder="pancard no."
+                            required />
+                    </div>
+                    <div class="form-group col-xl-6">
+                        <input type="text" class="form-control" id="gst_no1" name="gst_number" placeholder="GST no." required />
+                    </div>
+                    <div class="form-group col-xl-6">
+                        <input type="number" class="form-control" id="phone1" name="phone1" placeholder="phone number" value=""
+                            required />
+                    </div>
+                    <div class="form-group col-xl-6">
+                        <input type="text" class="form-control" id="email1" name="email1" placeholder="emailid" value="" required />
+                    </div>
+                    <div class="form-group col-xl-6">
+                        <input type="text" class="form-control" id="address_line11" name="addressline11" placeholder="address line1"
+                            value="" required />
+                    </div>
+                    <div class="form-group col-xl-6">
+                        <input type="text" class="form-control" id="address_line22" name="addressline22" placeholder="address line2"
+                            value="" required />
+                    </div>
+                    <div class="form-group col-xl-6">
+                        <select class="form-control" id="state_id1" name="state1" value="">
+                            <option value="">Select State</option>
+                            <% states.forEach((s)=>{ %>
+                                <option value="<%= s.id %>" <%=s.id===locationInfo.state_id ? 'selected' : '' %>><%= s.name %>
+                                </option>
+                                <% }) %>
+                        </select>
+                    </div>
+                    <div class="form-group col-xl-6">
+                        <select onchange = "getlatlong1()" class="form-control" id="city_id1" name="city1" value="">
+                            <option value="">Select City</option>
+                            <% cities.forEach((c)=>{ %>
+                                <option value="<%= c.id %>" <%=c.id===locationInfo.city_id ? 'selected' : '' %>><%= c.name %>
+                                </option>
+                                <% }) %>
+                        </select>
+                    </div>
+                    <div class="form-group col-xl-6">
+                        <input type="number" class="form-control" id="pincode_id1" name="pincode1" placeholder="pincode" value=""
+                            required />
+                    </div>
+                    <div class="form-group col-xl-6"></div>
+                    <div class="form-group col-xl-6">
+                        <p>Latitude:
+                            <input class="form-control" type="text" id="latitude" name="lat1" readonly />
+                        </p>
+                    </div>
+                    <div class="form-group col-xl-6">
+                        <p>Longitude:
+                            <input class="form-control" type="text" id="longitude" name="lng1" readonly />
+                        </p>
+                    </div>
+                
+                    <div class="text-center" style="width: 100%;"><label style="align-self:center ;">Operating Hours</label></div>
+                    <div class="form-group col-xl-6">
+                        <label>From</label>
+                        <input type="time" class="form-control" id="operatinghr_from1" name="operatinghrfrom1"
+                            placeholder="operating hr from" required /><br>
+                    </div>
+                    <div class="form-group col-xl-6">
+                        <label>To</label>
+                        <input type="time" class="form-control" id="operatinghr_to1" name="operatinghrto1" placeholder="operating hr to"
+                            required />
+                    </div>
+                    <div class="form-group col-xl-12" style="justify-content: center;">
+                        <%- csrf_html %>
+                            <button class="btn btn-primary" id="update-branch-btn">Update Branch</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<script src="https://maps.googleapis.com/maps/api/js?v=3.exp&key=AIzaSyBqhwb6YFhpSA0S2lo08eFekIftq6kQz8E&libraries=places">
+</script>
+<script>
+    function getlatlong() {
+        var geocoder = new google.maps.Geocoder();
+        var add1 = document.getElementById('address_line1').value;
+    var add2 = document.getElementById('address_line2').value;
+    geocoder.geocode( { 'address': (add1+add2)}, function(results, status) {
+  if (status == google.maps.GeocoderStatus.OK)
+  {
+    
+  }
+});
+    }
+    function getlatlong1() {
+        var geocoder = new google.maps.Geocoder();
+        var add1 = document.getElementById('address_line11').value;
+    var add2 = document.getElementById('address_line22').value;
+    geocoder.geocode( { 'address': (add1+add2)}, function(results, status) {
+  if (status == google.maps.GeocoderStatus.OK)
+  {
+      // do something with the geocoded result
+      //
+      console.log(results[0].geometry.location.lat())
+      console.log(results[0].geometry.location.lng())
+  }
+});
+    }
+    </script>
+
+<%- include("./partials/footer.html") %>
+<script type="text/javascript">
+    jQuery(document).ready(function() {
+        jQuery("[required]").after("<span class='required'>*</span>");
+    });
+    VIEW_LEADS.init({
+        _csrf: '<%= _csrf %>',
+        flash: '<%= messages.error %>'
+    })
+</script>

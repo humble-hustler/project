@@ -1,0 +1,205 @@
+<%- include("./partials/header.html") %>
+<%- include("./partials/topnav.html") %>
+<%- include("./partials/sidebar.html") %>
+<style>
+    #subplan
+    {
+        color: white;
+    }
+    .page-header-actions
+    {
+        position: static;
+        /* margin-left: auto; */
+    }
+</style>
+<div class="page">
+
+    <div class="page-content">
+        <h3 class="panel-title">Subscription Plans</h3>
+
+        <div class="panel">
+           
+            <div class="panel-body">
+                <div class="panel-heading">
+                    <div class="page-header-actions">
+                    <button class="btn btn-round btn-primary" data-target="#view-edit-plan" data-toggle="modal"  id="add-new-plan">
+                        <i class="icon fa-plus" aria-hidden="true"></i>
+                        <span class="hidden-sm-down">Add Plans</span>
+                    </button>
+                </div>
+            </div>
+        
+                <table class="table table-hover dataTable table-striped w-full" id="subscription-plan-list">
+                    <thead>
+                        <tr>
+                            <th>Id</th>
+                            <th>Name</th>
+                            <th>Period</th>
+                            <th>Interval</th>
+                            <th>Amount</th>
+                            <th>Action</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                    </tbody>
+                </table>
+            </div>
+            <div class="modal fade" id="add-new-subscription_plan" aria-hidden="false" aria-labelledby="add-new-subscription_plan" role="dialog" tabindex="-1">
+                <div class="modal-dialog modal-simple">
+                    <div class="modal-content" >
+                    
+                        <div class="modal-header">
+                            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                <span aria-hidden="true">×</span>
+                            </button>
+                            <h4 class="modal-title" id="add-subscription_plan">Add Plan</h4>
+                        </div>
+                        <div class="modal-body">
+                            <div class="row">
+                                <div class="form-group col-xl-6 form-body">
+                                    <input type="text" class="form-control" id="plan_name" name="plan_name" placeholder="Plan Name" value="" required />
+                                    <div class="invalid-feedback"></div>
+                                </div>
+                                <div class="form-group col-xl-6 form-body">
+                                    <select name="plan_period" id="plan_period">
+                                        <option value="monthly">Monthly</option>
+                                        <option value="yearly">Yearly</option>
+                                      </select>
+                                </div>
+                                <div class="form-group col-xl-6 form-body">
+                                    <input type="text" class="form-control" id="plan_amount" name="plan_amount" placeholder="Plan amount" value="" required />
+                                    <div class="invalid-feedback"></div>
+                                </div>
+
+                                 <div class="form-group col-xl-12">
+                                    <%- csrf_html %>
+                                    <button class="btn btn-primary" id="add-new-team-member-btn">Add</button>
+                                </div>
+                            </div>                
+                        </div>  
+                    </div>
+                </div>
+            </div>
+            <div class="modal fade" id="view-edit-plan" aria-hidden="false" aria-labelledby="view-edit-plan"
+                role="dialog" tabindex="-1">
+                <div class="modal-dialog modal-lg" style=" width: 19cm;">
+                    <div class="modal-content">
+                        <div class="modal-header">
+                            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                <span aria-hidden="true">×</span>
+                            </button>
+                            <h4 class="modal-title" id="edit-plan">Plan Details</h4>
+                        </div>
+                        <div class="modal-body">
+                            <!-- <form method="POST" id="asset-form-add"> -->
+                                <div class="row">
+                                    <div class="form-group col-xl-4">
+                                        <label class="form-control-label">Plan Name</label>
+                                        <input class="form-control edit-data" required type="text"  name="view_plan_name" id="planName">
+                                    </div>
+                                    <div class="form-group col-xl-4">
+                                        <label class="form-control-label">Plan Id</label>
+                                        <input class="form-control edit-data" required type="text"  name="plan_id" id="planId">
+                                    </div>
+                                    <div class="form-group col-xl-4">
+                                        <label class="form-control-label">Plan Amount</label>
+                                        <span class="input-group-addon">(₹.)</span>
+                                        <input class="form-control edit-data" required type="number"  name="view_plan_amount" id="planAmount">
+                                    </div>
+                                </div>    
+                                <div class="row">
+                                    <div class="form-group col-xl-4">
+                                        <%- csrf_html %>
+                                        <label class="form-control-label" for="allowedProducts">No. of Products allowed to add</label>
+                                        <select id="allowedProducts" name="allowed_products" class="form-control edit-data">
+                                            <option value="">Select Option</option>
+                                            <option value="1">10</option>
+                                            <option value="2">30</option>
+                                            <option value="3">50</option>
+                                            <option value="4">70</option>
+                                            <option value="5">100</option>
+                                        </select>
+                                    </div>
+                                    <div class="form-group col-xl-4">
+                                        <%- csrf_html %>
+                                        <label class="form-control-label" >Allowed New Products Request?</label>
+                                        <select id="addProReq" name="add_product_req" class="form-control edit-data">
+                                            <option value="">Select Option</option>
+                                            <option value="0">No</option>
+                                            <option value="1">Yes</option>
+                                        </select>                                 
+                                    </div>
+                                    <div class="form-group col-xl-4">
+                                        <%- csrf_html %>
+                                        <label class="form-control-label" >If Yes No. of Requests</label>
+                                        <input class="form-control edit-data" required type="number"  name="no_of_req" id="noofreq" disabled>                                   
+                                    </div>
+                                    <div class="form-group col-xl-4">
+                                        <%- csrf_html %>
+                                        <label class="form-control-label" >Allowed Features</label>
+                                        <select id="allowedFeatures" name="allowed_features" class="form-control edit-data" multiple>
+                                            <option value="1">Branch Management</option>
+                                            <option value="2">Staff Management</option>
+                                            <option value="3">Messenger</option>
+                                            <option value="4">Customer Messenger</option>
+                                            <option value="5">Promotions Management</option>
+                                        </select>                                        
+                                    </div>
+                                    <div class="form-group col-xl-4">
+                                        <%- csrf_html %>
+                                        <label class="form-control-label" >Validity</label>
+                                        <select id="planValidity" name="plan_validity" class="form-control edit-data">
+                                            <option value="">Select Option</option>
+                                            <option value="1" data-period="monthly">Monthly</option>
+                                            <option value="3" data-period="3 months">3 Months</option>
+                                            <option value="6" data-period="6 months">6 Months</option>
+                                            <option value="12" data-period="yearly">Yearly</option>
+                                        </select>
+                                    </div>    
+                                    <div class="form-group col-xl-12">
+                                        <%- csrf_html %>
+                                        <button class="btn btn-primary" id="add-new-plan-btn">Add Plan</button>
+                                        <button class="btn btn-primary" id="update-existing-plan-btn">Update Plan</button>
+                                    </div>
+                                </div>
+                            <!-- </form> -->
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="modal fade" id="delete-plan" aria-hidden="false" aria-labelledby="delete-plan" role="dialog" tabindex="-1">
+                <div class="modal-dialog modal-simple">
+                    <div class="modal-content" >
+                       <div class="modal-header">
+                            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                <span aria-hidden="true">×</span>
+                            </button>
+                            <h4 class="modal-title">Delete Plan</h4>
+                        </div>
+                        <div class="modal-body">
+                            <div class="row">
+                                <input type="hidden" name="plan-id" id="plan-id"> 
+                                <div class="col-lg-12">
+                                    <p>Do you really want to Delete the selected Plan ?</p>
+                                
+                                </div>
+                                <div class="form-group col-xl-12">
+                                    <button class="btn btn-round btnSelect" id="delete-plan-btn">Delete</button>
+                                </div>
+                            </div>                
+                        </div>            
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+
+<%- include("./partials/footer.html") %>
+<script type="text/javascript">
+VIEW_SUBSCRIPTION_PLAN.init({
+_csrf: '<%= _csrf %>'
+})
+</script>        

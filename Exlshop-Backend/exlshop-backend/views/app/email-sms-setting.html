@@ -1,0 +1,487 @@
+<%- include("./partials/header.html") %>
+<%- include("./partials/topnav.html") %>
+<%- include("./partials/sidebar.html") %>
+<div class="page">
+    <div class="page-content container-fluid">
+        <div class="row">
+            <div class="col-lg-3">
+                <div class="card card-shadow ">
+                    <div class="card-block">
+                        <div class='row'>
+                            <div class='col-lg-12'>
+                                <h5>FILTER MENU</h5>
+                            </div>
+                        </div>
+                        <div class='row'>
+                            <div class='col-lg-12'>
+                                <hr>
+                            </div>
+                        </div>
+                        <div class='row'>
+                            <div class='col-lg-12'>
+                                <span>Emails Sent : 1022</span><br>
+                                <span>Emails Remaining : 1000</span>
+                            </div>
+                        </div>
+                        <div class='row'>
+                            <div class='col-lg-12'>
+                                <hr>
+                            </div>
+                        </div>
+                        <div class='row'>
+                            <div class='col-lg-12'>
+                                <span>SMS Sent : 1022</span><br>
+                                <span>SMS Remaining : 1000</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="col-lg-9">
+                <div class="panel">
+                    <div class="panel-body nav-tabs-animate nav-tabs-horizontal">
+                        <ul class="nav nav-tabs nav-tabs-line tabs-line-top mb-10" role="tablist">
+                            <li class="nav-item" role="presentation"><a class="nav-link active" data-toggle="tab" href="#sms" aria-controls="sms" role="tab">Send SMS </a></li>
+                            <li class="nav-item" role="presentation"><a class="nav-link" data-toggle="tab" href="#email" aria-controls="email" role="tab">Send Email</a></li>
+                            <li class="nav-item" role="presentation"><a class="nav-link " data-toggle="tab" href="#sms-settings" aria-controls="sms-settings" role="tab">SMS Settings </a></li>
+                            <li class="nav-item" role="presentation"><a class="nav-link" data-toggle="tab" href="#email-settings" aria-controls="email-settings" role="tab">Email Settings</a></li>
+                            <li class="nav-item" role="presentation"><a class="nav-link " data-toggle="tab" href="#sms-logs" aria-controls="sms-logs" role="tab">SMS Logs </a></li>
+                            <li class="nav-item" role="presentation"><a class="nav-link" data-toggle="tab" href="#email-logs" aria-controls="email-logs" role="tab">Email logs</a></li>
+                        </ul>
+                        <div class="tab-content">
+                            <div class="tab-pane active" id="sms" role="tabpanel">
+                                <div class="row">
+                                    <div class="col-lg-6">
+                                        <label>SMS Plans</label>
+                                        <select class='form-control' id="sms-plan">
+                                            <option>Select Plan</option>
+                                            <option value='all'>All Members/ Enquiries</option>
+                                            <option value='all-member'>All Members</option>
+                                            <option value='all-enquiry'>All Enquiry</option>
+                                            <option value='plan-wise'>Plan Wise</option>
+                                            <option value='age-wise'>Age Wise</option>
+                                            <option value='member-wise'>Member Wise</option>
+                                            <option value='enquiry-wise'>Enquiry Wise</option>
+                                            <option value='trial-wise'>Trial Wise</option>
+                                            <option value='family-members'>Family Members</option>
+                                            <option value='outstanding'>Outstanding Payment</option>
+                                            <option value='renewals'>Renewals</option>
+                                        </select>
+                                    </div>
+                                    <!-- all user/memeber wise -->
+                                    <div class="col-lg-3 filter-options display-hidden">
+                                        <label>Status</label>
+                                        <select class='form-control' id="status">
+                                            <option value='all'>All </option>
+                                            <option value='1'>Active </option>
+                                            <option value='0'>InActive</option>
+                                        </select>
+                                    </div>
+
+                                    <div class="col-lg-6 filter-options display-hidden">
+                                        <label>Gender Wise</label>
+                                        <select class='form-control' id="gender">
+                                            <option value='all'>All </option>
+                                            <option value='M'>Male </option>
+                                            <option value='F'>Female</option>
+                                        </select>
+                                    </div>
+
+                                    <div class="col-lg-6 filter-options display-hidden">
+                                        <label>Plan Wise</label>
+                                        <select class='form-control' id="plan">
+                                        </select>
+                                    </div>
+
+                                    <div class="col-lg-6 filter-options display-hidden">
+                                        <label>Age Wise</label>
+                                        <select class='form-control' id="age">
+                                            <option value='none'> Select Age</option>
+                                            <option value='1'> Age (0-25)</option>
+                                            <option value='2'> Age (25-35)</option>
+                                            <option value='3'> More than 35</option>
+                                        </select>
+                                    </div>
+
+                                    <div class="col-lg-6 filter-options display-hidden">
+                                        <label>Member List</label>
+                                        <select class='form-control' id="member-list" multiple>
+                                        </select>
+                                    </div>
+
+                                    <div class="col-lg-6 filter-options display-hidden">
+                                        <label>Enquiry List</label>
+                                        <select class='form-control' id="enquiry-list" multiple>
+                                        </select>
+                                    </div>
+
+                                    <div class="col-lg-6 filter-options display-hidden">
+                                        <label>Trial Wise</label>
+                                        <select class='form-control' id="trial">
+                                            <option value='1'>Active </option>
+                                            <option value='0'>InActive</option>
+                                        </select>
+                                    </div>
+
+                                    <div class="col-lg-3 filter-options display-hidden">
+                                        <label>Type</label>
+                                        <select class='form-control' id="renewal-type">
+                                            <option value=''> Select </option>
+                                            <option value='1'>Next 15 Days </option>
+                                            <option value='2'>Next 30 Days </option>
+                                            <option value='3'>Last 15 Days </option>
+                                            <option value='4'>Last 30 Days </option>
+                                        </select>
+                                    </div>
+
+                                    <div class="col-lg-3 filter-options display-hidden">
+                                        <label>Member</label>
+                                        <select class='form-control' id="renewal">
+                                        </select>
+                                    </div>
+
+                                    <div class="col-lg-6 filter-options display-hidden">
+                                        <label>Outstanding</label>
+                                        <select class='form-control' id="outstanding" >
+                                            <option value="all">All</option>
+                                        </select>
+                                    </div>
+
+                                    <div class="col-lg-12">
+                                        <label>Type your Message</label>
+                                        <textarea class='form-control' id='sms-message'></textarea>
+                                        <p class='remaining-chars'>Remaining Characters: <span id="sms-remaining-characters">320</span></p>
+                                    </div>
+                                </div>
+                                <br>
+                                <div class="row">
+                                    <div class="col-lg-12 text-right">
+                                        <button class='btn btn-primary' id='send-sms'>Send</button>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="tab-pane" id="email" role="tabpanel">
+                                <div class="row">
+                                    <div class="col-lg-6">
+                                        <label>SMS Plans</label>
+                                        <select class='form-control' id="email-plan">
+                                            <option>Select Plan</option>
+                                            <option value='all-member'>All Members</option>
+                                            <option value='all-enquiry'>All Enquiry</option>
+                                            <option value='plan-wise'>Plan Wise</option>
+                                            <option value='age-wise'>Age Wise</option>
+                                            <option value='member-wise'>Member Wise</option>
+                                            <option value='enquiry-wise'>Enquiry Wise</option>
+                                            <option value='trial-wise'>Trial Wise</option>
+                                            <option value='outstanding'>Outstanding Payment</option>
+                                            <option value='renewals'>Renewals</option>
+                                        </select>
+                                    </div>
+                                    <!-- all user/memeber wise -->
+                                    <div class="col-lg-6 filter-options-email display-hidden">
+                                        <label>Status</label>
+                                        <select class='form-control' id="email-status">
+                                            <option value='all'>All </option>
+                                            <option value='1'>Active </option>
+                                            <option value='0'>InActive</option>
+                                        </select>
+                                    </div>
+
+                                    <div class="col-lg-6 filter-options-email display-hidden">
+                                        <label>Plan Wise</label>
+                                        <select class='form-control' id="email-plan-wise">
+                                        </select>
+                                    </div>
+
+                                    <div class="col-lg-6 filter-options-email display-hidden">
+                                        <label>Age Wise</label>
+                                        <select class='form-control' id="email-age">
+                                            <option value='none'> Select Age</option>
+                                            <option value='1'> Age (0-25)</option>
+                                            <option value='2'> Age (25-35)</option>
+                                            <option value='3'> More than 35</option>
+                                        </select>
+                                    </div>
+
+                                    <div class="col-lg-6 filter-options-email display-hidden">
+                                        <label>Member List</label>
+                                        <select class='form-control' id="email-member-list" multiple>
+                                        </select>
+                                    </div>
+
+                                    <div class="col-lg-6 filter-options-email display-hidden">
+                                        <label>Enquiry List</label>
+                                        <select class='form-control' id="email-enquiry-list" multiple>
+                                        </select>
+                                    </div>
+
+                                    <div class="col-lg-6 filter-options-email display-hidden">
+                                        <label>Trial Wise</label>
+                                        <select class='form-control' id="email-trial">
+                                            <option value='1'>Active </option>
+                                            <option value='0'>InActive</option>
+                                        </select>
+                                    </div>
+
+                                    <div class="col-lg-3 filter-options-email display-hidden">
+                                        <label>Type</label>
+                                        <select class='form-control' id="email-renewal-type">
+                                            <option value=''> Select </option>
+                                            <option value='1'>Next 15 Days </option>
+                                            <option value='2'>Next 30 Days </option>
+                                            <option value='3'>Last 15 Days </option>
+                                            <option value='4'>Last 30 Days </option>
+                                        </select>
+                                    </div>
+
+                                    <div class="col-lg-3 filter-options-email display-hidden">
+                                        <label>Member</label>
+                                        <select class='form-control' id="email-renewal">
+                                        </select>
+                                    </div>
+
+                                    <div class="col-lg-6 filter-options-email display-hidden">
+                                        <label>Outstanding</label>
+                                        <select class='form-control' id="email-outstanding" >
+                                            <option value="all">All</option>
+                                        </select>
+                                    </div>
+
+                                    <div class="col-lg-12">
+                                        <label>Type your Message</label>
+                                        <textarea class='form-control' id='email-message'></textarea>
+                                    </div>
+                                </div>
+                                <br>
+                                <div class="row">
+                                    <div class="col-lg-12 text-right">
+                                        <button class='btn btn-primary' id='send-email'>Send</button>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="tab-pane" id="sms-settings" role="tabpanel">
+                                <!-- <div class="row text-right">
+                                    <div class="col-lg-12 text-right">
+                                        <button class="btn btn-primary" id="add-sms-settings" data-toggle='modal' data-target='#add-new-sms-template'>Add SMS Settings</button>
+                                    </div>
+                                </div> -->
+                                <table class="table table-hover dataTable table-striped w-full" id="sms-setting-list">
+                                    <thead>
+                                        <tr>
+                                            <th>Page Name</th>
+                                            <th>Status </th>
+                                            <th>Message</th>
+                                            <th></th>
+                                        </tr>
+                                    </thead>                    
+                                    <tbody>
+                                        <% smsTemplates.forEach(function(s){%>
+                                        <tr class="sms-settings-rows" template_id="<%= s.template_master_id %>">
+                                            <td><%= s.page_name %></td>
+                                            <td><input type="checkbox" data-plugin="switchery" class="js-switch"  <%= s.is_active == 1 ? 'checked' : '' %>/></td>
+                                            <td><textarea class="form-control sms-setting-message"><%= s.message %></textarea></td>
+                                            <td><%= s.variable_names %></td>
+                                        </tr>
+                                        <% }) %>
+                                    </tbody>
+                                </table>
+                                <% if(smsTemplates.length != 0){ %>
+                                <div class="row text-right">
+                                    <div class="col-lg-12 text-right">
+                                        <button class="btn btn-primary" id="save-sms-settings">Save SMS Settings</button>
+                                    </div>
+                                </div>
+                                <% } %> 
+                            </div>
+                            <div class="tab-pane" id="email-settings" role="tabpanel">
+                                <!-- <div class="row text-right">
+                                    <div class="col-lg-12 text-right">
+                                        <button class="btn btn-primary" id="add-email-settings" data-toggle='modal' data-target='#add-new-email-template'>Add Email Settings</button>
+                                    </div>
+                                </div> -->
+                                <table class="table table-hover dataTable table-striped w-full" id="email-setting-list">
+                                    <thead>
+                                        <tr>
+                                            <th>Page Name</th>
+                                            <th>Status </th>
+                                            <th>Message</th>
+                                            <th></th>
+                                        </tr>
+                                    </thead>                    
+                                    <tbody>
+                                        <% emailTemplates.forEach(function(s){%>
+                                        <tr class="email-settings-rows" template_id="<%= s.template_master_id %>">
+                                            <td><%= s.page_name %></td>
+                                            <td><input type="checkbox" data-plugin="switchery" class="js-switch"  <%= s.is_active == 1 ? 'checked' : '' %>/></td>
+                                            <td><textarea class="form-control email-setting-message"><%= s.message %></textarea></td>
+                                            <td><%= s.variable_names %></td>
+                                        </tr>
+                                        <% }) %>
+                                    </tbody>
+                                </table>
+                                <div class="row text-right">
+                                    <div class="col-lg-12 text-right">
+                                        <button class="btn btn-primary" id="save-email-settings">Save Email Settings</button>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="tab-pane" id="sms-logs" role="tabpanel">
+                                <table class="table table-hover dataTable table-striped w-full" id="sms-list">
+                                    <thead>
+                                        <tr>
+                                            <th>Member Name</th>
+                                            <th>Mobile No</th>
+                                            <th>Message </th>
+                                            <th>Date Time</th>
+                                        </tr>
+                                    </thead>                    
+                                    <tbody>
+                                        
+                                    </tbody>
+                                </table>
+                            </div>
+                            <div class="tab-pane" id="email-logs" role="tabpanel">
+                                <table class="table table-hover dataTable table-striped w-full" id="email-list">
+                                    <thead>
+                                        <tr>
+                                            <th>Member Name</th>
+                                            <th>Email Id</th>
+                                            <th>Message </th>
+                                            <th>Date Time</th>
+                                        </tr>
+                                    </thead>                    
+                                    <tbody>
+                                        
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="modal fade" id="add-new-sms-template" aria-hidden="false" aria-labelledby="add-new-sms-template" role="dialog" tabindex="-1">
+    <div class="modal-dialog modal-simple modal-lg">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">×</span>
+                </button>
+                <h4 class="modal-title">Add Newe SMS Template</h4>
+            </div>
+            <div class="modal-body">
+                <form action='/app/settings/add-sms-settings' method='POST'>
+                    <%- csrf_html %>
+                    <div class="row">
+                        <div class="col-lg-12">
+                            <label>Page Name</label>
+                            <input type="text" class="form-control" name='page_name' required>
+                        </div>
+                        <div class="col-lg-12">
+                            <label>Message</label>
+                            <textarea class="form-control" name='sms_template' id='sms-template' required></textarea>
+                        </div>
+                        <div class="col-lg-12">
+                            <label>Variable Names</label>
+                            <textarea class="form-control" name='sms_variable_names' id='sms_variable_names' required></textarea>
+                        </div>
+                    </div>
+                    <br>
+                    <div class="row">
+                        <div class="col-lg-12">
+                            <button class='btn btn-primary'> Add SMS Template</button>
+                        </div>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="modal fade" id="add-new-email-template" aria-hidden="false" aria-labelledby="add-new-email-template" role="dialog" tabindex="-1">
+    <div class="modal-dialog modal-simple modal-lg">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">×</span>
+                </button>
+                <h4 class="modal-title">Add Newe Email Template</h4>
+            </div>
+            <div class="modal-body">
+                <form action='/app/settings/add-email-settings' method='POST'>
+                    <%- csrf_html %>
+                    <div class="row">
+                        <div class="col-lg-12">
+                            <label>Page Name</label>
+                            <input type="text" class="form-control" name='page_name' required>
+                        </div>
+                        <div class="col-lg-12">
+                            <label>Message</label>
+                            <textarea class="form-control" name='email_template' id='email-template' required></textarea>
+                        </div>
+                        <div class="col-lg-12">
+                            <label>Variable Names</label>
+                            <textarea class="form-control" name='email_variable_names' id='email_variable_names' required></textarea>
+                        </div>
+                    </div>
+                    <br>
+                    <div class="row">
+                        <div class="col-lg-12">
+                            <button class='btn btn-primary'> Add Email Template</button>
+                        </div>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="modal fade" id="member-list-modal" aria-hidden="false" aria-labelledby="member-list" role="dialog" tabindex="-1">
+    <div class="modal-dialog modal-simple modal-lg">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">×</span>
+                </button>
+                <h4 class="modal-title">Selected Members</h4>
+            </div>
+            <div class="modal-body">
+                <!-- <form action='/app/settings/add-sms-settings' method='POST'> -->
+                    <%- csrf_html %>
+                    <div class="row">
+                        <table class="table table-hover dataTable table-striped w-full" id='member-list-table'> 
+                            <thead>
+                                <tr>
+                                    <th>Name</th>
+                                    <th>Email</th>
+                                    <th>Phone</th>
+                                    <th>Action</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                
+                            </tbody>
+                        </table>
+                    </div>
+                    <br>
+                    <div class="row">
+                        <div class="col-lg-12">
+                            <button class='btn btn-primary display-hidden' id="send-email-final"> Save and Proceed</button>
+                            <button class='btn btn-primary display-hidden' id="send-sms-final"> Save and Proceed</button>
+                        </div>
+                    </div>
+                <!-- </form> -->
+            </div>
+        </div>
+    </div>
+</div>
+<%- include("./partials/footer.html") %>
+<script type="text/javascript">
+    SMS_SETTING.init({
+        _csrf: '<%= _csrf %>'
+    })
+</script>

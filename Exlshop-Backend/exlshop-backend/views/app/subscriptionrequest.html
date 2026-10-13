@@ -1,0 +1,126 @@
+<!DOCTYPE html>
+<html class="no-js css-menubar" lang="en">
+
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=0, minimal-ui">
+
+    <title>Login</title>
+
+    <link rel="stylesheet" href="/global/css/bootstrap.min.css">
+    <link rel="stylesheet" href="/global/css/bootstrap-extend.min.css">
+    <link rel="stylesheet" href="/css/site.min.css">
+    <link rel="stylesheet" href="/css/plan.css">
+	<link rel="stylesheet" href="/css/login.css">
+	<!-- Owl Carousel CSS -->
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/OwlCarousel2/2.3.4/assets/owl.carousel.min.css">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/OwlCarousel2/2.3.4/assets/owl.theme.default.min.css">
+
+<!-- Owl Carousel JS -->
+
+    <script id = "paymentApi"  amount="0"></script>
+    <script src="/global/vendor/breakpoints/breakpoints.js"></script>
+    <script src="/js/app/subscriptionrequest.js"></script>
+    <script>
+        Breakpoints();
+    </script>
+</head>
+<style>
+	.grid-1-5 {
+		width: 0px;
+	}
+	.owl-stage-outer{
+		position: relative;
+	}
+
+	.owl-prev {
+    position: absolute;
+    left: -25px;
+	top: 50%;
+}
+
+.owl-next {
+    position: absolute;
+    right: 0;
+	top: 50%;
+}
+
+.owl-carousel .owl-nav button.owl-next, .owl-carousel .owl-nav button.owl-prev, .owl-carousel button.owl-dot {
+	background-color: rgba(255,255,255,0.7);
+	font-size: 23px;
+	
+}
+
+.owl-carousel .owl-nav button.owl-next, .owl-carousel .owl-nav button.owl-prev, .owl-carousel button.owl-dot, span {
+	padding: 20px 15px 20px 15px;
+	border-radius: 50%;
+	color: black;
+}
+.owl-dots{
+	display: none;
+}
+.owl-item.center  {
+    transition: transform .2s; 
+			transform: scale(1.09); 
+			border-radius: 0.5em;
+			
+  }
+.owl-item > div {
+    /* margin: 45px 60px; */
+    transition: margin 400ms ease-out;
+  }
+  .owl-stage-outer {
+	padding-top: 20px;
+	padding-bottom: 40px;
+  }
+
+  .owl-item.center  .grid-1-5{
+	background-color: rgba(255, 255, 255, 0.89);;
+  }
+  
+</style>
+<body>
+    <div class="container-fluid group" >
+		<% if(messages.error) { %>
+                	<%= messages.error %>
+                   <% } %>
+		<%- csrf_html %>
+		<div class="row owl-carousel" style="margin-left: 15px; padding-bottom: 20px;">
+			<% subscription_plans.forEach((s) =>{ %>
+				<div class="col-4" style="margin-top: 20px; max-width: 90%;">
+					<div class="grid-1-5" style="width: 100%;">
+						<h1><%= s.name%></h1>
+						<h3><sup>&#8377;</sup><%= s.amount%><span class="small">/mo</span></h3>
+						<p>25,000 monthly visits</p>
+						<ul>
+							<p><%= s.description %></p>
+						</ul>		
+						<div class="form-group">
+							<button type="submit" class="btn btn-primary btn-checkout2" planName="<%= s.name%>" planAmt="<%= s.amount%>" planId="<%= s.id%>" planInterval="<%= s.plan_interval%>" planPeriod="<%= s.period%>">Select</button>
+						</div>
+					</div>
+				</div>
+			<% }) %>
+		</div>
+	</div>
+
+    
+    <script src="/global/vendor/jquery/jquery.js"></script>
+    <script src="/global/vendor/bootstrap/bootstrap.js"></script>
+   	<script src="/global/vendor/toastr/toastr.min.js"></script>
+   	<script src="/js/app/subscription.js"></script>
+    <style src="/global/vendor/datatables.net-bs4/dataTables.bootstrap4.css"></style>
+	<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.6.4/jquery.min.js"></script>
+	<script src="https://cdnjs.cloudflare.com/ajax/libs/OwlCarousel2/2.3.4/owl.carousel.min.js"></script>
+
+       
+<script type="text/javascript">
+ SUBSCRIPTION.init({
+        _csrf: '<%= _csrf %>',
+        subscription_plans : '<%- JSON.stringify(subscription_plans) %>',
+		session : '<%- JSON.stringify(session) %>'
+})
+ </script>
+</body>
+</html>

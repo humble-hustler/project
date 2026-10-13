@@ -1,0 +1,355 @@
+<%- include("./partials/header.html") %>
+<%- include("./partials/topnav.html") %>
+<%- include("./partials/sidebar.html") %>
+<div class="page">
+    <div class="page-content container-fluid">
+        <div class="row">
+            <div class="col-lg-3">
+                <div class="card card-shadow text-center">
+                    <div class="card-block">
+                        <a class="avatar avatar-lg" href="javascript:void(0)" id="capture-image">
+                            <img id="member-profile-image" src="<%= user.image_file ? ('/profile-img/'+user.image_file) : '/images/avatar-placeholder.png' %>">
+                        </a>
+                        <h4 class="profile-user"><%= user.fname %> <%= user.lname %></h4>
+                        Inactive
+                        <input type="checkbox" id="user-active-switch"  class="js-switch edit-data" name="is_active" <%= user.is_active ? 'checked' : '' %> />
+                        Active
+                        <hr />
+                    </div>
+                </div>
+            </div>
+
+            <div class="col-lg-9">
+                <div class="panel">
+                    <div class="panel-body nav-tabs-animate nav-tabs-horizontal">
+                        <ul class="nav nav-tabs nav-tabs-line tabs-line-top mb-10" role="tablist">
+                            <li class="nav-item" role="presentation"><a class="nav-link active" data-toggle="tab" href="#personal-details" aria-controls="personal-details" role="tab">Personal</a></li>
+                            <li class="nav-item" role="presentation"><a class="nav-link" data-toggle="tab" href="#education-details" aria-controls="education-details" role="tab">Education</a></li>
+                            <li class="nav-item" role="presentation"><a class="nav-link" data-toggle="tab" href="#work-experience-details" aria-controls="work-experience-details" role="tab">Experience</a></li>
+                        </ul>
+                        <div class="tab-content">
+                            <div class="tab-pane active" id="personal-details" role="tabpanel">
+                                <div class="row">
+                                    <div class="form-group col-md-6">
+                                        <label class="form-control-label" for="fname">First Name</label>
+                                        <input type="text" class="form-control edit-data-name" id="fname" name="fname" value="<%= user.fname %>">
+                                        <div class="invalid-feedback"></div>
+                                    </div>
+                                    <div class="form-group col-md-6">
+                                        <label class="form-control-label" for="lname">Last Name</label>
+                                        <input type="text" class="form-control edit-data-name " id="lname" name="lname" value="<%= user.lname %>">
+                                        <div class="invalid-feedback"></div>
+                                    </div>
+                                </div>
+                                <div class="row">
+                                    <div class="form-group col-md-6">
+                                        <label class="form-control-label" for="fname">Phone</label>
+                                        <input type="text" class="form-control edit-data-phone" id="phone" name="phone" value="<%= user.phone %>">
+                                        <div class="invalid-feedback"></div>
+                                    </div>
+                                    <div class="form-group col-md-6">
+                                        <label class="form-control-label" for="lname">Email</label>
+                                        <input type="text" class="form-control edit-data-email" id="email" name="email" value="<%= user.email %>">
+                                        <div class="invalid-feedback"></div>
+                                    </div>
+                                </div>
+                                <div class="row">
+                                    <div class="form-group col-md-6">
+                                        <label class="form-control-label mr-10" for="lname">Gender</label>
+                                        <div class="radio-custom radio-default radio-inline">
+                                            <input type="radio" class="edit-data" id="gender-male" value="M" name="gender" <%= user.gender == 'M' ? 'checked' : '' %>>
+                                                   <label for="gender-male">Male</label>
+                                        </div>
+                                        <div class="radio-custom radio-default radio-inline">
+                                            <input type="radio" class="edit-data" id="gender-female" value="F" name="gender" <%= user.gender == 'F' ? 'checked' : '' %>>
+                                                   <label for="gender-female">Female</label>
+                                        </div>
+                                    </div>
+                                    <div class="form-group col-md-6">
+                                        <label class="form-control-label mr-10" for="lname">Marital Status</label>
+                                        <div class="radio-custom radio-default radio-inline">
+                                            <input type="radio" class="edit-data" id="marital-status-married" value="1" name="marital_status" <%= user.marital_status == '1' ? 'checked' : '' %>>
+                                                   <label for="marital-status-married">Married</label>
+                                        </div>
+                                        <div class="radio-custom radio-default radio-inline">
+                                            <input type="radio" class="edit-data" id="marital-status-single" value="0" name="marital_status" <%= user.marital_status == '0' ? 'checked' : '' %>>
+                                                   <label for="marital-status-single">Single</label>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="row">
+                                    <div class="form-group col-md-4">
+                                        <label class="form-control-label" for="fname">Emergency Contact Name</label>
+                                        <input type="text" class="form-control edit-data-phone" id="emergency_contact_name" name="emergency_contact_name" value="<%= user.emergency_contact_name %>">
+                                        <div class="invalid-feedback"></div>
+                                    </div>
+                                    <div class="form-group col-md-4">
+                                        <label class="form-control-label" for="fname">Emergency Contact Phone</label>
+                                        <input type="text" class="form-control edit-data-phone" id="emergency_contact_number" name="emergency_contact_number" value="<%= user.emergency_contact_number %>">
+                                        <div class="invalid-feedback"></div>
+                                    </div>
+                                    <div class="form-group col-md-4">
+                                        <label class="form-control-label" for="blood-group">Blood Group</label>
+                                        <input type="text" class="form-control edit-data" id="blood-group" name="blood_group" value="<%= user.blood_group %>">
+                                    </div>
+                                </div>
+                                <div class="row">
+                                    <div class="form-group col-md-6">
+                                        <label class="form-control-label" for="dob">Date of Birth</label>
+                                        <input type="text" class="form-control edit-data" id="dob" name="birth_date" value="<%= formatDate(user.birth_date, 'DD-MM-YYYY') %>">
+                                    </div>
+                                    <div class="form-group col-md-6">
+                                        <label class="form-control-label" for="anniversary">Anniversary Date</label>
+                                        <input type="text" class="form-control edit-data" id="anniversary_date" name="anniversary_date" value="<%= formatDate(user.anniversary_date, 'DD-MM-YYYY') %>">
+                                    </div>
+                                </div>
+                                <div class="row">
+                                    <div class="form-group col-md-6">
+                                        <label class="form-control-label" for="dob">Address Line 1</label>
+                                        <input type="text" class="form-control edit-data" id="address_line_1" name="address_line_1" value="<%= user.address_line_1 %>">
+                                    </div>
+                                    <div class="form-group col-md-6">
+                                        <label class="form-control-label" for="anniversary">Address Line 2</label>
+                                        <input type="text" class="form-control edit-data" id="address_line_2" name="address_line_2" value="<%= user.address_line_2 %>">
+                                    </div>
+                                </div>
+                                <div class="row">
+                                    <div class="form-group col-md-4">
+                                        <label class="form-control-label" for="state">State</label>
+                                        <select id="state" name="state_id" class="form-control edit-data">
+                                            <option value>Select State</option>
+                                            <% states.forEach((s) => { %>
+                                            <option value="<%= s.id %>" <%= s.id === user.state_id ? 'selected' : '' %>><%= s.name %></option>
+                                            <% }) %>
+                                        </select>
+                                    </div>
+                                    <div class="form-group col-md-4">
+                                        <label class="form-control-label" for="city">City</label>
+                                        <select id="city" name="city_id" class="form-control edit-data">
+                                            <option value>Select City</option>
+                                            <% cities.forEach((c) => { %>
+                                            <option value="<%= c.id %>" <%= c.id === user.city_id ? 'selected' : '' %>><%= c.name %></option>
+                                            <% }) %>
+                                        </select>
+                                    </div>
+                                    <div class="form-group col-md-4">
+                                        <label class="form-control-label" for="zip">Zip</label>
+                                        <input type="text" class="form-control edit-data" id="zip" name="zip" value="<%= user.zip %>">
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="tab-pane" id="education-details" role="tabpanel">
+                                <table class="table table-hover dataTable table-striped w-full mt-10">
+                                    <thead>
+                                        <th>Education Level</th>
+                                        <th>Institute</th>
+                                        <th>Description</th>
+                                        <th>Month/Year</th>
+                                        <th><center>Action</center></th>
+                                    </thead>
+                                    <tbody>
+                                        <%userEducations.forEach(function(u){%>
+                                        <tr education_id="<%= u.id %>">
+                                            <td><%= (u.education_level == 1)?('Degree'):((u.education_level == 2)?('Diploma'):('Certificate')) %></td>
+                                            <td><%= u.institute %></td>
+                                            <td><%= u.description %></td>
+                                            <td><%= formatDate(u.month,'MMMM')+"/"+u.year %></td>
+                                            <td><center>
+                                                <a class="edit-education"><i class="fa fa-pencil"></i></a></center>
+                                            </td>
+                                        </tr>
+                                        <%})%>
+                                    </tbody>
+                                </table>
+                                <hr />
+                                <!-- /api/v1/user1/add-education -->
+                                <!-- action="/super-admin/settings/user/add/education" -->
+                                <form action="/super-admin/settings/user/add/education" method="POST" id="education-form">
+                                    <%- csrf_html %>
+                                    <input type="hidden" name="user_id_education" id="user-id-education" value="<%= user.id %>">
+                                    <input type="hidden" name="education_id" id="education-id">
+                                    <div class="row">
+                                        <div class="form-group col-md-4">
+                                            <div class="form-control-label">Education Level</div>
+                                            <select class="form-control" name="education_level" id="education-level" required>
+                                                <option value="">Select Level</option>
+                                                <option value="1">Degree</option>
+                                                <option value="2">Diploma</option>
+                                                <option value="3">Certificate</option>
+                                            </select>
+                                        </div>
+                                        <div class="form-group col-md-4">
+                                            <div class="form-control-label">Institute</div>
+                                            <input type="text" class="form-control" name="institute" id="institute" required/>
+                                        </div>
+                                        <div class="form-group col-md-4">
+                                            <div class="form-control-label">Description</div>
+                                            <input type="text" class="form-control" name="description" id="description" />
+                                        </div>
+                                        <div class="form-group col-md-4">
+                                            <div class="form-control-label">Month </div>
+                                            <select class="form-control" name="month" id="month">
+                                                <option value="">Select Month</option>
+                                                <option value="1">January</option>
+                                                <option value="2">February</option>
+                                                <option value="3">March</option>
+                                                <option value="4">April</option>
+                                                <option value="5">May</option>
+                                                <option value="6">June</option>
+                                                <option value="7">July</option>
+                                                <option value="8">August</option>
+                                                <option value="9">September</option>
+                                                <option value="10">October</option>
+                                                <option value="11">November</option>
+                                                <option value="12">december</option>
+                                            </select>
+                                        </div>
+                                        <div class="form-group col-md-4">
+                                            <div class="form-control-label">Year</div>
+                                            <input type="text" class="form-control" name="year" id="year" />
+                                        </div>
+                                        <div class="form-group col-md-4 ">
+
+                                            <button class="btn btn-primary mt-40" id="education-form-btn">Add</button>
+                                            <a class="text-dark mr-10 display-hidden mt-40 btn" id="add-education">Clear <i class="fa fa-times-circle-o"></i></a>
+                                        </div>
+                                    </div>
+                                </form>
+                            </div>
+                            <div class="tab-pane" id="work-experience-details" role="tabpanel">
+                                <table class="table table-hover dataTable table-striped w-full mt-10">
+                                    <thead>
+                                        <tr>
+                                            <th>Job Position</th>
+                                            <th>Employer Name</th>
+                                            <th>Job Description</th>
+                                            <th>From Date</th>
+                                            <th>To Date</th>
+                                            <th><center>Action</center></th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        <%userExperience.forEach(function(u){%>
+                                        <tr experience_id = "<%= u.id %>">
+                                            <td><%= u.job_position %></td>
+                                            <td><%= u.employer_name %></td>
+                                            <td><%= u.job_description %></td>
+                                            <td><%= formatDate(u.from_month,'MMMM')+"/"+u.from_year %></td>
+                                            <td><%= formatDate(u.to_month,'MMMM')+"/"+u.to_year %></td>
+                                            <td><center>
+                                                <a class="edit-experience"><i class="fa fa-pencil"></i></a>
+                                            </center></td>
+                                        </tr>
+                                        <%})%>
+                                    </tbody>
+                                </table>
+                                <hr />
+                                <!-- /api/v1/user1/add-experience -->
+                                <!-- action="/super-admin/settings/user/add/experience" -->
+                                <form action="/super-admin/settings/user/add/experience" method="POST" id="experience-form">
+                                    <%- csrf_html %>
+                                    <input type="hidden" name="user_id_experience" id="user-id-experience" value="<%= user.id %>">
+                                    <input type="hidden" name="experience_id" id="experience-id">
+                                    <div class="row">
+                                        <div class="form-group col-md-4">
+                                            <label class="form-control-label">Job Position</label>
+                                            <input type="text" class="form-control" name="job_position" id="job-position" required/>
+                                        </div>
+                                        <div class="form-group col-md-4">
+                                            <label class="form-control-label">Employer Name</label>
+                                            <input type="text" class="form-control" name="employer_name" id="employer-name" required/>
+                                        </div>
+                                        <div class="form-group col-md-4">
+                                            <label class="form-control-label">Job Description</label>
+                                            <input type="text" class="form-control" name="job_description" id="job-description" />
+                                        </div>                                    
+                                    </div>
+                                    <div class="row">
+                                        <div class="form-group col-md-3">
+                                            <label class="form-control-label">From Month</label>
+                                            <select class="form-control" name="from_month_exp" id="from_month_exp" required>
+                                                <option value="">Select Month</option>
+                                                <option value="1">January</option>
+                                                <option value="2">February</option>
+                                                <option value="3">March</option>
+                                                <option value="4">April</option>
+                                                <option value="5">May</option>
+                                                <option value="6">June</option>
+                                                <option value="7">July</option>
+                                                <option value="8">August</option>
+                                                <option value="9">September</option>
+                                                <option value="10">October</option>
+                                                <option value="11">November</option>
+                                                <option value="12">december</option>
+                                            </select>
+                                        </div>
+                                        <div class="form-group col-md-3">
+                                            <label class="form-control-label">Year</label>
+                                            <input type="text" class="form-control" name="from_year_exp" id="from_year_exp" required/>
+                                        </div>
+                                        <div class="form-group col-md-3">
+                                            <label class="form-control-label">To Month</label>
+                                            <select class="form-control" name="to_month_exp" id="to_month_exp">
+                                                <option value="">Select Month</option>
+                                                <option value="1">January</option>
+                                                <option value="2">February</option>
+                                                <option value="3">March</option>
+                                                <option value="4">April</option>
+                                                <option value="5">May</option>
+                                                <option value="6">June</option>
+                                                <option value="7">July</option>
+                                                <option value="8">August</option>
+                                                <option value="9">September</option>
+                                                <option value="10">October</option>
+                                                <option value="11">November</option>
+                                                <option value="12">december</option>
+                                            </select>
+                                        </div>
+                                        <div class="form-group col-md-3">
+                                            <label class="form-control-label">Year</label>
+                                            <input type="text" class="form-control" name="to_year_exp" id="to_year_exp" />
+                                        </div>   
+                                        <div class="col-md-12 text-right ">
+                                            <button class="btn btn-primary " id="experience-form-btn">Add</button>
+                                            <a class="text-dark mr-10 display-hidden" id="add-experience">Clear <i class="fa fa-times-circle-o"></i></a>
+                                        </div>
+                                    </div>
+                                </form>
+                            </div>
+                            
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<div class="modal fade" id="profile-picture-capture" aria-hidden="false" aria-labelledby="profile-picture-capture" role="dialog" tabindex="-1">
+    <div class="modal-dialog modal-simple">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">×</span>
+                </button>
+                <h4 class="modal-title">Capture Profile Picture</h4>
+            </div>
+            <div class="modal-body">
+                <div class="col-md-12">
+                    <div id="camera-container"></div>
+                </div>                
+                <div class="col-md-12 text-center">
+                    <button class="btn btn-primary" id="capture">Capture</button>
+                </div>                
+            </div>            
+        </div>
+    </div>
+</div>
+<%- include("./partials/footer.html") %>
+<script type="text/javascript">
+    SINGLE_USER.init({
+        _csrf: '<%= _csrf %>',
+        userData: '<%- JSON.stringify(user) %>',
+        userEducations: '<%- JSON.stringify(userEducations) %>',
+        userExperience: '<%- JSON.stringify(userExperience) %>'
+    })
+</script>

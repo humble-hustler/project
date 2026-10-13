@@ -1,0 +1,1337 @@
+<%- include("./partials/header.html") %>
+<%- include("./partials/topnav.html") %>
+<%- include("./partials/sidebar.html") %>
+<style>
+    .cont{
+  height: 100%;
+  width: 576px;
+  left: calc(50% - 288px);
+  padding: 0;
+  margin: 0 auto;
+  position: absolute;
+}
+#progress-bar{
+  appearance:none;
+  width: 576px;
+  color: #000;
+  height: 2px;
+  margin: 0 auto;
+}
+.newspan {
+  height: 10px;
+  width: 10px;
+  border-radius: 100%;
+  border: 3px solid #137CC0;
+  background:#137CC0;
+  position: absolute;
+  left:0;
+  top: 12px;
+  cursor: pointer;
+  transition: all 0.4s ease-in-out;
+}
+.second{
+  left: 192px;
+}
+.third{
+  left: 384px;
+}
+.fourth{
+  left: 576px;
+}
+#progress-bar::-webkit-progress-value{ /* Changes line color */
+  background: #fff;
+  transition: all 0.4s ease-in-out;
+}
+#progress-bar::-webkit-progress-bar{ /* Changes background color */
+  background: #137CC0;
+}
+.border-change{
+  border-color:#fff;
+  transition: all 0.4s ease-in-out;
+}
+</style>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/2.1.3/jquery.min.js"></script>
+
+<div class="page">
+    <div class="page-content container-fluid">
+        <div class="row">
+            <div class="col-lg-3">
+                <div class="card card-shadow text-center">
+                    <div class="card-block">
+                        <a class="avatar avatar-lg" href="javascript:void(0)" id="capture-image">
+                            <img id="member-profile-image" src="<%= user.image_file ? user.profile_image : '/images/avatar-placeholder.png' %>">
+                        </a>
+                        <h4 class="profile-user"><%= user.fname %> <%= user.lname %></h4>
+                        Inactive
+                        <input type="checkbox" id="user-active-switch" data-color="#eb6709"  class="js-switch" name="is_active" <%= user.is_active ? 'checked' : '' %> />
+                        Active
+                        <hr />
+                        <div class="form-group">
+                            <label class="form-control-label" for="role">Role</label>
+                            <select class="form-control" id="role" name="role">
+                                <option value="">Select Role</option>
+                                <% roles.forEach((r) => { %>
+                                <option value="<%= r.id %>" <%= r.id === user.roles_id ? 'selected' : '' %>><%= r.verbose %></option>
+                                <% }) %>
+                            </select>
+                        </div>
+                        <div class="form-group">
+                            <label class="form-control-label" for="role">Designation</label>
+                            <select class="form-control edit-profile-data" id="designation" name="designation_id">
+                                <option value="">Select Designation</option>
+                                <% designations.forEach((d) => { %>
+                                <option value="<%= d.id %>" <%= d.id === user.designation_id ? 'selected' : '' %>><%= d.designation %></option>
+                                <% }) %>
+                            </select>
+                        </div>
+                        <div class="form-group">
+                            <label class="form-control-label" for="role">Department</label>
+                            <select class="form-control edit-profile-data" id="department" name="department_id">
+                                <option value="">Select Department</option>
+                                <% departments.forEach((d) => { %>
+                                <option value="<%= d.id %>" <%= d.id === user.department_id ? 'selected' : '' %>><%= d.department %></option>
+                                <% }) %>
+                            </select>
+                        </div>
+                        <div class="form-group">
+                            <label class="form-control-label" for="role">Locations</label>
+                            <select class="form-control edit-locations" id="locations" name="locations_id"s multiple>
+                                <option value="">Select Location</option>
+                                <% locations.forEach((l) => { %>
+                                    <option value="<%= l.id %>" <%= userLocations.indexOf(l.id) != '-1' ? 'selected' : '' %>><%= l.name %></option>
+                                <% }) %>
+                            </select>
+                        </div>
+                        <div class="text-right"><a class=" delete-user" data-target="#delete-user" data-toggle="modal"><i class="fa fa-trash"></i> Delete</a></div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="col-lg-9">
+                <div class="panel">
+                    <div class="panel-body nav-tabs-animate nav-tabs-horizontal">
+                        <div class="col-12 mb-2" style="border: 1px dashed #137CC0; border-radius: 10px;">
+                            <div class="row p-2">
+                                <label class="form-control-label text-dark" style="font-weight: 500;">Profile Status :
+                                    <% if(user.completed == 1) { %>
+                                        <span class="badge badge-success">Complete</span>
+                                    <% } else { %>
+                                        <span class="badge badge-danger">Incomplete</span>
+                                    <% } %>
+                                </label>
+                            </div>
+                            <div class="pearls row" style="font-size: 14px;">
+                                <div class="pearl col-4 <%= user.experience_added > 0 ? 'current' : '' %>" aria-expanded="true">
+                                  <div class="pearl-icon"><i class="icon fa-plus-square" aria-hidden="true"></i></div>
+                                  <span class="pearl-title">Add Experience</span>
+                                </div>
+                                <div class="pearl col-4 <%= user.education_added > 0 ? 'current' : '' %>" aria-expanded="false">
+                                  <div class="pearl-icon"><i class="icon fa-graduation-cap" aria-hidden="true"></i></div>
+                                  <span class="pearl-title">Add Education</span>
+                                </div>
+                                <div class="pearl col-4 <%= user.salary_added > 0 || user.training_pay_added > 0 ? 'current' : '' %>" aria-expanded="false">
+                                  <div class="pearl-icon"><i class="icon fa-rupee" aria-hidden="true"></i></div>
+                                  <span class="pearl-title">Add Salary/Training Pay</span>
+                                </div>
+                            </div>
+                        </div>
+                        <ul class="nav nav-tabs nav-tabs-line tabs-line-top mb-10" role="tablist">
+                            <li class="nav-item" role="presentation"><a class="nav-link active" data-toggle="tab" href="#personal-details" aria-controls="personal-details" role="tab" title="Personal Details"><i class="fa fa-user-circle font-22" aria-hidden="true"></i></a></li>
+                            <li class="nav-item" role="presentation"><a class="nav-link" data-toggle="tab" href="#education-details" aria-controls="education-details" role="tab" title="Education"><i class="fa fa-graduation-cap font-22" aria-hidden="true"></i></a></li>
+                            <li class="nav-item" role="presentation"><a class="nav-link" data-toggle="tab" href="#work-experience-details" aria-controls="work-experience-details" role="tab" title="Experience"><i class="fa fa-list font-22" aria-hidden="true"></i></a></li>
+                            <li class="nav-item" role="presentation"><a class="nav-link" data-toggle="tab" href="#compensations" aria-controls="attendance" role="tab" title="Compensations"><i class="fa fa-money font-22" aria-hidden="true"></i></a></li>
+                            <!-- <li class="nav-item" role="presentation"><a class="nav-link" data-toggle="tab" href="#attendance" aria-controls="attendance" role="tab" title="attendance"><i class="fa fa-user font-22" aria-hidden="true"></i></a></li> -->
+                            <li class="nav-item" role="presentation"><a class="nav-link" data-toggle="tab" href="#user-status" aria-controls="user-status" role="tab" title="Status"> <i class="fa fa-check-square font-22" aria-hidden="true"></i></a></li>
+                            <li class="nav-item" role="presentation"><a class="nav-link" data-toggle="tab" href="#time-slots" aria-controls="time-slots" role="tab" title="Time Slots"> <i class="fa fa-clock-o font-22" aria-hidden="true"></i></a></li>
+                            <li class="nav-item" role="presentation"><a class="nav-link" data-toggle="tab" href="#shift" aria-controls="shift" role="tab" title="Shifts"><i class="fa fa-hourglass-start font-22" aria-hidden="true"></i></a></li>
+                            <li class="nav-item" role="presentation"><a class="nav-link" data-toggle="tab" href="#feedbacks" aria-controls="feedbacks" role="tab" title="Feedback"><i class="fa fa-comments-o font-22" aria-hidden="true"></i></a></li>
+                        </ul>
+                        <div class="tab-content">
+                            <div class="tab-pane active" id="personal-details" role="tabpanel">
+                                <div class="row">
+                                    <div class="form-group col-md-6">
+                                        <label class="form-control-label" for="fname">First Name</label>
+                                        <input type="text" class="form-control edit-data" id="fname" name="fname" value="<%= user.fname %>">
+                                    </div>
+                                    <div class="form-group col-md-6">
+                                        <label class="form-control-label" for="lname">Last Name</label>
+                                        <input type="text" class="form-control edit-data" id="lname" name="lname" value="<%= user.lname %>">
+                                    </div>
+                                </div>
+                                <div class="row">
+                                    <div class="form-group col-md-6">
+                                        <label class="form-control-label" for="fname">Phone</label>
+                                        <input type="text" class="form-control edit-data-phone" id="phone" name="phone" value="<%= user.phone %>" maxlength="10" oninput="this.value = this.value.replace(/[^0-9.]/g, '').replace(/(\..*)\./g, '$1');">
+                                        <div class="invalid-feedback"></div>
+                                    </div>
+                                    <div class="form-group col-md-6">
+                                        <label class="form-control-label" for="lname">Email</label>
+                                        <input type="text" class="form-control edit-data-email" id="email" name="email" value="<%= user.email %>">
+                                        <div class="invalid-feedback"></div>
+                                    </div>
+                                </div>
+                                <div class="row">
+                                    <div class="form-group col-md-6">
+                                        <label class="form-control-label mr-10" for="lname">Gender</label>
+                                        <div class="radio-custom radio-default radio-inline">
+                                            <input type="radio" class="edit-data" id="gender-male" value="M" name="gender" <%= user.gender == 'M' ? 'checked' : '' %>>
+                                                   <label for="gender-male">Male</label>
+                                        </div>
+                                        <div class="radio-custom radio-default radio-inline">
+                                            <input type="radio" class="edit-data" id="gender-female" value="F" name="gender" <%= user.gender == 'F' ? 'checked' : '' %>>
+                                                   <label for="gender-female">Female</label>
+                                        </div>
+                                    </div>
+                                    <div class="form-group col-md-6">
+                                        <label class="form-control-label mr-10" for="lname">Marital Status</label>
+                                        <div class="radio-custom radio-default radio-inline">
+                                            <input type="radio" class="edit-data" id="marital-status-married" value="1" name="marital_status" <%= user.marital_status == '1' ? 'checked' : '' %>>
+                                                   <label for="marital-status-married">Married</label>
+                                        </div>
+                                        <div class="radio-custom radio-default radio-inline">
+                                            <input type="radio" class="edit-data" id="marital-status-single" value="0" name="marital_status" <%= user.marital_status == '0' ? 'checked' : '' %>>
+                                                   <label for="marital-status-single">Single</label>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="row">
+                                    <div class="form-group col-md-4">
+                                        <label class="form-control-label" for="fname">Emergency Contact Name</label>
+                                        <input type="text" class="form-control edit-data-name" id="emergency_contact_name" name="emergency_contact_name" value="<%= user.emergency_contact_name %>">
+                                        <div class="invalid-feedback"></div>
+
+                                    </div>
+                                    <div class="form-group col-md-4">
+                                        <label class="form-control-label" for="fname">Emergency Contact Phone</label>
+                                        <input type="text" class="form-control edit-data-phone" id="emergency_contact_number" name="emergency_contact_number" value="<%= user.emergency_contact_number %>" maxlength="10" oninput="this.value = this.value.replace(/[^0-9.]/g, '').replace(/(\..*)\./g, '$1');">
+                                        <div class="invalid-feedback"></div>
+
+                                    </div>
+                                    <div class="form-group col-md-4">
+                                        <label class="form-control-label" for="blood-group">Blood Group</label>
+                                        <select class="form-control edit-data" id="blood-group" name="blood_group" value="">
+                                            <option value="">--Select Blood Group--</option>
+                                            <option <%= (user.blood_group=='A+ve')?('selected'):('') %>>A+ve</option>
+                                            <option <%= (user.blood_group=='A-ve')?('selected'):('') %>>A-ve</option>
+                                            <option <%= (user.blood_group=='B+ve')?('selected'):('') %>>B+ve</option>
+                                            <option <%= (user.blood_group=='B-ve')?('selected'):('') %>>B-ve</option>
+                                            <option <%= (user.blood_group=='AB+ve')?('selected'):('') %>>AB+ve</option>
+                                            <option <%= (user.blood_group=='AB-ve')?('selected'):('') %>>AB-ve</option>
+                                            <option <%= (user.blood_group=='O+ve')?('selected'):('') %>>O+ve</option>
+                                            <option <%= (user.blood_group=='O-ve')?('selected'):('') %>>O-ve</option>
+                                        </select>
+                                    </div>
+                                </div>
+                                <div class="row">
+                                    <div class="form-group col-md-6">
+                                        <label class="form-control-label" for="dob">Date of Birth</label>
+                                        <input type="date" class="form-control edit-data" id="dob" name="birth_date" value="<%= user.birth_date %>">
+                                    </div>
+                                    <div class="form-group col-md-6">
+                                        <label class="form-control-label" for="anniversary">Anniversary Date</label>
+                                        <input type="date" class="form-control edit-data" id="anniversary_date" name="anniversary_date" value="<%=user.anniversary_date %>">
+                                    </div>
+                                </div>
+                                <div class="row">
+                                    <div class="form-group col-md-6">
+                                        <label class="form-control-label" for="dob">Address Line 1</label>
+                                        <input type="text" class="form-control edit-data" id="address_line_1" name="address_line_1" value="<%= user.address_line_1 %>">
+                                    </div>
+                                    <div class="form-group col-md-6">
+                                        <label class="form-control-label" for="anniversary">Address Line 2</label>
+                                        <input type="text" class="form-control edit-data" id="address_line_2" name="address_line_2" value="<%= user.address_line_2 %>">
+                                    </div>
+                                </div>
+                                <div class="row">
+                                    <div class="form-group col-md-4">
+                                        <label class="form-control-label" for="state">State</label>
+                                        <select id="state" name="state_id" class="form-control edit-data">
+                                            <option value>Select State</option>
+                                            <% states.forEach((s) => { %>
+                                            <option value="<%= s.id %>" <%= s.id === user.state_id ? 'selected' : '' %>><%= s.name %></option>
+                                            <% }) %>
+                                        </select>
+                                    </div>
+                                    <div class="form-group col-md-4">
+                                        <label class="form-control-label" for="city">City</label>
+                                        <select id="city" name="city_id" class="form-control edit-data">
+                                            <option value>Select City</option>
+                                            <% cities.forEach((c) => { %>
+                                            <option value="<%= c.id %>" <%= c.id === user.city_id ? 'selected' : '' %>><%= c.name %></option>
+                                            <% }) %>
+                                        </select>
+                                    </div>
+                                    <div class="form-group col-md-4">
+                                        <label class="form-control-label" for="zip">Zip</label>
+                                        <input type="text" class="form-control edit-data" id="zip" name="zip" value="<%= user.zip %>" maxlength="6" oninput="this.value = this.value.replace(/[^0-9.]/g, '').replace(/(\..*)\./g, '$1');">
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="tab-pane" id="education-details" role="tabpanel">
+                                <table class="table table-hover dataTable table-striped w-full mt-10">
+                                    <thead>
+                                    <th>Education Level</th>
+                                    <th>Institute</th>
+                                    <th>Description</th>
+                                    <th>Month/Year</th>
+                                    <th>Action</th>
+                                    </thead>
+                                    <tbody>
+                                        <%userEducations.forEach((u) => {%>
+                                        <tr data-row-id="<%= u.id %>">
+                                            <td>
+                                                <% if(u.education_level == 1){ %>
+                                                Degree
+                                                <% }else if(u.education_level == 2){ %>
+                                                Diploma
+                                                <% }else if(u.education_level == 3){ %>
+                                                Certificate
+                                                <% }else if(u.education_level == 4){ %>
+                                                Secondary
+                                                <% }else if(u.education_level == 5){ %>
+                                                Higher Secondary
+                                                <% } %>
+                                            </td>
+                                            <td><%= u.institute %></td>
+                                            <td><%= u.description %></td>
+                                            <td><%= formatDate(u.month,'MMMM')+"/"+u.year %></td>
+                                            <td><a class="edit-education1" data-target="#edit-education" data-toggle="modal"><i class="fa fa-edit"></i> </a>
+                                                <a class="delete-education" data-target="#delete-education" data-toggle="modal"><i class="fa fa-trash"></i> </a></td>
+                                        </tr>
+                                        <%})%>
+                                    </tbody>
+                                </table>
+                                <hr />
+                                <form action="/app/users/add/education" method="POST">
+                                    <%- csrf_html %>
+                                    <input type="hidden" name="user_id_education" id="user-id-education" value="<%= user.id %>">
+                                    <div class="row">
+                                        <div class="form-group col-md-4">
+                                            <div class="form-control-label">Education Level</div>
+                                            <select class="form-control" name="education_level" id="education-level" required>
+                                                <option value="">Select Level</option>
+                                                <option value="1">Degree</option>
+                                                <option value="2">Diploma</option>
+                                                <option value="3">Certificate</option>
+                                                <option value="4">Secondary</option>
+                                                <option value="5">Higher Secondary</option>
+                                            </select>
+                                        </div>
+                                        <div class="form-group col-md-4">
+                                            <div class="form-control-label">Institute</div>
+                                            <input type="text" class="form-control" name="institute" id="institute" required/>
+                                        </div>
+                                        <div class="form-group col-md-4">
+                                            <div class="form-control-label">Description</div>
+                                            <input type="text" class="form-control" name="description" id="description" />
+                                        </div>
+                                        <div class="form-group col-md-4">
+                                            <div class="form-control-label">Month </div>
+                                            <select class="form-control" name="month" id="month">
+                                                <option value="">Select Month</option>
+                                                <option value="1">January</option>
+                                                <option value="2">February</option>
+                                                <option value="3">March</option>
+                                                <option value="4">April</option>
+                                                <option value="5">May</option>
+                                                <option value="6">June</option>
+                                                <option value="7">July</option>
+                                                <option value="8">August</option>
+                                                <option value="9">September</option>
+                                                <option value="10">October</option>
+                                                <option value="11">November</option>
+                                                <option value="12">december</option>
+                                            </select>
+                                        </div>
+                                        <div class="form-group col-md-4">
+                                            <div class="form-control-label">Year</div>
+                                            <div class="input-group input-group-icon">
+                                                <span class="input-group-addon" style="border: 1px solid #e4eaec;
+                                                padding: 6px 10px;
+                                                background-color: #eee">
+                                                  <span class="icon fa-calendar" aria-hidden="true"></span>
+                                                </span>
+                                                <input type="text" class="form-control" name="year" id="year" maxlength="4" oninput="this.value = this.value.replace(/[^0-9.]/g, '').replace(/(\..*)\./g, '$1');"/>
+                                            </div>
+                                        </div>
+                                        <div class="form-group col-md-4 " style="align-self: end;">
+                                            <button class="btn btn-primary">Add</button>
+                                        </div>
+                                    </div>
+                                </form>
+                            </div>
+                            <div class="tab-pane" id="work-experience-details" role="tabpanel">
+                                <table class="table table-hover dataTable table-striped w-full mt-10">
+                                    <thead>
+                                        <tr>
+                                            <th>Job Position</th>
+                                            <th>Employer Name</th>
+                                            <th>Job Description</th>
+                                            <th>From Date</th>
+                                            <th>To Date</th>
+                                            <th>Action</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        <%userExperience.forEach(function(u){%>
+                                        <tr data-row-id="<%= u.id %>">
+                                            <td><%= u.job_position %></td>
+                                            <td><%= u.employer_name %></td>
+                                            <td><%= u.job_description %></td>
+                                            <td><%= formatDate(u.from_month,'MMMM')+"/"+u.from_year %></td>
+                                            <td><%= formatDate(u.to_month,'MMMM')+"/"+u.to_year %></td>
+                                            <td><a class="edit-experience" data-target="#edit-experience" data-toggle="modal"><i class="fa fa-edit"></i> </a>
+                                                <a class="delete-experience" data-target="#delete-experience" data-toggle="modal"><i class="fa fa-trash"></i> </a></td>
+                                        </tr>
+                                        <%})%>
+                                    </tbody>
+                                </table>
+                                <hr />
+                                <form action="/app/users/add/experience" method="POST">
+                                    <%- csrf_html %>
+                                    <input type="hidden" name="user_id_experience" id="user-id-experience" value="<%= user.id %>">
+                                    <div class="row">
+                                        <div class="form-group col-md-4">
+                                            <label class="form-control-label">Job Position</label>
+                                            <input type="text" class="form-control" name="job_position" id="job-position" required/>
+                                        </div>
+                                        <div class="form-group col-md-4">
+                                            <label class="form-control-label">Employer Name</label>
+                                            <input type="text" class="form-control" name="employer_name" id="employer-name" required/>
+                                        </div>
+                                        <div class="form-group col-md-4">
+                                            <label class="form-control-label">Job Description</label>
+                                            <input type="text" class="form-control" name="job_description" id="job-description" />
+                                        </div>                                    
+                                    </div>
+                                    <div class="row">
+                                        <div class="form-group col-md-3">
+                                            <label class="form-control-label">From Month</label>
+                                            <select class="form-control" name="from_month_exp" id="from_month_exp" required>
+                                                <option value="">Select Month</option>
+                                                <option value="1">January</option>
+                                                <option value="2">February</option>
+                                                <option value="3">March</option>
+                                                <option value="4">April</option>
+                                                <option value="5">May</option>
+                                                <option value="6">June</option>
+                                                <option value="7">July</option>
+                                                <option value="8">August</option>
+                                                <option value="9">September</option>
+                                                <option value="10">October</option>
+                                                <option value="11">November</option>
+                                                <option value="12">december</option>
+                                            </select>
+                                        </div>
+                                        <div class="form-group col-md-3">
+                                            <label class="form-control-label">Year</label>
+                                            <input type="text" class="form-control" name="from_year_exp" id="from_year_exp" required/>
+                                        </div>
+                                        <div class="form-group col-md-3">
+                                            <label class="form-control-label">To Month</label>
+                                            <select class="form-control" name="to_month_exp" id="to_month_exp">
+                                                <option value="">Select Month</option>
+                                                <option value="1">January</option>
+                                                <option value="2">February</option>
+                                                <option value="3">March</option>
+                                                <option value="4">April</option>
+                                                <option value="5">May</option>
+                                                <option value="6">June</option>
+                                                <option value="7">July</option>
+                                                <option value="8">August</option>
+                                                <option value="9">September</option>
+                                                <option value="10">October</option>
+                                                <option value="11">November</option>
+                                                <option value="12">december</option>
+                                            </select>
+                                        </div>
+                                        <div class="form-group col-md-3">
+                                            <label class="form-control-label">Year</label>
+                                            <input type="text" class="form-control" name="to_year_exp" id="to_year_exp" />
+                                        </div>   
+                                        <div class="col-md-12 text-right ">
+                                            <button class="btn btn-primary ">Add</button>
+                                        </div>
+                                    </div>
+                                </form>
+                            </div>
+                            <div class="tab-pane" id="compensations" role="tabpanel">
+                                <div class="nav-tabs-vertical">
+                                    <ul class="nav nav-tabs mr-25" role="tablist">
+                                        <li class="nav-item" role="presentation"><a class="nav-link active" data-toggle="tab" href="#salary" aria-controls="salary" role="tab">Salary</a></li>
+                                        <li class="nav-item" role="presentation"><a class="nav-link" data-toggle="tab" href="#pt-pay" aria-controls="pt-pay" role="tab">Personal Training Pay</a></li>
+                                    </ul>
+                                    <div class="tab-content">
+                                        <div class="tab-pane active" id="salary" role="tabpanel">
+                                            <table class="table table-hover dataTable table-striped w-full mt-10">
+                                                <thead>
+                                                    <tr>
+                                                        <th>Salary Type</th>
+                                                        <th>Salary Amount (<i class="fa fa-inr" aria-hidden="true"></i>)</th>
+                                                        <th>Department</th>
+                                                        <th>Designation</th>
+                                                        <th>Status</th>
+                                                        <th>Updated On</th>
+                                                    </tr>
+                                                </thead>
+                                                <tbody>
+                                                    <%userSalaryLog.forEach(function(s){%>
+                                                    <tr>
+                                                        <td>
+                                                            <% if(s.salary_type == 1){%>Hourly
+                                                            <%}else if(s.salary_type == 2){%>Daily
+                                                            <%}else if(s.salary_type == 3){%>Monthly
+                                                            <%}else if(s.salary_type == 4){%>Pay Per Class
+                                                            <%}else if(s.salary_type == 4){%>Pay Per Check In
+                                                            <%} %>
+                                                        </td>
+                                                        <td><%= s.salary_amount %></td>
+                                                        <td>
+                                                            <% departments.forEach((d) => { 
+                                                            if(d.id == s.department_id){%>
+                                                                <%= d.department %>
+                                                            <%} }) %>
+                                                        </td>
+                                                        <td>
+                                                            <% designations.forEach((d) => { 
+                                                            if(d.id == s.designation_id){%>
+                                                            <%= d.designation %>
+                                                            <%} })%>
+                                                        </td>
+                                                        <td>
+                                                            <% if(s.is_promoted == 1){ %>
+                                                            <span class="badge badge-success">Promoted</span>
+                                                            <% }else if(s.is_promoted == 2){ %>
+                                                            <span class="badge badge-danger">Demoted</span>
+                                                            <% } %>
+                                                        </td>
+                                                        <td><%= formatDate(s.created_at,'DD-MM-YYYY') %>
+                                                            <small><%= formatDate(s.created_at,'hh:mm a') %></small>
+                                                        </td>
+                                                    </tr>
+                                                    <%})%>
+                                                </tbody>
+                                            </table>
+                                            <hr />
+                                            <form id="add_salary_form">
+                                                <%- csrf_html %>
+                                                <input type="hidden" name="user_id_salary" id="user-id-salary" value="<%= user.id %>">
+                                                <div class="row">
+                                                    <div class="form-group col-md-4">
+                                                        <label class="form-control-label">Salary Type</label>
+                                                        <select class="form-control" name="salary_type" id="salary-type">
+                                                            <option value="" <%= (user.salary_type)?(''):('selected') %>>Select Salary Type</option>
+                                                            <option value="1" <%= (user.salary_type==1)?('selected'):('') %>>Hourly</option>
+                                                            <option value="2" <%= (user.salary_type==2)?('selected'):('') %>>Daily</option>
+                                                            <option value="3" <%= (user.salary_type==3)?('selected'):('') %>>Monthly</option>
+                                                            <option value="4" <%= (user.salary_type==4)?('selected'):('') %>>Pay Per Class</option>
+                                                            <option value="5" <%= (user.salary_type==5)?('selected'):('') %>>Pay Per Check In</option>
+                                                        </select>
+                                                    </div>
+                                                    <div class="form-group col-md-4">
+                                                        <label class="form-control-label">Amount</label>
+                                                        <input type="number" class="form-control" name="salary_amount" id="salary-amount" value="<%= user.salary_amount %>" />
+                                                    </div>
+                                                    <div class="form-group col-md-4">
+                                                        <label class="form-control-label" for="role">Designation</label>
+                                                        <select class="form-control " id="designation-salary" name="salary_designation">
+                                                            <option value="">Select Designation</option>
+                                                            <% designations.forEach((d) => { %>
+                                                            <option value="<%= d.id %>" <%= d.id === user.designation_id ? 'selected' : '' %>><%= d.designation %></option>
+                                                            <% }) %>
+                                                        </select>
+                                                    </div>
+                                                    <div class="form-group col-md-4">
+                                                        <label class="form-control-label" for="role">Department</label>
+                                                        <select class="form-control " id="department-salary" name="salary_department">
+                                                            <option value="">Select Department</option>
+                                                            <% departments.forEach((d) => { %>
+                                                            <option value="<%= d.id %>" <%= d.id === user.department_id ? 'selected' : '' %>><%= d.department %></option>
+                                                            <% }) %>
+                                                        </select>
+                                                    </div>
+                                                    <div class="form-group col-md-4">
+                                                        <label class="form-control-label" for="role">Status</label><br>
+                                                        <input type="radio" name="is_promoted" value="1"> Promoted &nbsp;&nbsp;&nbsp;
+                                                        <input type="radio" name="is_promoted" value="2"> Demoted
+                                                    </div>
+                                                    <div class="form-group col-md-4 text-right">
+                                                        <button class="btn btn-primary mt-40">Add</button>
+                                                    </div>
+                                                </div>
+                                            </form>
+                                        </div>
+                                        <div class="tab-pane" id="pt-pay" role="tabpanel">
+                                            <table class="table table-hover dataTable table-striped w-full mt-10">
+                                                <thead>
+                                                    <tr>
+                                                        <th>Pay Type</th>
+                                                        <th>Pay Amount (<i class="fa fa-inr" aria-hidden="true"></i>)</th>
+                                                        <th>Created At</th>
+                                                    </tr>
+                                                </thead>
+                                                <tbody>
+                                                    <%userPTPayLog.forEach(function(p){%>
+                                                    <tr>
+                                                        <td>
+                                                            <% if(p.pay_type == 1){%>PT Fixed Rate Per Session on Allocation Basis
+                                                            <%}else if(p.pay_type == 2){%>PT Fixed Rate Per Session on Completion Basis
+                                                            <%}else if(p.pay_type == 3){%>PT % on Allocation Basis
+                                                            <%}else if(p.pay_type == 4){%>PT % on Completion Basis
+                                                            <%} %>
+                                                        </td>
+                                                        <td><%= p.pay_amount %></td>
+                                                        <td><%= formatDate(p.created_at,'DD-MM-YYYY hh:mm a') %></td>
+                                                    </tr>
+                                                    <%})%>
+                                                </tbody>
+                                            </table>
+                                            <hr />
+                                            <form action="/app/users/add/pay" method="POST">
+                                                <%- csrf_html %>
+                                                <input type="hidden" name="user_id_pay" id="user-id-pay" value="<%= user.id %>">
+                                                <div class="row">
+                                                    <div class="form-group col-md-4">
+                                                        <label class="form-control-label">Pay Type</label>
+                                                        <select class="form-control" name="pay_type" id="pt-pay-type">
+                                                            <option value="" <%= (user.pay_type)?(''):('selected') %>>Select Pay Type</option>
+                                                            <option value="1" <%= (user.pay_type==1)?('selected'):('') %>>PT Fixed Rate Per Session on Allocation Basis</option>
+                                                            <option value="2" <%= (user.pay_type==2)?('selected'):('') %>>PT Fixed Rate Per Session on Completion Basis</option>
+                                                            <option value="3" <%= (user.pay_type==3)?('selected'):('') %>>PT % on Allocation Basis</option>
+                                                            <option value="4" <%= (user.pay_type==4)?('selected'):('') %>>PT % on Completion Basis</option>
+                                                        </select>
+                                                    </div>
+                                                    <div class="form-group col-md-4">
+                                                        <label class="form-control-label">Amount</label>
+                                                        <input type="number" class="form-control" name="pay_amount" value="<%= user.pay_amount%>" id="pt-pay-amount" />
+                                                    </div>
+                                                    <div class="form-group col-md-4">
+                                                        <button class="btn btn-primary mt-40">Update</button>
+                                                    </div>
+                                                </div>
+                                            </form>
+                                        </div>                                        
+                                    </div>
+                                </div>
+                            </div>
+                            <!-- <div class="tab-pane" id="attendance" role="tabpanel">
+                                <div class="row">
+                                    <div class="col-md-12">
+                                        <% if(attendanceLogs.length) { %>
+                                        <table class="table table-hover dataTable table-striped w-full">
+                                            <thead>
+                                                <tr>                                            
+                                                    <th>In Time</th>                                                    
+                                                    <th>Out Time</th>                                                    
+                                                    <th>Session Duration</th>                                                    
+                                                </tr>
+                                            </thead>
+                                            <tbody>
+                                                <% attendanceLogs.forEach((a) => { %>
+                                                <tr>
+                                                    <td><%= formatDate(a.in_time, 'Do MMM YYYY') %> <small><%= formatDate(a.in_time, 'hh:mm A') %></small></td>
+                                                    <td><%= formatDate(a.out_time, 'Do MMM YYYY') %> <small><%= formatDate(a    .out_time, 'hh:mm A') %></small></td>
+                                                    <td><%= a.session_duration %></td>
+                                                </tr>
+                                                <% }) %>                                        
+                                            </tbody>
+                                        </table>
+                                        <% } else { %>
+                                        <div class="text-center text-muted mt-20">No Data Found</div>
+                                        <% } %>
+                                    </div>
+                                </div>
+                            </div> -->
+                            <div class="tab-pane" id="user-status" role="tabpanel">
+                                <div class="row">
+                                    <div class="col-md-12">
+                                        <% if(userStatusLogs.length) { %>
+                                        <table class="table table-hover dataTable table-striped w-full">
+                                            <thead>
+                                                <tr>                                            
+                                                    <th>Status</th>                                                    
+                                                    <th>From Date</th>  
+                                                    <th>To Date</th>                                                    
+                                                    <th>Reason for Status Change</th>                     
+                                                </tr>
+                                            </thead>
+                                            <tbody>
+                                            <% userStatusLogs.forEach(function(u, i){ %>  
+                                            <% if(i==0){ %> 
+                                            <tr>
+                                                <td>
+                                                    <% if(u.is_active == 0){ %>
+                                                    <span class="badge badge-success">Active</span>
+                                                    <% }else{ %>  
+                                                    <span class="badge badge-danger">In Active</span>
+                                                    <% } %>
+                                                </td>
+                                                <td><%= formatDate(user.created_date, 'DD-MM-YYYY') %></td>
+                                                <td><%= formatDate(u.created_date, 'DD-MM-YYYY') %></td>
+                                                <td>
+                                                    <% if(u.reason_id == 1){ %>
+                                                        Sabbatical Leave
+                                                    <% }else if(u.reason_id == 2){ %>
+                                                        Normal Leave
+                                                    <% }else if(u.reason_id == 3){ %>
+                                                        Permanantly Leaving the Job
+                                                    <% }else if(u.reason_id == 4){ %>
+                                                        <%= u.reason_text %>
+                                                    <% } %>
+                                                </td>
+                                            </tr>
+                                            <% }else{ %>  
+                                            <tr>
+                                                <td>
+                                                    <% if(u.is_active == 0){ %>
+                                                    <span class="badge badge-success">Active</span>
+                                                    <% }else{ %>  
+                                                    <span class="badge badge-danger">In Active</span>
+                                                    <% } %>
+                                                </td>
+                                                <td><%= formatDate(userStatusLogs[i-1].created_date, 'DD-MM-YYYY') %></td>
+                                                <td><%= formatDate(u.created_date, 'DD-MM-YYYY') %></td>
+                                                <td>
+                                                    <%= u.reason_text %>
+                                                </td>
+                                            </tr>
+                                            <% } }) %>                               
+                                            </tbody>
+                                        </table>
+                                        <% } else { %>
+                                        <div class="text-center text-muted mt-20">No Data Found</div>
+                                        <% } %>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="tab-pane" id="time-slots" role="tabpanel">
+                                <div class="row">
+                                    <div class="col-md-12">
+                                        <% if(timeSlots.length) { %>
+                                        <table class="table table-hover dataTable table-striped w-full">
+                                            <thead>
+                                                <tr>                                            
+                                                    <th>Start Time</th>  
+                                                    <th>End Time</th>                                                  
+                                                    <th>Available On Weekdays</th>  
+                                                    <th><center>Action</center></th> 
+                                                </tr>
+                                            </thead>
+                                            <tbody>
+                                                <% timeSlots.forEach(function(t){ %>  
+                                                <tr>
+                                                    <td><%= t.start_time %></td>
+                                                    <td><%= t.end_time %></td>
+                                                    <td><% var arr = ['Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday', 'Sunday']; 
+                                                        var week_str = '';%>
+                                                        <% if(t.week_days == 'all'){ %>
+                                                            All Days a Week
+                                                        <% }else{ 
+                                                            var week_arr = t.week_days.split(",");
+                                                            week_arr.forEach(function(w){
+                                                                week_str+= ((week_str)?(', '+arr[w]):(arr[w])) ;
+                                                            })
+                                                        } %>
+                                                        <%= week_str; %>
+                                                    </td>
+                                                    <td><center><a class="time-slot-delete" data-toggle='modal' data-target='#delete-time-slot' time_slot_id="<%= t.id %>"><i class="fa fa-trash"></i></a></center></td>
+                                                </tr>
+                                                <% }) %>                  
+                                            </tbody>
+                                        </table>
+                                        <% } else { %>
+                                        <div class="text-center text-muted mt-20">No Data Found</div>
+                                        <% } %>
+                                    </div>
+                                </div>
+                                <hr />
+                                <form action="/app/users/add/time-slot" method="POST" id="add-time-slot">
+                                    <%- csrf_html %>
+                                    <input type="hidden" name="user_id_time_slot" id="user-id-time-slot" value="<%= user.id %>">
+                                    <div class="row">
+                                        <div class="form-group col-md-8">
+                                            <label class="form-control-label">Time Slot</label>
+                                            <select class="form-control" name="time_slot" id="time-slot">
+                                                <option value="">-- Select Slot --</option>
+                                                <% var arr = ['Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday', 'Sunday'];  %>
+                                                <% brandTimeSlots.forEach(function(bt){ %>
+                                                <option value="<%= bt.id%>"> <%= bt.start_time %> - <%= bt.end_time%>(
+                                                    <% var week_str='';%>
+                                                    <% if(bt.week_days == 'all'){%>
+                                                        All Days a Week
+                                                    <% }else{
+                                                        var week_arr = bt.week_days.split(",");
+                                                        week_arr.forEach(function(w){
+                                                            week_str+= ((week_str)?(', '+arr[w]):(arr[w])) ;
+                                                        })
+                                                        
+                                                    }%>
+                                                    <%= week_str%>
+                                                )</option>
+                                                <% }) %>
+                                            </select>
+                                        </div>
+                                        <div class="form-group col-md-4 text-right">
+                                            <button class="btn btn-primary mt-40">Save</button>
+                                        </div>
+                                    </div>
+                                </form>
+                            </div>
+                            <div class="tab-pane" id="shift" role="tabpanel">
+                                <div class="row">
+                                    <div class="col-md-12">
+                                        <% if(shifts.length) { %>
+                                        <table class="table table-hover dataTable table-striped w-full">
+                                            <thead>
+                                                <tr>                                            
+                                                    <th>Shift Details</th>  
+                                                    <th>From Date</th>                                                  
+                                                    <th>Till Date</th>  
+                                                </tr>
+                                            </thead>
+                                            <tbody>
+                                                <% shifts.forEach(function(t){ %>  
+                                                <tr>
+                                                    <td><%= t.shift_name %>(<%= t.start_time %> - <%= t.end_time %>)</td>
+                                                    <td><%= formatDate(t.start_date, 'DD-MM-YYYY') %></td>
+                                                    <td><%= t.end_date ? formatDate(t.end_date, 'DD-MM-YYYY') : 'Active Now'%>
+                                                    </td>
+                                                </tr>
+                                                <% }) %>                  
+                                            </tbody>
+                                        </table>
+                                        <% } else { %>
+                                        <div class="text-center text-muted mt-20">No Data Found</div>
+                                        <% } %>
+                                    </div>
+                                </div>
+                                <hr />
+                                <form action="/app/users/add/shift" method="POST" id="add-shift">
+                                    <%- csrf_html %>
+                                    <input type="hidden" name="user_id_shift" id="user-id-shift" value="<%= user.id %>">
+                                    <div class="row">
+                                        <div class="form-group col-md-8">
+                                            <label class="form-control-label">Shifts</label>
+                                            <select class="form-control" name="shift" id="shift">
+                                                <option value="">-- Select Shift --</option>
+                                                <% brandShifts.forEach(function(bt){ %>
+                                                <option value="<%= bt.id%>"><%= bt.shift_name %>(<%= bt.start_time %> - <%= bt.end_time %>)</option>
+                                                <% }) %>
+                                            </select>
+                                        </div>
+                                        <div class="form-group col-md-4 text-right">
+                                            <button class="btn btn-primary mt-40">Save</button>
+                                        </div>
+                                    </div>
+                                </form>
+                            </div>
+                            <div class="tab-pane" id="feedbacks" role="tabpanel">
+                                <div class="row">
+                                    <div class="col-md-12">
+                                        <% if(feedbacks.length) { %>
+                                        <table class="table table-hover dataTable table-striped w-full">
+                                            <thead>
+                                                <tr>                                            
+                                                    <th>Member Name</th>  
+                                                    <th>Feedback</th>                                                  
+                                                    <th>Date of Feedback</th>  
+                                                </tr>
+                                            </thead>
+                                            <tbody>
+                                                <% feedbacks.forEach(function(t){ %>  
+                                                <tr>
+                                                    <td><a href="/app/members/<%= t.user_id %>" target="_blank" class="no-underline"><%= t.member_name %></a></td>
+                                                    <td><%= t.feedback %></td>
+                                                    <td><%= formatDate(t.created_date, 'DD-MM-YYYY hh:mm a') %></td>
+                                                </tr>
+                                                <% }) %>                  
+                                            </tbody>
+                                        </table>
+                                        <% } else { %>
+                                        <div class="text-center text-muted mt-20">No Data Found</div>
+                                        <% } %>
+                                    </div>
+                                </div>
+                                <hr />
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="modal fade" id="profile-picture-capture" aria-hidden="false" aria-labelledby="profile-picture-capture" role="dialog" tabindex="-1">
+    <div class="modal-dialog modal-simple">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">×</span>
+                </button>
+                <h4 class="modal-title">Capture Profile Picture</h4>
+            </div>
+            <div class="modal-body">
+                <div class="col-md-12">
+                    <div id="camera-container"></div>
+                </div>                
+                <div class="col-md-12 text-center">
+                    <button class="btn btn-primary" id="capture">Capture</button>
+                </div>                
+            </div>            
+        </div>
+    </div>
+</div>
+
+<div class="modal fade" id="user-log-modal" aria-hidden="false" aria-labelledby="user-log-modal" role="dialog" tabindex="-1">
+    <div class="modal-dialog modal-simple">
+        <div class="modal-content">
+        <form>
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">×</span>
+                </button>
+                <h4 class="modal-title">User Status</h4>
+                <input type="hidden" value="<%= _csrf %>" name="_csrf" id="_csrf">
+            </div>
+            <div class="modal-body">
+                <div class="row">
+                    <div class="col-md-12">
+                        <label>Select Reason</label>
+                        <select class="form-control" id="user-status-reason-id" required>
+                            <option value="">--Select Reason--</option>
+                            <option value="1">Sabbatical Leave</option>
+                            <option value="2">Normal Leave</option>
+                            <option value="3">Permanantly Leaving the Job</option>
+                            <option value="4">Other</option>
+                        </select>
+                    </div> 
+                </div>
+                <br>
+                <div class="resignation display-hidden">
+                    <div class="row">
+                        <div class="col-md-6">
+                            <label>Resignation</label>
+                            <select class="form-control" name="resignation_type" id="resignation-type">
+                                <option value=''>--Select Type--</option>
+                                <option value='1'>Voluntary</option>
+                                <option value='2'>Involuntary</option>
+                            </select>
+                        </div>
+                        <div class="col-md-6">
+                            <label>Reason</label>
+                            <textarea class="form-control" name="resignation_reason" id="resignation-reason"></textarea>
+                        </div> 
+                    </div>
+                    <br>
+                    <div class="row">
+                        <div class="col-md-6">
+                            <label>Notice Period</label>
+                            <select class="form-control" name="notice_period" id="resignation-notice-period">
+                                <option value=''>--Select Type--</option>
+                                <option value='1'>Waived off</option>
+                                <option value='2'>30 days</option>
+                                <option value='3'>60 days</option>
+                                <option value='4'>90 days</option>
+                            </select>
+                        </div>
+                        <div class="col-md-6">
+                            <label>Notice Served</label><br>
+                            <input type="radio" name="notice_served" value="yes">&nbsp;&nbsp;Yes&nbsp;
+                            <input type="radio" name="notice_served" value="no">&nbsp;&nbsp;No&nbsp;
+                            <input type="radio" name="notice_served" value="na">&nbsp;&nbsp;NA&nbsp;
+                        </div>   
+                    </div>  
+                </div>
+                <br>
+                <div class="row">
+                    <div class="col-md-12">
+                        <textarea class="form-control display-hidden" id="reason-text" placeholder="Other Reason"></textarea>
+                    </div>   
+                </div>  
+                <br>          
+                <div class="col-md-12 text-right">
+                    <button class="btn btn-primary" id="save-user-status">Save</button>
+                </div>                
+            </div>
+        </form>            
+        </div>
+    </div>
+</div>
+
+<div class="modal fade" id="delete-time-slot" aria-hidden="false" aria-labelledby="delete-time-slot" role="dialog" tabindex="-1">
+    <div class="modal-dialog modal-simple">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">×</span>
+                </button>
+                <h4 class="modal-title">Delete Time Slot</h4>
+            </div>
+            <div class="modal-body">
+                <form action="/app/users/delete/time-slot" method="POST">
+                    <%- csrf_html %>
+                    <input type="hidden" name="time_slot_id">
+                    <div class="row">
+                        <div class="col-md-12">
+                            Are you sure you want to Delete this Time Slot?
+                        </div> 
+                    </div> 
+                    <br>          
+                    <div class="col-md-12 text-right">
+                        <button type="submit" class="btn btn-primary" id="">Delete</button>
+                        <button class="btn btn-secondary"  class="close" data-dismiss="modal">Cancel</button>
+                    </div> 
+                </form>               
+            </div>            
+        </div>
+    </div>
+</div>
+
+<div class="modal fade" id="delete-user" aria-hidden="false" aria-labelledby="delete-user" role="dialog" tabindex="-1">
+    <div class="modal-dialog modal-simple">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">×</span>
+                </button>
+                <h4 class="modal-title">Delete User</h4>
+            </div>
+            <div class="modal-body">
+                <form action="/app/users/delete" method="POST">
+                    <%- csrf_html %>
+                    <div class="row">
+                        <div class='col-md-12'>
+                            <input type="hidden" name="user_id" value="<%= user.id %>">
+                            <p>Are you sure you want to DELETE  User - <span class="member-name"><%= user.fname +' '+ user.lname %></span></p>
+                        </div>                    
+                    </div>
+                    <div class="row">
+                        <div class='col-md-12'>
+                            <button type="submit" class="btn btn-primary"> Delete</button>
+                        </div>                    
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="modal fade" id="edit-experience" aria-hidden="false" aria-labelledby="delete-user" role="dialog" tabindex="-1">
+    <div class="modal-dialog modal-simple">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">×</span>
+                </button>
+                <h4 class="modal-title">Update Experience</h4>
+            </div>
+            <div class="modal-body">
+                <form action="/app/users/edit-experience" method="post">
+                    <%- csrf_html %>
+                    <input type="hidden" name="user_id" value="<%= user.id %>">
+                    <input type="hidden" id="experience_id" name="id" >
+                    <div class="row">
+                        <div class="form-group col-md-4">
+                            <label class="form-control-label">Job Position</label>
+                            <input type="text" class="form-control" name="job_position" id="edit-job-position" required/>
+                        </div>
+                        <div class="form-group col-md-4">
+                            <label class="form-control-label">Employer Name</label>
+                            <input type="text" class="form-control " name="employer_name" id="edit-employer-name" required/>
+                        </div>
+                        <div class="form-group col-md-4">
+                            <label class="form-control-label">Job Description</label>
+                            <input type="text" class="form-control " name="job_description" id="edit-job-description" />
+                        </div>                                    
+                    </div>
+                    <div class="row">
+                        <div class="form-group col-md-3">
+                            <label class="form-control-label">From Month</label>
+                            <select class="form-control" name="from_month" id="edit-from_month" required>
+                                <option value="">Select Month</option>
+                                <option value="1">January</option>
+                                <option value="2">February</option>
+                                <option value="3">March</option>
+                                <option value="4">April</option>
+                                <option value="5">May</option>
+                                <option value="6">June</option>
+                                <option value="7">July</option>
+                                <option value="8">August</option>
+                                <option value="9">September</option>
+                                <option value="10">October</option>
+                                <option value="11">November</option>
+                                <option value="12">december</option>
+                            </select>
+                        </div>
+                        <div class="form-group col-md-3">
+                            <label class="form-control-label">Year</label>
+                            <input type="text" class="form-control" name="from_year" id="edit-from_year" required/>
+                        </div>
+                        <div class="form-group col-md-3">
+                            <label class="form-control-label">To Month</label>
+                            <select class="form-control " name="to_month" id="edit-to_month">
+                                <option value="">Select Month</option>
+                                <option value="1">January</option>
+                                <option value="2">February</option>
+                                <option value="3">March</option>
+                                <option value="4">April</option>
+                                <option value="5">May</option>
+                                <option value="6">June</option>
+                                <option value="7">July</option>
+                                <option value="8">August</option>
+                                <option value="9">September</option>
+                                <option value="10">October</option>
+                                <option value="11">November</option>
+                                <option value="12">december</option>
+                            </select>
+                        </div>
+                        <div class="form-group col-md-3">
+                            <label class="form-control-label">Year</label>
+                            <input type="text" class="form-control" name="to_year" id="edit-to_year" />
+                        </div>   
+                        <div class="col-md-12 text-center">
+                            <button class="btn btn-primary ">Update</button>
+                        </div>
+                    </div>
+                </form>    
+            </div>
+        </div>
+    </div>
+</div>
+<div class="modal fade" id="edit-education" aria-hidden="false" aria-labelledby="delete-user" role="dialog" tabindex="-1">
+    <div class="modal-dialog modal-simple">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">×</span>
+                </button>
+                <h4 class="modal-title">Update Education</h4>
+            </div>
+            <div class="modal-body">
+                <form action="/app/users/edit-education" method="post">
+                    <%- csrf_html %>
+                    <input type="hidden" name="user_id" value="<%= user.id %>">
+                    <input type="hidden" id="education_id" name="id" >
+                    <div class="row">
+                        <div class="form-group col-md-4">
+                            <div class="form-control-label">Education Level</div>
+                            <select class="form-control" name="education_level" id="edit-education-level" required>
+                                <option value="">Select Level</option>
+                                <option value="1">Degree</option>
+                                <option value="2">Diploma</option>
+                                <option value="3">Certificate</option>
+                                <option value="4">Secondary</option>
+                                <option value="5">Higher Secondary</option>
+                            </select>
+                        </div>
+                        <div class="form-group col-md-4">
+                            <div class="form-control-label">Institute</div>
+                            <input type="text" class="form-control" name="institute" id="edit-institute" required/>
+                        </div>
+                        <div class="form-group col-md-4">
+                            <div class="form-control-label">Description</div>
+                            <input type="text" class="form-control" name="description" id="edit-description" />
+                        </div>
+                        <div class="form-group col-md-4">
+                            <div class="form-control-label">Month </div>
+                            <select class="form-control" name="month" id="edit-month">
+                                <option value="">Select Month</option>
+                                <option value="1">January</option>
+                                <option value="2">February</option>
+                                <option value="3">March</option>
+                                <option value="4">April</option>
+                                <option value="5">May</option>
+                                <option value="6">June</option>
+                                <option value="7">July</option>
+                                <option value="8">August</option>
+                                <option value="9">September</option>
+                                <option value="10">October</option>
+                                <option value="11">November</option>
+                                <option value="12">december</option>
+                            </select>
+                        </div>
+                        <div class="form-group col-md-4">
+                            <div class="form-control-label">Year</div>
+                            <input type="text" class="form-control" name="year" id="edit-year" />
+                        </div>
+                        <div class="form-group col-md-12 text-center">
+                            <button class="btn btn-primary mt-40">Update</button>
+                        </div>
+                    </div>
+                </form>    
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="modal fade" id="delete-education" aria-hidden="false" aria-labelledby="delete-user" role="dialog" tabindex="-1">
+    <div class="modal-dialog modal-simple">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">×</span>
+                </button>
+                <h4 class="modal-title">Delete</h4>
+            </div>
+            <div class="modal-body">
+                <form action="/app/users/delete-education" method="POST">
+                    <%- csrf_html %>
+                    <div class="row">
+                        <div class='col-md-12'>
+                            <input type="hidden" name="user_id" value="<%= user.id %>">
+                            <input type="hidden" id="delete_education_id" name="id" >
+                            <p>Are you sure you want to delete this record.</p>
+                        </div>                    
+                    </div>
+                    <div class="row">
+                        <div class='col-md-12'>
+                            <button type="submit" class="btn btn-primary"> Delete</button>
+                        </div>                    
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+<div class="modal fade" id="delete-experience" aria-hidden="false" aria-labelledby="delete-user" role="dialog" tabindex="-1">
+    <div class="modal-dialog modal-simple">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">×</span>
+                </button>
+                <h4 class="modal-title">Delete</h4>
+            </div>
+            <div class="modal-body">
+                <form action="/app/users/delete-experience" method="POST">
+                    <%- csrf_html %>
+                    <div class="row">
+                        <div class='col-md-12'>
+                            <input type="hidden" name="user_id" value="<%= user.id %>">
+                            <input type="hidden" id="delete_experience_id" name="id" >
+                            <p>Are you sure you want to delete this record.</p>
+                        </div>                    
+                    </div>
+                    <div class="row">
+                        <div class='col-md-12'>
+                            <button type="submit" class="btn btn-primary"> Delete</button>
+                        </div>                    
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+<%- include("./partials/footer.html") %>
+<script type="text/javascript">
+    $(document).ready(function(){
+        $('.edit-education1').on('click',function(){
+            const id = $(this).closest('tr').attr('data-row-id');
+            
+            $.ajax({
+                url: '/app/users/getEducation',
+                method: 'POST',
+                data: {
+                    _csrf: '<%= _csrf %>',
+                    id
+                },
+                success: function (data) {
+                    if (data.success) {
+                        var d = data.data
+                        $("#edit-education-level").val(d[0].education_level)
+                        $("#edit-institute").val(d[0].institute)
+                        $("#edit-description").val(d[0].description)
+                        $("#edit-month").val(d[0].month)
+                        $("#edit-year").val(d[0].year)
+                        $("#education_id").val(d[0].id)
+                    } else {
+                        toastr.error('Some error occurred')
+                    }
+                }
+            });
+        
+        })
+
+        $('.delete-education').on('click',function(){
+            const id = $(this).closest('tr').attr('data-row-id');
+            alert(id)
+            
+            $.ajax({
+                url: '/app/users/getEducation',
+                method: 'POST',
+                data: {
+                    _csrf: '<%= _csrf %>',
+                    id
+                },
+                success: function (data) {
+                    if (data.success) {
+                        var d = data.data
+                        $("#delete_education_id").val(d[0].id)
+                    } else {
+                        toastr.error('Some error occurred')
+                    }
+                }
+            });
+        
+        })
+
+
+        $('.edit-experience').on('click',function(){
+            const id = $(this).closest('tr').attr('data-row-id');
+            $.ajax({
+                url: '/app/users/getExperience',
+                method: 'POST',
+                data: {
+                    _csrf: '<%= _csrf %>',
+                    id
+                },
+                success: function (data) {
+                    if (data.success) {
+                        var d = data.data
+                        $("#edit-job-position").val(d[0].job_position)
+                        $("#edit-employer-name").val(d[0].employer_name)
+                        $("#edit-job-description").val(d[0].job_description)
+                        $("#edit-from_month").val(d[0].from_month)
+                        $("#edit-from_year").val(d[0].from_year)
+                        $("#experience_id").val(d[0].id)
+                        $("#edit-to_month").val(d[0].to_month)
+                        $("#edit-to_year").val(d[0].to_year)
+                    } else {
+                        toastr.error('Some error occurred')
+                    }
+                }
+            });
+        
+        })
+
+        $('.delete-experience').on('click',function(){
+            const id = $(this).closest('tr').attr('data-row-id');
+            alert(id)
+            
+            $.ajax({
+                url: '/app/users/getExperience',
+                method: 'POST',
+                data: {
+                    _csrf: '<%= _csrf %>',
+                    id
+                },
+                success: function (data) {
+                    if (data.success) {
+                        var d = data.data
+                        $("#delete_experience_id").val(d[0].id)
+                    } else {
+                        toastr.error('Some error occurred')
+                    }
+                }
+            });
+        
+        })
+
+    })
+
+    SINGLE_USER.init({
+        _csrf: '<%= _csrf %>',
+        userData: '<%- JSON.stringify(user) %>'
+    })
+</script>

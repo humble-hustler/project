@@ -1,0 +1,194 @@
+<%- include('../partials/header.html') %>
+
+<!--FRONTEND CODE-->
+<div class="container">
+<div class="row">
+<main class="col-md-3 profile-box mt-3">
+    <article class="card contentinside mb-3">
+        <div class="card-body">
+            <figure class="icontext">
+                
+                <div class="text">
+                    <!-- <strong> <%= session.user.fname %> <%= session.user.lname %></strong> <br> 
+                    <%= session.user.email %> <br> 
+                    <%= session.user.phone %> <br> -->
+                        <ul style="list-style: none;">
+                            <li>
+                                <h4 class="fw-bold"><%= profile[0].fname %> <%= profile[0].lname %></h4> <br> 
+                            </li>
+                            <li>
+                               Email : <%= profile[0].email %> 
+                            </li>
+                            <li>
+                                Phone :<%= profile[0].phone %> 
+                            </li>
+                            
+                             <li>
+                                Address : <%= profile[0].address_line_1 %> <%= profile[0].address_line_2 %>
+                             </li>
+                             <li>
+                                Zip-code :<%= profile[0].zip %>
+                             </li>
+                            
+                        </ul>
+                        <a href="#"  id="codeforedit" class="btn btn-danger">Edit Profile</a>
+                </div>
+            </figure>
+        </div> 
+    </article>
+</main> 
+
+
+<!--start-->
+<div class="col-md-9" id="codeforupdate">            
+    <div class="modal-body">
+        <div class="card mx-auto">
+            <article class="card-body">
+                <!-- <button style="float:right;cursor:pointer" class="close-profile-modal">X</button> -->
+                <header class="mb-2"><h4 class="card-title">Update Profile</h4></header>
+                <form action="/profile/update-profile" method="POST">
+                    <input type="hidden" name="id" value="<%= profile[0].id %>" >
+                    <input type="hidden" name="_csrf" value="<%= _csrf %>">
+
+                    <div class="form-row">
+                        <div class="col form-group">
+                            <label>First name</label><span style="color: red; padding-left: 10px;">*</span>
+                            <input type="text" name="fname" value="<%= profile[0].fname %>" placeholder="John" class="form-control" required>
+                        </div>
+                        <div class="col form-group">
+                            <label>Last name</label><span style="color: red; padding-left: 10px;">*</span>
+                            <input type="text" name="lname" value="<%= profile[0].lname %>" placeholder="Doe" class="form-control" required>
+                        </div>
+                        <!-- <div class="col form-group">
+                            <label>Gender</label>
+                            <input type="radio" value="<%= profile[0].gender == 'M' %>" id="maleid" name="gender" required> <label> Male </label>
+                            <input type="radio" value="<%= profile[0].gender == 'M' %>" id="femaleid" name="gender" required> <label> Female </label> 
+                        </div> -->
+                    </div>
+        </div>
+                    <div class="form-row">
+                        <div class="col form-group">
+                            <label>Email</label><span style="color: red; padding-left: 10px;">*</span>
+                            <input type="email" name="email" value="<%= profile[0].email %>" id="user-email" placeholder="john@example.com" class="form-control" required>
+                        </div>
+                        <div class="col form-group">
+                            <label>Phone Number</label><span style="color: red; padding-left: 10px;">*</span>
+                            <input type="tel" name="phone" id="user-phone" value="<%= profile[0].phone %>"class="form-control" placeholder="1234567890" pattern="[0-9]{10}" required>
+                        </div>
+                        <div class="form-group col-md-12">
+                            <small class="form-text text-muted">We'll never share your email or phone number with anyone else.</small>
+                        </div>
+                    </div>                           
+                    <div class="form-row">
+                        <div class="col form-group">
+                            <label>Address_line_1</label><span style="color: red; padding-left: 10px;">*</span>
+                            <input class="form-control" name="address_line_1" value="<%= profile[0].address_line_1 %>"placeholder="Add Address" type="text" required>
+                            <label>Address_line_2</label><span style="color: red; padding-left: 10px;">*</span>
+                            <input class="form-control" name="address_line_2" value="<%= profile[0].address_line_2 %>"placeholder="Add Address" type="text" required>
+                        </div> 
+                        <div class="col form-group">
+                            <label>Zip-code</label><span style="color: red; padding-left: 10px;">*</span>
+                            <input class="form-control" name="zip" value="<%= profile[0].zip %>"placeholder="zip-code" type="text" required>
+                        </div>  
+                    </div>
+                  
+                    <div class="form-group">
+                        <button type="submit" id="update-btn" class="btn btn-primary">Update</button>
+                    </div>
+                    <!-- <div class="form-group"> 
+                        <label class="custom-control custom-checkbox"><input type="checkbox" class="custom-control-input" checked="" required> <div class="custom-control-label"> I agree with <a href="#">terms and contitions</a></div></label>
+                    </div>            -->
+                </form>
+            </article>
+        </div>
+        <!-- <p class="text-center">Have an account? <a href="#" class="close-register-modal open-login-modal" >Log In</a></p> -->
+    </div>            
+</div>
+</div>
+</div>
+<!--code for edit end-->
+
+<!-- register modal start -->
+<div class="modal fade" id="edit-profile-modal" tabindex="-1" role="dialog" aria-labelledby="edit-profile-modal" aria-hidden="true" >
+    <div class="modal-dialog modal-md" role="document">
+        <div class="modal-content">            
+            <div class="modal-body">
+                <div class="card mx-auto">
+                    <article class="card-body">
+                        <!-- <button style="float:right;cursor:pointer" class="close-profile-modal">X</button> -->
+                        <header class="mb-2"><h4 class="card-title">Update Profile</h4></header>
+                        <form action="/profile/update-profile" method="POST">
+                            <input type="hidden" name="id" value="<%= profile[0].id %>" >
+                            <input type="hidden" name="_csrf" value="<%= _csrf %>">
+
+                            <div class="form-row">
+                                <div class="col form-group">
+                                    <label>First name</label>
+                                    <input type="text" name="fname" value="<%= profile[0].fname %>" placeholder="John" class="form-control" required>
+                                </div>
+                                <div class="col form-group">
+                                    <label>Last name</label>
+                                    <input type="text" name="lname" value="<%= profile[0].lname %>" placeholder="Doe" class="form-control" required>
+                                </div>
+                            </div>
+                            <div class="form-row">
+                                <div class="col form-group">
+                                    <label>Email</label>
+                                    <input type="email" name="email" value="<%= profile[0].email %>" id="user-email" placeholder="john@example.com" class="form-control" required>
+                                </div>
+                                <div class="col form-group">
+                                    <label>Phone Number</label>
+                                    <input type="tel" name="phone" id="user-phone" value="<%= profile[0].phone %>"class="form-control" placeholder="1234567890" pattern="[0-9]{10}" required>
+                                </div>
+                                <div class="form-group col-md-12">
+                                    <small class="form-text text-muted">We'll never share your email or phone number with anyone else.</small>
+                                </div>
+                            </div>                           
+                            <div class="form-row">
+                                <div class="col form-group">
+                                    <label>Address_line_1</label>
+                                    <input class="form-control" name="address_line_1" value="<%= profile[0].address_line_1 %>"placeholder="Add Address" type="text" required>
+                                    <label>Address_line_2</label>
+                                    <input class="form-control" name="address_line_2" value="<%= profile[0].address_line_2 %>"placeholder="Add Address" type="text" required>
+                                </div> 
+                                <div class="col form-group">
+                                    <label>Zip-code</label>
+                                    <input class="form-control" name="zip" value="<%= profile[0].zip %>"placeholder="zip-code" type="text" required>
+                                </div>  
+                            </div>
+                          
+                            <div class="form-group">
+                                <button type="submit" id="update-btn" class="btn btn-primary btn-block">Update</button>
+                            </div>
+                            <!-- <div class="form-group"> 
+                                <label class="custom-control custom-checkbox"><input type="checkbox" class="custom-control-input" checked="" required> <div class="custom-control-label"> I agree with <a href="#">terms and contitions</a></div></label>
+                            </div>            -->
+                        </form>
+                    </article>
+                </div>
+                <!-- <p class="text-center">Have an account? <a href="#" class="close-register-modal open-login-modal" >Log In</a></p> -->
+            </div>            
+        </div>
+    </div>
+</div>
+<script>
+     $("#codeforupdate").hide();
+    $("#codeforedit").click(function(){
+  $("#codeforupdate").show();
+});
+$("#update-btn").click(function(){
+  $("#codeforupdate").hide();
+});
+</script>
+<!-- register modal end -->
+<%- include('../partials/footer.html') %>
+<style>
+    ul li{
+        margin-bottom: 10px;
+    }
+    .contentinside
+    {
+        border: 1px solid rgba(0, 0, 0, 0.2);
+        border-radius: 0.45rem;
+    }
+</style>

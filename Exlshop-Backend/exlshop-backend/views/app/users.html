@@ -1,0 +1,259 @@
+<%- include("./partials/header.html") %>
+<%- include("./partials/topnav.html") %>
+<%- include("./partials/sidebar.html") %>
+<style>
+    .panel-actions
+    {
+        position: static;
+        display: flex;
+    justify-content: space-between;
+    padding-top:30px ;
+    }
+    .panel
+   {
+    background-color: white;
+    padding: 20px 10px;
+    border-radius: 3px;
+   }
+</style>
+<div class="page">
+    <div class="page-content">
+        <ul class="nav nav-tabs nav-tabs-line tabs-line-top mb-10" role="tablist">
+            <h3>Staff Member</h3>
+            <!-- <li class="nav-item" role="presentation"><a class="nav-link " data-toggle="tab"
+                    href="#Out-of-Stock" aria-controls="personal-details" role="tab"
+                    title="Personal Details">
+                    <h4 aria-hidden="true">Out Of Stock</h4>
+                </a></li> -->
+        </ul>
+        <div class="panel">
+            <div class="panel-heading">
+               
+                <div class="panel-actions text-white">  
+                                  
+                   <div>
+                    <a class="btn btn-primary" href="/app/users/add">                        
+                        <span class="hidden-sm-down">Add Staff Member</span>
+                        <i class="icon fa-plus" aria-hidden="true"></i>
+                    </a>
+                </div>
+                    <div class="resetBtn">
+                        <button class="text-dark mr-10" id="reset-filter-btn">Reset Filter <i class="fa fa-times-circle-o"></i></button>
+                        <button class="btn btn-primary" id="filter-btn" data-toggle="modal" data-target="#filter">Filter <i class="fa fa-filter"></i></button>
+                    </div>   
+                </div>
+
+            </div>
+            <div class="panel-body">
+                <table class="table table-hover dataTable table-striped w-full mt-10" id="team-list">
+                    <thead>
+                        <tr>
+                            <th>Name</th>
+                            <th>Email</th>
+                            <th>Phone</th>
+                            <th>Role</th>
+                            <th>Department</th>
+                            <th>Designation</th>
+                            <th>Status</th>
+                            <th>Profile Status</th>
+                        </tr>
+                    </thead>                    
+                    <tbody></tbody>
+                </table>
+            </div>
+        </div>       
+    </div>
+</div>
+
+<div class="modal fade" id="filter" aria-hidden="false" aria-labelledby="filter" role="dialog" tabindex="-1">
+    <div class="modal-dialog modal-simple">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">×</span>
+                </button>
+                <h4 class="modal-title">Filters</h4>
+            </div>
+            <div class="modal-body">
+                <div class="row">
+                    <div class="form-group col-xl-6">
+                        <label class="form-control-label">Customer Name</label>
+                        <input class="form-control" id="customerName" name="customer_Name">
+                    </div>
+                    <div class="form-group col-xl-6">
+                        <label class="form-control-label">Phone No.</label>
+                        <input class="form-control" id="phone_id" name="phone_name">
+                    </div>
+                    <div class="form-group col-xl-6">
+                        <label class="form-control-label">Email-ID</label>
+                        <input class="form-control" id="email_id" name="email_name">
+                    </div>
+                    
+                    <div class="form-group col-xl-6">
+                        <label class="form-control-label">Department Name</label>
+                        <input class="form-control" id="department_id" name="department_name">
+                    </div>
+                    <div class="form-group col-xl-6">
+                        <label class="form-control-label">Designation</label>
+                        <input class="form-control" id="designation_id" name="designation_name">
+                    </div>
+                   
+                    <div class="form-group col-xl-12 text-right">
+                        <%- csrf_html %>
+                        <button class="btn btn-primary" id="apply-filter">Apply</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="modal fade" id="add-new-team-member" aria-hidden="false" aria-labelledby="add-new-team-member" role="dialog" tabindex="-1">
+    <div class="modal-dialog modal-simple modal-lg">
+        <form class="modal-content" action="/app/users/add" method="POST" autocomplete="off">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">×</span>
+                </button>
+                <h4 class="modal-title" id="add-new-team-member">Add New User</h4>
+            </div>
+            <div class="modal-body">
+                <div class="row">
+                    <div class="form-group col-xl-4">
+                        <input type="text" class="form-control" id="user-fname" name="user_fname" placeholder="First Name" required />
+                    </div>
+                    <div class="form-group col-xl-4">
+                        <input type="text" class="form-control" id="user-lname" name="user_lname" placeholder="Last Name" required />
+                    </div>
+                    <div class="form-group col-xl-4">
+                        <input type="text" class="form-control" id="user-email" name="user_email" placeholder="Email" required />
+                        <div class="invalid-feedback"></div>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="form-group col-xl-4">
+                        <input type="text" class="form-control" id="user-phone" name="user_phone" placeholder="Phone" required />
+                        <div class="invalid-feedback"></div>
+                    </div>
+                    <div class="form-group col-md-4">
+                        <input type="text" class="form-control edit-data" id="dob" name="birth_date" value="" placeholder="Date of Birth">
+                    </div>
+                    <div class="form-group col-xl-4">
+                        <select class="form-control" id="role" name="role_id" requried>
+                            <option>Select Role</option>
+                            <% roles.forEach((r)=>{ %>
+                            <option value="<%= r.id %>"><%= r.verbose %></option>
+                            <% }) %>
+                        </select>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="form-group col-md-4">
+                        <label class="form-control-label mr-10" for="lname">Gender</label>
+                        <div class="radio-custom radio-default radio-inline">
+                            <input type="radio" class="edit-data" id="gender-male" value="M" name="gender" >
+                                   <label for="gender-male">Male</label>
+                        </div>
+                        <div class="radio-custom radio-default radio-inline">
+                            <input type="radio" class="edit-data" id="gender-female" value="F" name="gender" >
+                                   <label for="gender-female">Female</label>
+                        </div>
+                    </div>
+                    <div class="form-group col-md-5">
+                        <label class="form-control-label mr-10" for="lname">Marital Status</label>
+                        <div class="radio-custom radio-default radio-inline">
+                            <input type="radio" class="edit-data" id="marital-status-married" value="1" name="marital_status" >
+                                   <label for="marital-status-married">Married</label>
+                        </div>
+                        <div class="radio-custom radio-default radio-inline">
+                            <input type="radio" class="edit-data" id="marital-status-single" value="0" name="marital_status" >
+                                   <label for="marital-status-single">Single</label>
+                        </div>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="form-group col-md-4">
+                        <!-- <label class="form-control-label" for="fname"></label> -->
+                        <input type="text" class="form-control edit-data" id="emergency_contact_name" name="emergency_contact_name" value="" placeholder="Emergency Contact Name">
+                    </div>
+                    <div class="form-group col-md-4">
+                        <!-- <label class="form-control-label" for="fname">Emergency Contact Phone</label> -->
+                        <input type="text" class="form-control edit-data" id="emergency_contact_number" name="emergency_contact_number" value="" placeholder="Emergency Contact Phone">
+                    </div>
+                    
+                    <div class="form-group col-md-4">
+                        <!-- <label class="form-control-label" for="anniversary"></label> -->
+                        <input type="text" class="form-control edit-data" id="anniversary_date" name="anniversary_date" value="" placeholder="Anniversary Date">
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="form-group col-md-4">
+                        <select class="form-control edit-data" id="blood-group" name="blood_group" value="">
+                            <option value="">--Select Blood Group--</option>
+                            <option >A+ve</option>
+                            <option >A-ve</option>
+                            <option >B+ve</option>
+                            <option >B-ve</option>
+                            <option >AB+ve</option>
+                            <option >AB-ve</option>
+                            <option >O+ve</option>
+                            <option >O-ve</option>
+                        </select>
+                    </div>
+                    <div class="form-group col-xl-4">
+                        <input type="password" class="form-control" id="user-password" name="user_password" placeholder="Password" autocomplete="new-password" required />
+                    </div>
+                    <div class="form-group col-xl-4">
+                        <input type="password" class="form-control" id="user-confirm-password" name="user_confirm_password" placeholder="Confirm Password" autocomplete="new-password" required />
+                        <div class="invalid-feedback" id="password-mismatch">Passwords do not match</div>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="form-group col-md-4">
+                        <!-- <label class="form-control-label" for="state">State</label> -->
+                        <select id="state" name="state_id" class="form-control edit-data">
+                            <option value>Select State</option>
+                            <% states.forEach((s) => { %>
+                            <option value="<%= s.id %>" ><%= s.name %></option>
+                            <% }) %>
+                        </select>
+                    </div>
+                    <div class="form-group col-md-4">
+                        <!-- <label class="form-control-label" for="city">City</label> -->
+                        <select id="city" name="city_id" class="form-control edit-data">
+                            <option value>Select City</option>
+
+                        </select>
+                    </div>
+                    <div class="form-group col-md-4">
+                        <!-- <label class="form-control-label" for="zip">Zip</label> -->
+                        <input type="text" class="form-control edit-data" id="zip" name="zip" value="" placeholder="Zip Code">
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="form-group col-md-6">
+                        <!-- <label class="form-controltrol-label" for="dob"></label> -->
+                        <textarea type="text" class="form-control edit-data" id="address_line_1" name="address_line_1" value="" placeholder="Address Line 1"></textarea>
+                    </div>
+                    <div class="form-group col-md-6">
+                        <!-- <label class="form-control-label" for="anniversary"></label> -->
+                        <textarea type="text" class="form-control edit-data" id="address_line_2" name="address_line_2" value="" placeholder="Address Line 2"></textarea>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="form-group col-xl-12">
+                        <%- csrf_html %>
+                        <button class="btn btn-primary" id="add-new-team-member-btn">Add</button>
+                    </div>
+                </div>                
+            </div>            
+        </form>
+    </div>
+</div>
+<%- include("./partials/footer.html") %>
+<script type="text/javascript">
+    VIEW_USERS.init({
+        _csrf: '<%= _csrf %>',
+        flash: '<%= messages.error %>'
+    })
+</script>

@@ -1,0 +1,64 @@
+<%- include("./partials/header.html") %>
+<%- include("./partials/topnav.html") %>
+<%- include("./partials/sidebar.html") %>
+<style>
+.select-parent{
+    background-color: rgb(201, 198, 198);
+    color: black;
+    height: 130px;
+    margin-bottom: 50px;
+    padding-left: 50px;
+    padding-top: 20px;
+    display: flex;
+}
+.select-period{
+    margin-left: 100px;
+}
+.vendor-select{
+    width: 150px;
+    height: 28px;
+}
+.period-select{
+    width: 150px;
+    height: 28px;
+}
+.filter-btn{
+    margin-top: 25px;
+    margin-left: 60px;
+}
+</style>
+<body>
+<div class="page">
+    <div class="page-content">
+        <div class="panel-heading">
+            <h3 class="panel-title"></h3>
+        </div>
+        <div class="panel">  
+            <div class="panel-body">
+                <input type="hidden" id="param-locationId" value="<%=a.locationId%>">
+                <input type="hidden" id="param-period" value="<%=a.period%>">
+                <table class="table table-hover dataTable table-striped w-full" id="orderlist">
+                    <thead>
+                        <tr style="text-align: center;">
+                            <th>Date</th>
+                            <th>Razorpay Order Id</th>
+                            <th>Customer name</th>
+                            <th>Products</th> 
+                            <th>Amount</th>
+                            <th>Shipping Address</th>
+                            <th>Shipping charges</th>
+                        </tr>
+                    </thead>                    
+                    <tbody id="tbody" style="text-align: center;"></tbody>
+                </table>
+            </div>
+        </div>       
+    </div>
+</div>
+</body>
+<%- include("./partials/footer.html") %>
+<script type="text/javascript">
+    ORDER_LIST.init({
+        _csrf: '<%= _csrf %>'
+    })
+</script>

@@ -1,0 +1,172 @@
+<%- include("./partials/header.html") %>
+<%- include("./partials/topnav.html") %>
+<%- include("./partials/sidebar.html") %>
+<div class="page">
+    <div class="page-content container-fluid">
+        <div class="row">
+            <div class="col-lg-3">
+                <div class="card card-shadow text-center">
+                    <div class="card-block">
+                        <a class="avatar avatar-lg" href="javascript:void(0)" id="capture-image">
+                            <img id="member-profile-image" src="<%= dietician.image_file ? ('/profile-img/'+dietician.image_file) : '/images/avatar-placeholder.png' %>">
+                        </a>
+                        <h4 class="profile-user"><%= dietician.fname %> <%= dietician.lname %></h4>
+                        Inactive
+                        <input type="checkbox" id="user-active-switch" data-color="#eb6709" class="js-switch edit-data" name="is_active" <%= dietician.is_active ? 'checked' : '' %> />
+                        Active
+                        <hr />
+                        <label>Category</label>
+                        <select class="form-control" id="diet-plan" name="diet_plan" placeholder="Diet Plan" multiple required>
+                            <% dietPlan.forEach((dp) => { %>
+                            <option <%= (dp.dietitian_id)?('selected'):('') %> value='<%= dp.id %>'><%= dp.name %></option>
+                            <% }) %>
+                        </select>
+                    </div>
+                </div>
+            </div>
+
+            <div class="col-lg-9">
+                <div class="panel">
+                    <div class="panel-body nav-tabs-animate nav-tabs-horizontal">
+                        <ul class="nav nav-tabs nav-tabs-line tabs-line-top mb-10" role="tablist">
+                            <li class="nav-item" role="presentation"><a class="nav-link active" data-toggle="tab" href="#personal-details" aria-controls="personal-details" role="tab">Personal</a></li>
+                        </ul>
+                        <div class="tab-content">
+                            <div class="tab-pane active" id="personal-details" role="tabpanel">
+                                <div class="row">
+                                    <div class="form-group col-md-6">
+                                        <label class="form-control-label" for="fname">First Name</label>
+                                        <input type="text" class="form-control edit-data" id="fname" name="fname" value="<%= dietician.fname %>">
+                                    </div>
+                                    <div class="form-group col-md-6">
+                                        <label class="form-control-label" for="lname">Last Name</label>
+                                        <input type="text" class="form-control edit-data" id="lname" name="lname" value="<%= dietician.lname %>">
+                                    </div>
+                                </div>
+                                <div class="row">
+                                    <div class="form-group col-md-6">
+                                        <label class="form-control-label" for="fname">Phone</label>
+                                        <input type="text" class="form-control edit-data" id="phone" name="phone" value="<%= dietician.phone %>">
+                                    </div>
+                                    <div class="form-group col-md-6">
+                                        <label class="form-control-label" for="lname">Email</label>
+                                        <input type="text" class="form-control edit-data" id="email" name="email" value="<%= dietician.email %>">
+                                    </div>
+                                </div>
+                                <div class="row">
+                                    <div class="form-group col-md-6">
+                                        <label class="form-control-label mr-10" for="lname">Gender</label>
+                                        <div class="radio-custom radio-default radio-inline">
+                                            <input type="radio" class="edit-data" id="gender-male" value="M" name="gender" <%= dietician.gender == 'M' ? 'checked' : '' %>>
+                                                   <label for="gender-male">Male</label>
+                                        </div>
+                                        <div class="radio-custom radio-default radio-inline">
+                                            <input type="radio" class="edit-data" id="gender-female" value="F" name="gender" <%= dietician.gender == 'F' ? 'checked' : '' %>>
+                                                   <label for="gender-female">Female</label>
+                                        </div>
+                                    </div>
+                                    <div class="form-group col-md-6">
+                                        <label class="form-control-label mr-10" for="lname">Marital Status</label>
+                                        <div class="radio-custom radio-default radio-inline">
+                                            <input type="radio" class="edit-data" id="marital-status-married" value="1" name="marital_status" <%= dietician.marital_status == '1' ? 'checked' : '' %>>
+                                                   <label for="marital-status-married">Married</label>
+                                        </div>
+                                        <div class="radio-custom radio-default radio-inline">
+                                            <input type="radio" class="edit-data" id="marital-status-single" value="0" name="marital_status" <%= dietician.marital_status == '0' ? 'checked' : '' %>>
+                                                   <label for="marital-status-single">Single</label>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="row">
+                                    <div class="form-group col-md-4">
+                                        <label class="form-control-label" for="fname">Emergency Contact Name</label>
+                                        <input type="text" class="form-control edit-data" id="emergency_contact_name" name="emergency_contact_name" value="<%= dietician.emergency_contact_name %>">
+                                    </div>
+                                    <div class="form-group col-md-4">
+                                        <label class="form-control-label" for="fname">Emergency Contact Phone</label>
+                                        <input type="text" class="form-control edit-data" id="emergency_contact_number" name="emergency_contact_number" value="<%= dietician.emergency_contact_number %>">
+                                    </div>
+                                    <div class="form-group col-md-4">
+                                        <label class="form-control-label" for="blood-group">Blood Group</label>
+                                        <input type="text" class="form-control edit-data" id="blood-group" name="blood_group" value="<%= dietician.blood_group %>">
+                                    </div>
+                                </div>
+                                <div class="row">
+                                    <div class="form-group col-md-6">
+                                        <label class="form-control-label" for="dob">Date of Birth</label>
+                                        <input type="text" class="form-control edit-data" id="dob" name="birth_date" value="<%= formatDate(dietician.birth_date, 'DD-MM-YYYY') %>">
+                                    </div>
+                                    <div class="form-group col-md-6">
+                                        <label class="form-control-label" for="anniversary">Anniversary Date</label>
+                                        <input type="text" class="form-control edit-data" id="anniversary_date" name="anniversary_date" value="<%= formatDate(dietician.anniversary_date, 'DD-MM-YYYY') %>">
+                                    </div>
+                                </div>
+                                <div class="row">
+                                    <div class="form-group col-md-6">
+                                        <label class="form-control-label" for="dob">Address Line 1</label>
+                                        <input type="text" class="form-control edit-data" id="address_line_1" name="address_line_1" value="<%= dietician.address_line_1 %>">
+                                    </div>
+                                    <div class="form-group col-md-6">
+                                        <label class="form-control-label" for="anniversary">Address Line 2</label>
+                                        <input type="text" class="form-control edit-data" id="address_line_2" name="address_line_2" value="<%= dietician.address_line_2 %>">
+                                    </div>
+                                </div>
+                                <div class="row">
+                                    <div class="form-group col-md-4">
+                                        <label class="form-control-label" for="state">State</label>
+                                        <select id="state" name="state_id" class="form-control edit-data">
+                                            <option value>Select State</option>
+                                            <% states.forEach((s) => { %>
+                                            <option value="<%= s.id %>" <%= s.id === dietician.state_id ? 'selected' : '' %>><%= s.name %></option>
+                                            <% }) %>
+                                        </select>
+                                    </div>
+                                    <div class="form-group col-md-4">
+                                        <label class="form-control-label" for="city">City</label>
+                                        <select id="city" name="city_id" class="form-control edit-data">
+                                            <option value>Select City</option>
+                                            <% cities.forEach((c) => { %>
+                                            <option value="<%= c.id %>" <%= c.id === dietician.city_id ? 'selected' : '' %>><%= c.name %></option>
+                                            <% }) %>
+                                        </select>
+                                    </div>
+                                    <div class="form-group col-md-4">
+                                        <label class="form-control-label" for="zip">Zip</label>
+                                        <input type="text" class="form-control edit-data" id="zip" name="zip" value="<%= dietician.zip %>">
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<div class="modal fade" id="profile-picture-capture" aria-hidden="false" aria-labelledby="profile-picture-capture" role="dialog" tabindex="-1">
+    <div class="modal-dialog modal-simple">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">×</span>
+                </button>
+                <h4 class="modal-title">Capture Profile Picture</h4>
+            </div>
+            <div class="modal-body">
+                <div class="col-md-12">
+                    <div id="camera-container"></div>
+                </div>                
+                <div class="col-md-12 text-center">
+                    <button class="btn btn-primary" id="capture">Capture</button>
+                </div>                
+            </div>            
+        </div>
+    </div>
+</div>
+<%- include("./partials/footer.html") %>
+<script type="text/javascript">
+    SINGLE_DIETITIAN.init({
+        _csrf: '<%= _csrf %>',
+        dietitianId: '<%- dietician.id %>'
+    })
+</script>

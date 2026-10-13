@@ -1,0 +1,138 @@
+<%- include("./partials/header.html") %>
+<%- include("./partials/topnav.html") %>
+<%- include("./partials/sidebar.html") %>
+<style>
+    #globalproductlist{
+        color: white;
+    }
+    .panel-actions{
+        position: static;
+        display: flex;
+        justify-content: space-between;
+    }
+</style>
+<div class="page">
+    <div class="page-content">
+        <h3 class="panel-title">Products</h3>
+        <div class="panel">            
+            
+            <div class="panel-body">
+                <div class="panel-heading">
+                
+                    <div class="panel-actions text-white"> 
+                        <a href="#" data-toggle="modal" data-target="#add-new-product" class="btn btn-primary">
+                            <span class="hidden-sm-down">Add Product</span>
+                            <i class="icon fa-plus" aria-hidden="true"></i>
+                        </a>
+                    </div>
+                </div>
+                <table class="table table-hover dataTable table-striped w-full" id="products-list">
+                    <thead>
+                        <tr>
+                            <th>Id</th>
+                            <th>Image</th>
+                            <th>Name</th>
+                            <th>Description</th>                       
+                        </tr>
+                    </thead>                    
+                    <tbody>
+                    </tbody>
+                </table>
+            </div>
+        </div>       
+    </div>
+</div>
+<div class="modal fade" id="add-new-product" aria-hidden="false" aria-labelledby="add-new-product" role="dialog" tabindex="-1">
+    <div class="modal-dialog modal-simple">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">×</span>
+                </button>
+                <h4 class="modal-title" id="add-new-team-product">Add New Product</h4>
+            </div>
+            <div class="modal-body">
+                <!-- <form action="/api/v1/productlist/add-products" method="POST" enctype="multipart/form-data"> -->
+                <form action="/super-admin/shop/add-products" method="post" enctype="multipart/form-data">
+                    <div class="row">
+                        <div class="form-group col-xl-12">
+                            <label class="form-control-label">Product Name *</label>
+                            <input type="text" class="form-control" id="product-name" name="product_name" required />
+                            <div class="invalid-feedback"></div>
+                        </div>
+                        <div class="col-xl-6 form-group">
+                            <label class="form-control-label">Product Image</label>
+                            <input type="file" class="form-control" name="file" id="poduct-img" required/>
+                        </div>
+                        <div class="panel panel-bordered form-group col-xl-12">
+                            <div class="panel-heading">
+                                <h4 class="modal-title" id="add-new-team-product">Categories</h4>
+                            </div>
+                            <div class="panel-body">
+                                <label class="form-control-label">Select Category</label>
+                                <select class="form-control cat-btn" id="category101" name="category_id" required>
+                                    <option value="">Select Options</option>
+                                    <% categories.forEach((c)=>{ %>
+                                        <option value="<%= c.id %>">
+                                            <%= c.name %>
+                                        </option>
+                                        <% }) %>
+                                </select>
+                            </div>
+                       
+                            <div class="panel-body">
+                            <label class="form-control-label" for="subcategory">Select SubCategory</label>
+                            <select class="form-control" id="subcategory101" name="subcategory_id" required>
+                                <option value="">Select Options</option>
+                            </select>
+                        </div>
+                        <div class="panel-body">
+                            <label class="form-control-label" for="subsubcategory">Select SubSubCategory</label>
+                            <select class="form-control" id="subsubcategory101" name="sub_subcategory_id" required>
+                                <option value="">Select Options</option>
+                            </select>
+                        </div> 
+                    </div>                                                
+                        <div class="form-group col-xl-12 text-right">
+                            <%- csrf_html %>
+                            <button type="submit" class="btn btn-primary" >Add Product</button>
+                        </div>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+<div class="modal fade" id="filter" aria-hidden="false" aria-labelledby="filter" role="dialog" tabindex="-1">
+    <div class="modal-dialog modal-simple">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">×</span>
+                </button>
+                <h4 class="modal-title">Filters</h4>
+            </div>
+            <div class="modal-body">
+                <p>Select Category</p>
+                <div class="row">
+                    <% categories.forEach(function(c){ %>
+                    <div class="form-group col-xl-4">
+                        <input type="checkbox" name="category" class="category" value="<%= c.id %>">
+                        <label class="form-control-label"><%= c.name %></label>
+                    </div>
+                    <% }) %>
+                    <div class="form-group col-xl-12 text-right">
+                        <%- csrf_html %>
+                        <button class="btn btn-primary" id="apply-filter">Apply</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<%- include("./partials/footer.html") %>
+<script type="text/javascript">
+    VIEW_PRODUCTS.init({
+        _csrf: '<%= _csrf %>'
+    })
+</script>

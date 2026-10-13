@@ -1,0 +1,78 @@
+<%- include("./partials/header.html") %>
+<%- include("./partials/topnav.html") %>
+<%- include("./partials/sidebar.html") %>
+
+
+
+<div class="card col-md-4 mx-auto profile-box border border-5" 
+    style="width: 25rem; height:35rem;margin:50px 0 100px 0; padding:30px 0">
+    <div class="icon mx-auto">
+        <img class="rounded-circle img-sm border" src="/global/portraits/5.jpg">
+    </div>
+    <div class="card-body mx-auto">
+       <div class="card-text">
+        <ul style="list-style: none; padding:0px">
+            <li>
+                <h4><%= profile[0].fname %> <%= profile[0].lname %></h4> 
+            </li>
+            <li>
+               Email : <%= profile[0].email %> 
+            </li>
+            <li>
+                Phone :<%= profile[0].phone %> 
+            </li>
+            <% if(profile[0].gender == 'M'){ %>
+                <li>
+                   Gender : Male
+                 </li>
+            <% } else { %> 
+                <li>
+                    Gender :  Female
+                </li>
+            <% } %>
+             <li>
+                Address : <%= profile[0].address_line_1 %> <%= profile[0].address_line_2 %>
+             </li>
+             <li>
+                Zip-code :<%= profile[0].zip %>
+             </li>
+             <% if(profile[0].marital_status == '1'){ %>
+                <li>
+                    Marital_status : Merried
+                 </li>
+            <% } else { %> 
+                <li>
+                    Mrital_status : Single
+                </li>
+            <% } %>
+            <li>
+                Birth_date :<%= formatDate(profile[0].birth_date, 'DD-MM-YYYY') %>
+            </li>
+            <li>
+                Anniversary_date :<%= formatDate(profile[0].anniversary_date, 'DD-MM-YYYY') %>
+            </li>
+            <li>
+                Blood_group :<%= profile[0].blood_group %>
+            </li>
+            <li>
+                Role :<%= profile[0].role %>
+            </li>
+
+
+        </ul>
+
+    </div>
+    <% if(profile[0].role == 'super-admin'){%>
+    <% } else { %>
+    <div style="margin-left: 42px;">
+        <a href="/app/users/userid/<%= profile[0].id %>" class="btn btn-danger">Edit Profile</a>
+    </div>
+    <% } %>
+    </div>
+  </div>
+
+
+
+
+
+<%- include("./partials/footer.html") %>

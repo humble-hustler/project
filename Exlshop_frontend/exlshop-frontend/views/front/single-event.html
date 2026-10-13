@@ -1,0 +1,121 @@
+<%- include('../partials/header.html') %>
+<div class="card section-page">
+    <div class="row no-gutters">
+        <aside class="col-sm-6 border-right">
+            <article class="gallery-wrap">
+                <div class="img-big-wrap">
+                    <a href="#"><img src="<%= coreHostname %>/event-img/<%= event.banner_img %>" id="featured-image"></a>
+                </div>
+                <div class="thumbs-wrap">
+                                 
+                </div>
+            </article>
+        </aside>
+        <main class="col-sm-6">
+            <article class="content-body">
+                <h3 class="title"><%= event.name %></h3>
+                <p><%= event.description %></p>
+                
+                <div class="row align-items-center">
+                    <div class="col-12">
+                        <span class=""><%= formatDate(event.start_date, 'Do MMM YYYY HH:mm A') %> - <%= formatDate(event.end_date, 'Do MMM YYYY HH:mm A') %></span> <br>
+                        <span class=" ">Rs. <%= event.charges %></span> 
+                    </div>
+                    <br><br>
+                    <div class="col-lg-12 " style="margin-top:5%">
+                        <a href="#" class="btn btn-primary" id="" data-target="#event-registration" data-toggle="modal"> Register</a>
+                    </div>
+                </div>
+            </article>
+        </main>
+    </div>
+</div>
+
+<div class="modal fade" id="event-registration" tabindex="-1" role="dialog" aria-labelledby="event-registration" aria-hidden="true">
+    <div class="modal-dialog modal-lg" role="document">
+        <div class="modal-content ">
+            <form action="/event/register" method="POST"id='registration-form'>
+                <div class="modal-header">
+                    <h5 class="modal-title">Event Registration</h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body">
+                    <div class="row">
+                        <div class="form-group col-md-12">
+                            <label>Name</label>
+                            <input type="text" name="name" id="name" class="form-control"  required />
+                        </div>                        
+                    </div>
+                    <div class="row">
+                        <div class="form-group col-md-6">
+                            <label>Email</label>
+                            <input type="text" name="email" id="email" class="form-control"  />
+                        </div>
+                        <div class="form-group col-md-6">
+                            <label>Contact No</label>
+                            <input type="text" name="contact_no" id="contact_no" class="form-control" required />
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="form-group col-md-6">
+                            <label>Gender</label><br>
+                            <input type="radio" name="gender" value="F" />  Female&nbsp;&nbsp;
+                            <input type="radio" name="gender" value="M" />  Male&nbsp;&nbsp;
+                            <input type="radio" name="gender" value="O" />  Others
+                        </div>
+                        <div class="form-group col-md-6">
+                            <label>Country</label><br>
+                            <select class="form-control" name="country" id="country" >
+                                <option value="" selected disabled>Select Country</option>
+                                <% countries.forEach((c) => { %>
+                                <option value="<%= c.id %>" <%= c.id == 101 ? 'selected' : ''%>><%= c.name %></option>
+                                <% }) %>
+                            </select>
+                        </div>
+                    </div>               
+                    <div class="row">
+                        <div class="form-group col-md-4">
+                            <label>State</label>
+                            <select class="form-control" name="state_id" id="state" >
+                                <option value="" selected disabled>Select State</option>
+                                <% states.forEach((s) => { %>
+                                <option value="<%= s.id %>"><%= s.name %></option>
+                                <% }) %>
+                            </select>
+                        </div>
+                        <div class="form-group col-md-4">
+                            <label>City</label>
+                            <select class="form-control" name="city" id="city" >
+                                <option value="" selected disabled>Select City</option>
+                            </select>
+                        </div>
+                        <div class="form-group col-md-4">
+                            <label>Zip</label>
+                            <input type="text" name="zip" id="zip" class="form-control"  />
+                        </div>
+                    </div> 
+                    <div class="row">
+                        <div class="form-group col-md-12">
+                            <label>Address</label>
+                            <textarea class="form-control" id='address'></textarea>
+                        </div>
+                    </div>                
+                </div>
+                <div class="modal-footer">
+                    <input type="submit" class="btn btn-primary btn-sm" id="register-user" value="Register">
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+<%- include('../partials/footer.html') %>
+<script type="text/javascript">
+
+    SINGLE_EVENT.init({
+        userId: `<%= (typeof session.user !== 'undefined')?(session.user.id):(null) %>`,
+        eventId: `<%= event.id %>`,
+        eventCharges: `<%= event.charges %>`
+    })
+</script>

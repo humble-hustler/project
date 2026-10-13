@@ -1,0 +1,145 @@
+<%- include("./partials/header.html") %>
+<%- include("./partials/topnav.html") %>
+<%- include("./partials/sidebar.html") %>
+<div class="page">    
+    <div class="page-content">
+        <div class="panel">
+            <div class="panel-heading">
+                <h3 class="panel-title">Leads</h3>
+                <div class="panel-actions text-white">
+                    <a class="text-dark mr-10" id="reset-filter-btn">Reset Filter <i class="fa fa-times-circle-o"></i></a>
+                    <a class="btn btn-primary" id="filter-btn" data-toggle="modal" data-target="#filter">Filter <i class="fa fa-filter"></i></a>
+                    <a class="btn btn-primary" data-target="#add-new-lead" data-toggle="modal">                        
+                        <span class="hidden-sm-down">Add New Lead</span>
+                        <i class="icon fa-plus" aria-hidden="true"></i>
+                    </a>
+                </div>
+            </div>
+            <div class="panel-body">
+                <table class="table table-hover dataTable table-striped w-full" id="leads-list">
+                    <thead>
+                        <tr>
+                            <th>Date</th>
+                            <th>Time</th>
+                            <th>Lead Details</th>
+                            <th>Source</th>
+                            <th>Status</th>
+                            <th>Lead Owner</th>
+                            <th>Followup On Date</th>
+                            <th>Followup On Time</th>
+                        </tr>
+                    </thead>                    
+                    <tbody></tbody>
+                </table>
+            </div>
+        </div>       
+    </div>
+</div>
+<div class="modal fade" id="add-new-lead" aria-hidden="false" aria-labelledby="add-new-lead" role="dialog" tabindex="-1">
+    <div class="modal-dialog modal-simple">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">×</span>
+                </button>
+                <h4 class="modal-title">Add New Lead</h4>
+            </div>
+            <div class="modal-body">
+                <form action="/super-admin/marketing/leads/add" method="POST">
+                    <div class="row">
+                        <div class="form-group col-xl-12">
+                            <input type="text" class="form-control" id="brand-name" name="brand_name" placeholder="Brand Name" required />
+                        </div>
+                        <div class="form-group col-xl-4">
+                            <label class="form-control-label">Status</label>
+                            <select class="form-control" name="lead_status" required>
+                                <option value="">Select Status</option>
+                                <% statuses.forEach((s) => { %>
+                                <option value="<%= s.id %>"><%= s.status %></option>
+                                <% }) %>
+                            </select>
+                        </div>
+                        <div class="form-group col-xl-4">
+                            <label class="form-control-label">Source</label>
+                            <select class="form-control" name="lead_source" required>
+                                <option value="">Select Source</option>
+                                <% sources.forEach((s) => { %>
+                                <option value="<%= s.id %>"><%= s.source %></option>
+                                <% }) %>
+                            </select>
+                        </div>
+                        <div class="form-group col-xl-4">
+                            <label class="form-control-label">Owner</label>
+                            <select class="form-control" name="owner_id" id="owner-id" required>
+                                <option value="">Select Lead Owner</option>
+                            </select>
+                        </div>
+                        <div class="form-group col-xl-12">
+                            <%- csrf_html %>
+                            <button class="btn btn-primary" id="add-lead-btn">Add Lead</button>
+                        </div>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+<div class="modal fade" id="filter" aria-hidden="false" aria-labelledby="filter" role="dialog" tabindex="-1">
+    <div class="modal-dialog modal-simple">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">×</span>
+                </button>
+                <h4 class="modal-title">Filters</h4>
+            </div>
+            <div class="modal-body">
+                <div class="row">
+                    <div class="form-group col-xl-6">
+                        <label class="form-control-label">From</label>
+                        <input type="text" class="form-control" id="from" name="from_date" />
+                    </div>
+                    <div class="form-group col-xl-6">
+                        <label class="form-control-label">To</label>
+                        <input type="text" class="form-control" id="to" name="to_date" />
+                    </div>
+                    <div class="form-group col-xl-6">
+                        <label class="form-control-label">Source</label>
+                        <select class="form-control" id="source" name="source">
+                            <option value="">All</option>
+                            <% sources.forEach((s) => { %>
+                            <option value="<%= s.id %>"><%= s.source %></option>
+                            <% }) %>
+                        </select>
+                    </div>
+                    <div class="form-group col-xl-6">
+                        <label class="form-control-label">Status</label>
+                        <select class="form-control" id="status" name="status">
+                            <option value="">All</option>
+                            <% statuses.forEach((s) => { %>
+                            <option value="<%= s.id %>"><%= s.status %></option>
+                            <% }) %>
+                        </select>
+                    </div>
+                    <div class="form-group col-xl-12">
+                        <label class="form-control-label">Lead Owner</label>
+                        <select class="form-control" id="users" name="users">
+                            <option value="">All</option>
+                         
+                        </select>
+                    </div>
+                    <div class="form-group col-xl-12 text-right">
+                        <%- csrf_html %>
+                        <button class="btn btn-primary" id="apply-filter">Apply</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<%- include("./partials/footer.html") %>
+<script type="text/javascript">
+    LEADS.init({
+        _csrf: '<%= _csrf %>'
+    })
+</script>

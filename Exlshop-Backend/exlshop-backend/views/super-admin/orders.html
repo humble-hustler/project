@@ -1,0 +1,146 @@
+<%- include("./partials/header.html") %>
+<%- include("./partials/topnav.html") %>
+<%- include("./partials/sidebar.html") %>
+<style>
+    #orders
+    {
+        color: white;
+    }
+    .user-mo{
+        display: none;
+    }
+    .user-email{
+        display: none;
+    }
+    .user-fname{
+        display: none;
+    }
+    .user-lname{
+        display: none;
+    }
+    .user-zip{
+        display: none;
+    }
+    .user-address-one{
+        display: none;
+    }
+    .user-address-two{
+        display: none;
+    }
+    .user-city{
+        display: none;
+    }
+    .user-state{
+        display: none;
+    }
+    .user-country{
+        display: none;
+    }
+    .add-dimension{
+        text-align: center;
+    }
+    .total-discount{
+        display: none;
+    }
+    .sub-total{
+        display: none;
+    }
+
+</style>
+<body>
+<div class="page">
+    <div class="page-content">
+        <div class="panel-heading">
+            <h3 class="panel-title">Orders</h3>
+        </div>
+        <div class="panel">            
+           
+            <div class="panel-body">
+                <table class="table table-hover dataTable table-striped w-full" id="order-list">
+                    <thead>
+                        <tr>
+                           
+                            <th>Date</th>
+                            <th>Instamojo Payment Id</th>
+                            <th>Customer Name</th>
+                            <th>Shop Name</th> 
+                            <th>Products</th>
+                            <th>Shipping Address</th> 
+                            <th>Order Status</th> 
+                            <th style="display: none">Order mo</th> 
+                            <th style="display: none">Order email</th> 
+                            <th style="display: none">Order fname</th> 
+                            <th style="display: none">Order lname</th> 
+                            <th style="display: none">Order zip</th> 
+                            <th style="display: none">Order address-one</th> 
+                            <th style="display: none">Order address-two</th>  
+                            <th style="display: none">Order city</th> 
+                            <th style="display: none">Order state</th>  
+                            <th style="display: none">Order country</th>  
+                            <th style="display: none">sub total</th>  
+                            <th style="display: none">total doscount</th>  
+
+                        </tr>
+                    </thead>                    
+                    <tbody id="tbody"></tbody>
+                </table>
+            </div>
+        </div>       
+    </div>
+</div>
+
+
+
+
+ <!-- ///////////////////////////////////// modal //////////////////////////////////////////////////// -->
+
+ <div id="myModal" class="modal fade">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h1 class="page-title" style="margin-top: 10px">Order Dimension</h1>
+                <button type="button" class="close" data-dismiss="modal">&times;</button>
+            </div>
+            <div class="modal-body">
+                
+                    
+                        <div class="container" style="margin-top: 10px">
+                            <div class="row">
+                                <div class="col-6">
+                                  
+                                    <input type="number" id="courier-length" name="length" placeholder="Enter courier length"><br> <br>
+                                    <input type="number" id="courier-breadth" name="breath" placeholder="Enter courier breath">
+                                  
+                                </div>
+                              
+                                <div class="col-6">
+                                    <input type="number" id="courier-height" name="height" placeholder="Enter courier height"><br> <br>
+                                    <input type="number" id="courier-weight" name="weight" placeholder="Enter courier weight">
+                                </div>
+                                <input type="hidden" name="_csrf" value="<%= _csrf %>">
+                            </div>
+                            <div class="add-dimension" style="margin-top: 20px">
+                                <button class="btn btn-secondary add-dimension-btn" style="margin-right: 10px" id="btn">Add Dimension</button> 
+                                <!-- <a class=" add-dimension-btn" style="margin-right: 10px" id="btn">Add Dimension</button>  -->
+                                <button type="button"  class="btn btn-secondary" data-dismiss="modal">Cancel</button>
+                            </div>                                
+                        </div>                             
+                    
+            </div>
+            
+            <div class="modal-footer">
+                
+            </div>
+        </div>
+    </div>
+</div> 
+
+</body>
+<%- include("./partials/footer.html") %>
+<script type="text/javascript">
+
+
+    VIEW_ORDERS.init({
+        _csrf: '<%= _csrf %>'
+    })
+</script>

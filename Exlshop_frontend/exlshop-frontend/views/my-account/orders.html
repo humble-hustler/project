@@ -1,0 +1,262 @@
+<%- include('../partials/header.html') %>
+<style>
+          :root{
+    --nav-bck:#F24A72;
+    --log-bck:#fff;
+    --cart-color:#fff;
+    --txt-color:#0000;
+    --bg-grey:#F1F3F6;
+    
+}
+
+body
+{
+    background-color:#F1F3F6 ;
+}
+
+.myorderbtn
+{
+background: #f2f2f2;
+font-size: 16px;
+display: inline-block;
+width: 75px;
+height: 33px;
+color: green;
+display: flex;
+justify-content: center;
+align-items: center;
+}
+#rate-product
+{
+    width: 172px;
+}
+.bs4-order-tracking {
+    margin-bottom: 30px;
+    overflow: hidden;
+    color: #878788;
+    padding-left: 0px;
+    margin-top: 30px
+}
+
+.bs4-order-tracking li {
+    list-style-type: none;
+    font-size: 13px;
+    width: 20%;
+    float: left;
+    position: relative;
+    font-weight: 400;
+    color: #878788;
+    text-align: center
+}
+
+.bs4-order-tracking li:first-child:before {
+    margin-left: 15px !important;
+    padding-left: 11px !important;
+    text-align: left !important
+}
+
+.bs4-order-tracking li:last-child:before {
+    margin-right: 5px !important;
+    padding-right: 11px !important;
+    text-align: right !important
+}
+
+.bs4-order-tracking li>div {
+    color: #fff;
+    width: 23px;
+    height: 23px;
+    text-align: center;
+    line-height: 29px;
+    display: block;
+    font-size: 12px;
+    background: #878788;
+    border-radius: 50%;
+    margin: auto
+    
+
+}
+
+/* .bs4-order-tracking li:after {
+    content: '' !important;
+    width: 150% !important;
+    height: 2px !important;
+    background: #878788 !important;
+    position: absolute !important;
+    left: 0% !important;
+    right: 0% !important;
+    top: 15px !important;
+    z-index: -1 !important;
+} */
+
+.bs4-order-tracking li:first-child:after {
+    left: 50%
+}
+
+.bs4-order-tracking li:last-child:after {
+    left: 0% !important;
+    width: 0% !important
+}
+
+.bs4-order-tracking li.active {
+    font-weight: bold;
+    color: green;
+}
+
+.bs4-order-tracking li.on {
+    font-weight: bold;
+    color: red;
+}
+
+.bs4-order-tracking li.active>div {
+    background: green;
+}
+
+.bs4-order-tracking li.on>div {
+    background: red;
+}
+.bs4-order-tracking li.active:after {
+    background: green;
+}
+.aaaa{
+    background-color: green;
+}
+.xxxx{
+    background-color: red;
+}
+.yyyy{
+    background-color: grey
+}
+.bbbb{
+    background-color: grey;
+}
+
+.bs4-order-tracking li.on:after {
+    background: red;
+}
+
+.card-timeline {
+    background-color: #fff;
+    z-index: 0;
+    width:125%;
+    border: none;
+}
+   
+    form.example input[type=text] {
+  padding: 8px;
+  font-size: 17px;
+  border: 1px solid grey;
+  float: left;
+  width: 80%;
+  background: #f1f1f1;
+}
+
+form.example button {
+  float: left;
+  width: 20%;
+  padding: 10px 5px;
+  background: #518F56;
+  color: white;
+  font-size: 14px;
+  border: 1px solid grey;
+  border-left: none;
+  cursor: pointer;
+}
+
+
+form.example::after {
+  clear: both;
+  display: table;
+}
+.section-content
+{
+    width: 90%;
+    margin: 5px auto;
+}
+.setw
+{
+    width: 150px;
+}
+.b{
+    border: 1px solid #ccc;
+}
+.s{
+    display: none;
+}
+.a{
+    display: none;
+}
+</style>
+ 
+<section class="section-content bg-white padding-y" id="order-history">
+    <div class="container-fluid">
+        <div class="row mb-5">  
+              <nav style="--bs-breadcrumb-divider: '>';" aria-label="breadcrumb">
+                <ol class="breadcrumb">
+                  <li class="breadcrumb-item">
+                  <a href="/" class="twelve breadclr">Home</a></li>
+                  <li class="breadcrumb-item active">
+                  <a href="/my-account/account" class="twelve breadclr">My-account</a></li>
+                  <li class="breadcrumb-item active" aria-current="page">
+                  <a class="twelve breadclr">Orders</a></li>
+                </ol>
+              </nav>
+              
+        <div class="col-md-3 bg-white" id="filtersection">
+            <div class="border border-1 mt-2">
+            <h6 class="ps-3 pt-3 mb-2">FILTERS</h6>
+            <hr>
+            <h6 class="ps-3 pt-3 mb-2">ORDER STATUS</h6>
+        
+                    <div  id="orderstatus" class="ps-3">
+                    <input type="checkbox" class="orderstatus" value="3" >
+                    <label>Out for Delivery</label><br>
+                    <input type="checkbox" class="orderstatus" value="4">
+                    <label>Delivered</label><br>
+                    <input type="checkbox" class="orderstatus" value="6">
+                    <label>Returned</label><br>
+                    <input type="checkbox" class="orderstatus" value="5">
+                    <label>Cancelled</label><br>
+                    </form>
+                </div>    
+                <hr>
+                <h6 class="ps-3 pt-3 mb-2">ORDER TIME</h6>
+                
+                        <div  id="orderstatus" class="ps-3">
+                        <input type="checkbox" class="ordertime" value="1">
+                        <label>Last 30 days</label><br>
+                        <input type="checkbox" class="ordertime" value="<%= year1 %>">
+                        <label><%= year1 %></label><br>
+                        <input type="checkbox" class="ordertime" value="<%= year2 %>">
+                        <label><%= year2 %></label><br>
+                        <input type="checkbox" class="ordertime" value="<%= year3 %>">
+                        <label><%= year3 %></label><br>
+                        <input type="checkbox" class="ordertime" value="<%= year4 %>">
+                        <label><%= year4 %></label><br>
+                        <input type="checkbox" class="ordertime" value="<%= year5 %>">
+                        <label><%= year5 %></label><br>
+                        </form>
+                    </div>    <!--end of rating-->
+                    <hr>
+                </div>
+        </div>
+            <div class="col-md-9">
+                <form class="example mb-3" action="" style="max-width:600px">
+                    <input id="search-orders"  type="text" placeholder="Search..">
+                     <button id="search-button" ><i class="fa fa-search pe-2"></i>search order</button>
+                  </form> <br> <br>
+                  <!-- <button id="v">Track order</button> -->
+                <div class="accordion" id="orderList"></div>                
+            </div> 
+        </div>
+    </div> 
+</section>
+
+
+<%- include('../partials/footer.html') %>
+<script type="text/javascript">
+    MY_ACCOUNT_ORDERS
+    .init({
+        _csrf: '<%= _csrf %>'
+    })
+
+</script>

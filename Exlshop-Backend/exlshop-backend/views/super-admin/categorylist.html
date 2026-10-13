@@ -1,0 +1,276 @@
+<%- include("./partials/header.html") %>
+    <%- include("./partials/topnav.html") %>
+        <%- include("./partials/sidebar.html") %>
+<style>
+   .subsubrow{
+    cursor: pointer;
+   }
+
+</style>
+    <div class="page">
+        <div class="page-header">
+            <h3 class="panel-title">Category Management</h3>
+
+            <div class="page-header-actions">
+                <a href="#" data-toggle="modal" id="add-category-btn" data-target="#add-new-subcategory" class="btn btn-primary">
+                    <span class="hidden-sm-down">Add Sub Category </span>
+                    <i class="icon fa-plus" aria-hidden="true"></i>
+                </a>
+                <a href="#" data-toggle="modal" id="add-category-btn" data-target="#add-new-subsubcategory" class="btn btn-primary">
+                    <span class="hidden-sm-down">Add Sub Sub Category </span>
+                    <i class="icon fa-plus" aria-hidden="true"></i>
+                </a>
+            </div>
+        </div>
+        
+        <div class="page-content">
+            <div class="panel-heading">
+                
+            </div>
+            <div class="panel">
+                
+            <div class="panel-body nav-tabs-animate nav-tabs-horizontal">
+                <ul class="nav nav-tabs nav-tabs-line tabs-line-top mb-10" role="tablist">
+                    <li class="nav-item" role="presentation"><a class="nav-link active" data-toggle="tab" href="#sub-category" aria-controls="sub-category" role="tab">Sub Category</a></li>
+                    <li class="nav-item" role="presentation"><a class="nav-link" data-toggle="tab" href="#sub-sub-category" aria-controls="sub-sub-category" role="tab">Sub Sub Category</a></li> 
+                    <li class="nav-item" role="presentation"><a class="nav-link" data-toggle="tab" href="#deleted-category" aria-controls="deleted-category" role="tab">Deleted Category</a></li> 
+                </ul>
+                <div class="tab-content">
+                    <div class="tab-pane active" id="sub-category" role="tabpanel">
+                        <table class="table table-hover dataTable table-striped w-full" id="sub-category-list">
+                            <thead>
+                                <tr style="text-align: center;">
+                                    <th >Category</th>
+                                    <th>Sub Category</th>
+                                    <th>Slug</th>
+                                    <th>Action</th>
+                                </tr>
+                            </thead>
+                            <tbody style="text-align: center;">
+                            </tbody>
+                        </table>
+                    </div>
+
+                    <div class="tab-pane" id="sub-sub-category">
+                        <table class="table table-hover dataTable table-striped w-full" id="sub-sub-category-list">
+                            <thead>
+                                <tr style="text-align: center;">
+                                    <th>Category</th>
+                                    <th>Sub Category</th>
+                                    <th>Sub Sub category</th>
+                                    <th>Slug</th>
+                                    <th>Action</th>
+                                </tr>
+                            </thead>
+                            <tbody style="text-align: center;">
+                            </tbody>
+                        </table>
+                    </div>
+
+                    <div class="tab-pane" id="deleted-category">
+                        <table class="table table-hover dataTable table-striped w-full" id="deleted-category-list">
+                            <thead>
+                                <tr style="text-align: center;">
+                                    <th>Category</th>
+                                    <th>Sub Category</th>
+                                    <th>Sub Sub category</th>
+                                    <th>Slug</th>
+                                </tr>
+                            </thead>
+                            <tbody style="text-align: center;">
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+                   
+                    
+            </div>
+        </div>
+    </div>
+
+    <div class="modal fade" id="add-new-subcategory" aria-hidden="false" aria-labelledby="add-new-subcategory" role="dialog" tabindex="-1">
+        <div class="modal-dialog modal-sm">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">×</span>
+                    </button>
+                    <h4 class="modal-title" id="add-new-subcategory">Add SubCategory</h4>
+                </div>
+                <div class="modal-body">
+                    <div class="row">
+                            <div class="form-group col-xl-12">
+                                <label class="form-control-label">Select Category</label>
+                                <select class="form-control cat-btn" id="categoryid" name="category_id" required>
+                                    <option value="">Select Options</option>
+                                    <% categories.forEach((c)=>{ %>
+                                        <option value="<%= c.id %>">
+                                            <%= c.name %>
+                                        </option>
+                                        <% }) %>
+                                </select>
+                            </div>
+                            <div class="form-group col-xl-12">
+                                <%- csrf_html %>
+                                    <input type="text" class="form-control" name="category_name" placeholder="subcategory Name" id="subcategory-name" required>
+                            </div>
+                            <div class="form-group col-xl-12" style="text-align: center;">
+                                <%- csrf_html %>
+                                    <button type="submit" class="btn btn-primary" id="add-subcategory-btn">Add Sub Category</button>
+                            </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="modal fade" id="add-new-subsubcategory" aria-hidden="false" aria-labelledby="add-new-subsubcategory" role="dialog" tabindex="-1">
+        <div class="modal-dialog modal-lg">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">×</span>
+                    </button>
+                    <h4 class="modal-title" id="add-new-subsubcategory">Add New Subsubcategory</h4>
+                </div>
+                <div class="modal-body">
+                    <div class="row">
+                            <div class="form-group col-xl-4">
+                                <label class="form-control-label">Select Category</label>
+                                <select class="form-control" id="category1id" name="category_id" required>
+                                    <option value="">Select Options</option>
+                                    <% categories.forEach((c)=>{ %>
+                                        <option value="<%= c.id %>">
+                                            <%= c.name %>
+                                        </option>
+                                        <% }) %>
+                                </select>
+                            </div>
+                            <div class="form-group col-xl-3">
+                                <label class="form-control-label" for="subcategory1id">Select SubCategory</label>
+                                <select class="form-control" id="subcategory1id" name="category_id" required>
+                                    <option value="">Select Options</option>
+                                </select>
+                            </div>
+
+                            <div class="form-group col-xl-12">
+                                <%- csrf_html %>
+                                    <input type="text" class="form-control" name="category_name" placeholder="subsubcategory Name"
+                                        id="subsubcategory-name" required>
+                            </div>
+                            <div class="form-group col-xl-12" style="text-align: center;">
+                                <%- csrf_html %>
+                                    <button class="btn btn-primary" id="add-subsubcategory">Add Subsubcategory</button>
+                            </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="modal fade" id="delete-sub-category" aria-hidden="false" aria-labelledby="delete-sub-category" role="dialog" tabindex="-1">
+        <div class="modal-dialog modal-simple">
+            <div class="modal-content" >
+               <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">×</span>
+                    </button>
+                    <h4 class="modal-title">Delete Category</h4>
+                </div>
+                <div class="modal-body">
+                    <div class="row">
+                        <form action="/super-admin/shop/delete-sub-category" method="POST">
+                            <input type="hidden" name="sub_category_id"> 
+                            <input type="hidden" name="is_sub_sub">
+                            <%- csrf_html %>
+                            <div class="col-lg-12">
+                                <p>Do you really want to Delete the selected Category ?</p>
+                            
+                            </div>
+                            <div class="form-group col-xl-12">
+                                <button class="btn btn-primary">Delete</button>
+                                <button class="btn btn-dark" data-dismiss="modal" aria-label="Close">Cancel</button>
+                            </div>
+                        </form>
+                    </div>                
+                </div>            
+            <!-- </form> -->
+    
+        </div>
+    
+            </div>
+    
+    </div>
+
+    <div class="modal fade" id="delete-sub-sub-category" aria-hidden="false" aria-labelledby="delete-sub-sub-category" role="dialog" tabindex="-1">
+        <div class="modal-dialog modal-simple">
+            <div class="modal-content" >
+               <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">×</span>
+                    </button>
+                    <h4 class="modal-title">Delete Category</h4>
+                </div>
+                <div class="modal-body">
+                    <div class="row">
+                        <form action="/super-admin/shop/delete-sub-sub-category" method="POST">
+                            <input type="hidden" name="sub_sub_category_id"> 
+                            <input type="hidden" name="is_sub_sub">
+                            <%- csrf_html %>
+                            <div class="col-lg-12">
+                                <p>Do you really want to Delete the selected Category ?</p>
+                            
+                            </div>
+                            <div class="form-group col-xl-12">
+                                <button class="btn btn-primary">Delete</button>
+                                <button class="btn btn-dark" data-dismiss="modal" aria-label="Close">Cancel</button>
+                            </div>
+                        </form>
+                    </div>                
+                </div>            
+            <!-- </form> -->
+    
+        </div>
+    
+            </div>
+    
+    </div>
+
+    <div class="modal fade" id="manage-product" aria-hidden="false" aria-labelledby="manage-category" role="dialog" tabindex="-1">
+        <div class="modal-dialog modal-simple">
+            <div class="modal-content" >
+               <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">×</span>
+                    </button>
+                    <h4 class="modal-title">Manage Product</h4>
+                </div>
+                <div class="modal-body">
+                    <div class="row">
+                        <form action="/super-admin/shop/manage_product" method="POST">
+                            <input type="hidden" name="manage_product"> 
+
+                            <%- csrf_html %>
+                           
+                            <div class="form-group col-xl-12">
+                                <button type="submit" class="btn btn-primary" id="manage_category_btn">Update</button>
+                                <button class="btn btn-dark" data-dismiss="modal" aria-label="Close" id="delete-category-btn">Cancel</button>
+                            </div>
+                        </form>
+                    </div>                
+                </div>            
+            <!-- </form> -->
+    
+        </div>
+    
+            </div>
+    
+    </div>
+
+<%- include("./partials/footer.html") %>
+    <script type="text/javascript">
+        VIEW_CATEGORY.init({
+            _csrf: '<%= _csrf %>',
+        })
+    </script>

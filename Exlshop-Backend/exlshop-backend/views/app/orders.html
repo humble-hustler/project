@@ -1,0 +1,116 @@
+<%- include("./partials/header.html") %>
+<%- include("./partials/topnav.html") %>
+<%- include("./partials/sidebar.html") %>
+<style>
+    #order
+    {
+        color: white;
+    }
+    .text
+    {
+        text-align: right;
+        padding: 10px 10px;
+    }
+</style>
+<div class="page">
+    <div class="page-content">
+        <ul class="nav nav-tabs nav-tabs-line tabs-line-top mb-10" role="tablist">
+            <h3>Orders</h3>
+            <!-- <li class="nav-item" role="presentation"><a class="nav-link " data-toggle="tab"
+                    href="#Out-of-Stock" aria-controls="personal-details" role="tab"
+                    title="Personal Details">
+                    <h4 aria-hidden="true">Out Of Stock</h4>
+                </a></li> -->
+        </ul>
+        <div class="panel">            
+            <div class="panel-heading">
+                     
+                <div class="resetBtn text">
+                    <button class="text-dark mr-10" id="reset-filter-btn">Reset Filter <i class="fa fa-times-circle"></i></button>
+                    <button class="btn btn-primary" id="filter-btn" data-toggle="modal" data-target="#filter">Filter <i class="fa fa-filter"></i></button>
+                </div>  
+                
+            </div>
+            <div class="panel-body">
+                <table class="table table-hover dataTable table-striped w-full" id="order-list">
+                    <thead>
+                        <tr>
+                            <th>Id</th>
+                            <th>Razorpay Order Id</th>
+                            <th>Customer Name</th>
+                            <th>Shipping Address</th> 
+                            <th>Date</th> 
+                            <th>Status</th>
+                            <% if(session.user.role_name !== 'staff') { %>
+                                <th>Assigned To</th>
+                            <% } %>                
+                        </tr>
+                    </thead>                    
+                    <tbody></tbody>
+                </table>
+            </div>
+        </div>
+               
+    </div>
+</div>
+<div class="modal fade" id="filter" aria-hidden="false" aria-labelledby="filter" role="dialog" tabindex="-1">
+    <div class="modal-dialog modal-simple">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">×</span>
+                </button>
+                <h4 class="modal-title">Filters</h4>
+            </div>
+            <div class="modal-body">
+                <div class="row">
+                    <div class="form-group col-xl-6">
+                        <label class="form-control-label">Order Placed Date From</label>
+                        <input type="date" class="form-control" id="from" name="from_date" val="">
+                    </div>
+                    <div class="form-group col-xl-6">
+                        <label class="form-control-label">Order Placed Date To</label>
+                        <input type="date" class="form-control" id="to" name="to_date" val="">
+                    </div>
+                    <div class="form-group col-xl-6">
+                        <label class="form-control-label">Order Status</label>
+                       
+                        <select class="form-control" id="statusId" name="status">
+                            <option disabled selected value>-- select an option -- </option> 
+                            <% order_status.forEach((o)=>{%>
+                            <option value="<%= o.name  %>">"<%= o.name  %>"</option> 
+                            <% } )%>
+                        </select>
+                       
+                    </div>
+                    <div class="form-group col-xl-6">
+                        <label class="form-control-label">Razorpay OrderId</label>
+                        <input type="text" class="form-control" id="orderidFilter" name="order_id" val="">
+                    </div>
+                    <div class="form-group col-xl-6">
+                        <label class="form-control-label">Customer Name</label>
+                        <input type="text" class="form-control" id="customerName" name="customer_Name" val="">
+                    </div>
+                   
+                    <div class="form-group col-xl-12 text-right">
+                        <%- csrf_html %>
+                        <button class="btn btn-primary" id="apply-filter">Apply</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<%- include("./partials/footer.html") %>
+<style>
+     a.right {
+        float: right;
+      }
+</style>
+<script type="text/javascript">
+   VIEW_ORDER.init({
+        _csrf: '<%= _csrf %>',
+        order_status:'<%- JSON.stringify(order_status) %>'
+    })
+</script>

@@ -1,0 +1,84 @@
+<%- include("../partials/header.html") %>
+<%- include("../partials/topnav.html") %>
+<%- include("../partials/sidebar.html") %>
+<div class="page">
+    <div class="page-content">        
+        <div class="panel">
+            <div class="panel-heading">
+                <h3 class="panel-title">Member Status</h3>
+               <!--  <div class="panel-actions text-white">
+                    <div class="panel-actions text-white">
+                        <button class="btn  btn-primary" id="export"><i class="fa fa-download" aria-hidden="true"></i> Export</button>
+                    </div>
+                </div> -->
+                <div class="panel-actions text-white">
+                    <a class="text-dark mr-10" id="reset-filter-btn">Reset Filter <i class="fa fa-times-circle-o"></i></a>
+                    <a class="btn btn-primary" id="filter-btn" data-toggle="modal" data-target="#filter">Filter <i class="fa fa-filter"></i></a>
+                    <button class="btn  btn-primary" id="export"><i class="fa fa-download" aria-hidden="true"></i> Export</button>
+                </div>
+            </div>
+            <div class="panel-body">
+                <table class="table table-hover dataTable table-striped w-full" id="member-status-report-table">
+                    <thead>
+                        <tr>
+                            <th>Name </th>
+                            <!-- <th>Mobile  </th> -->
+                            <!-- <th>Email ID</th> -->
+                            <th>Gender</th>
+                            <th>Address</th>
+                            <th>DOB</th>
+                            <th>DOJs</th>
+                            <th>Plan</th>
+                            <th>Expiry Date</th>
+                            <th>Status</th>
+                        </tr>
+                    </thead>                    
+                    <tbody></tbody>
+                </table>
+            </div>
+        </div>       
+    </div>
+</div>
+
+<div class="modal fade" id="filter" aria-hidden="false" aria-labelledby="filter" role="dialog" tabindex="-1">
+    <div class="modal-dialog modal-simple">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">×</span>
+                </button>
+                <h4 class="modal-title">Filters</h4>
+            </div>
+            <div class="modal-body">
+                <div class="row">
+                    <div class="form-group col-xl-6">
+                        <label class="form-control-label">Joining Date From</label>
+                        <input type="text" class="form-control" id="from" name="from_date" />
+                    </div>
+                    <div class="form-group col-xl-6">
+                        <label class="form-control-label">Joining Date To</label>
+                        <input type="text" class="form-control" id="to" name="to_date" />
+                    </div>
+                    <!-- <div class="form-group col-xl-6">
+                        <label class="form-control-label">Expiry Date From</label>
+                        <input type="text" class="form-control" id="expiry_from" name="expiry_from_date" />
+                    </div>
+                    <div class="form-group col-xl-6">
+                        <label class="form-control-label">Expiry Date To</label>
+                        <input type="text" class="form-control" id="expiry_to" name="expiry_to_date" />
+                    </div> -->
+                    <div class="form-group col-xl-12 text-right">
+                        <%- csrf_html %>
+                        <button class="btn btn-primary" id="apply-filter">Apply</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<%- include("../partials/footer.html") %>
+<script type="text/javascript">
+    MEMBER_STATUS.init({
+        _csrf: '<%= _csrf %>'
+    })
+</script>

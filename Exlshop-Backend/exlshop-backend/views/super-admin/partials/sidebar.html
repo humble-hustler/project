@@ -1,0 +1,125 @@
+<div class="site-menubar">
+    <div class="site-menubar-body">
+        <ul class="site-menu" data-plugin="menu">
+            <% if(session.user.role_name === 'super-admin' ) { %>
+            <li class="site-menu-category">General</li>
+            <li class="site-menu-item <%= menuActive == 'dashboard' ? 'active' : '' %>">
+                <a href="/super-admin/dashboard">
+                    <i class="site-menu-icon wb-dashboard" aria-hidden="true"></i>
+                    <span class="site-menu-title" id="dashboard">Dashboard</span>                    
+                </a>                
+            </li>
+            <li class="site-menu-category">SHOPS</li>
+            <li class="site-menu-item <%= menuActive == 'shops' ? 'active' : '' %>">
+                <a href="/super-admin/brands">
+                    <i class="site-menu-icon fa-building-o" aria-hidden="true"></i>
+                    <span class="site-menu-title" id="viewshops">View Shops</span>                    
+                </a>                
+            </li>            
+            <li class="site-menu-item <%= menuActive == 'shopusers' ? 'active' : '' %>">
+                <a href="/super-admin/brands/team">
+                    <i class="site-menu-icon fa-users" aria-hidden="true"></i>
+                    <span class="site-menu-title" id="shopusers">Shop Users</span>
+                </a>                
+            </li>
+            <li class="site-menu-category">Super Admin List</li>
+            <li class="site-menu-item <%= menuActive == 'users' ? 'active' : '' %>">
+                <a href="/super-admin/settings/users">
+                    <i class="site-menu-icon fa-users" aria-hidden="true"></i>
+                    <span class="site-menu-title" id="users">Users</span>                    
+                </a>                
+            </li>
+            <% } %>
+            <% if(session.user.role_name === 'dietitian' ) { %>
+            <li class="site-menu-category">Messenger</li>
+            <li class="site-menu-item <%= menuActive == 'chat' ? 'active' : '' %>">
+                <a href="/super-admin/chat/dietitian-messenger">
+                    <i class="site-menu-icon fa-users" aria-hidden="true"></i>
+                    <span class="site-menu-title" id="chat">Chat </span>                    
+                </a>                
+            </li>
+            <% } %>
+            <% if(session.user.role_name === 'super-admin' ) { %>
+            <li class="site-menu-category">Promotions/ Subscription</li>
+            <li class="site-menu-item <%= menuActive == 'promotions' ? 'active' : '' %>">
+                <a href="/super-admin/promotions">
+                    <i class="site-menu-icon fa fa-money" aria-hidden="true"></i>
+                    <span class="site-menu-title" id="prom">Promotions </span>                    
+                </a>
+            </li>
+            <li class="site-menu-item <%= menuActive == 'subscription' ? 'active' : '' %>">
+                <a href="/super-admin/shop/subscription ">
+                    <i class="site-menu-icon fa-shopping-cart" aria-hidden="true"></i>
+                    <span class="site-menu-title" id="sub">Subscription</span>
+                </a>
+            </li>
+            <li class="site-menu-item <%= menuActive == 'subscription_plan' ? 'active' : '' %>">
+                <a href="/super-admin/shop/subscription_plan">
+                    <i class="site-menu-icon fa-shopping-cart" aria-hidden="true"></i>
+                    <span class="site-menu-title" id="subplan">Subscription-Plan</span>
+                </a>
+            </li>
+            <% } %>
+
+            <% if(session.user.role_name === 'super-admin' ) { %>
+                <li class="site-menu-category">Order Management</li>
+                <li class="site-menu-item <%= menuActive == 'orders' ? 'active' : '' %>">
+                    <a href="/super-admin/shop/orders">
+                        <i class="site-menu-icon fa-shopping-cart" aria-hidden="true"></i>
+                        <span class="site-menu-title" id="orders">Orders</span>
+                    </a>
+                </li>
+            <% } %>   
+
+            <% if(session.user.role_name === 'super-admin' ) { %>
+                <li class="site-menu-category">Settlement</li>
+                <li class="site-menu-item <%= menuActive == 'vendor-settlement' ? 'active' : '' %>">
+                    <a href="/super-admin/shop/vendor">
+                        <i class="site-menu-icon fa-shopping-cart" aria-hidden="true"></i>
+                        <span class="site-menu-title" id="sub">Vendor Settlement</span>
+                    </a>
+                </li>
+                <% } %>
+
+            <% if(session.user.role_name === 'super-admin' ) { %>
+            <li class="site-menu-category">Global Shop Settings</li>
+            <li class="site-menu-item <%= menuActive == 'category-list' ? 'active' : '' %>">
+                <a href="/super-admin/shop/category">
+                    <i class="site-menu-icon fa-list" aria-hidden="true"></i>
+                    <span class="site-menu-title" id="category">Category List</span>
+                </a>                
+            </li>
+            <li class="site-menu-item <%= menuActive == 'global-list' ? 'active' : '' %>">
+                <a href="/super-admin/shop/products">
+                    <i class="site-menu-icon fa-list" aria-hidden="true"></i>
+                    <span class="site-menu-title" id="globalproductlist">Global Product List</span>
+                </a>                
+            </li>
+            <li class="site-menu-item <%= menuActive == 'product-list' ? 'active' : '' %>">
+                <a href="/super-admin/shop/requested/products">
+                    <i class="site-menu-icon fa-list" aria-hidden="true"></i>
+                    <span class="site-menu-title" id="requestedproduct">Requested Product List</span>
+                </a>                
+            </li>
+          
+            <!-- <li class="site-menu-item">
+                <a href="/super-admin/shop/pickup&delivery ">
+                    <i class="site-menu-icon fa-shopping-cart" aria-hidden="true"></i>
+                    <span class="site-menu-title" id="pickup">Pickup & Delivery</span>
+                </a>
+            </li> -->
+            <% } %>
+        </ul>              
+    </div>
+    <div class="site-menubar-footer">
+        <a href="javascript: void(0);" class="fold-show" data-placement="top" data-toggle="tooltip" data-original-title="Settings">
+            <span class="icon wb-settings" aria-hidden="true"></span>
+        </a>
+        <a href="javascript: void(0);" data-placement="top" data-toggle="tooltip" data-original-title="Lock">
+            <span class="icon wb-eye-close" aria-hidden="true"></span>
+        </a>
+        <a href="/logout" data-placement="top" data-toggle="tooltip" data-original-title="Logout">
+            <span class="icon wb-power" aria-hidden="true"></span>
+        </a>
+    </div>
+</div>

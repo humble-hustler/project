@@ -1,0 +1,29 @@
+<%- include("./partials/header.html") %>
+<%- include("./partials/topnav.html") %>
+<%- include("./partials/sidebar.html") %>
+<div class="page" id="sales-wrapper"></div>
+
+
+<%- include("./partials/footer.html") %>
+<script type="text/javascript">
+    function refreshSaleBlock() {
+        $('#sale-loader').css('display','block')
+        $.ajax({
+            url: '/app/sales/refresh',
+            method: 'POST',
+            data: {
+                _csrf: '<%= _csrf %>',
+                saleId: '<%= saleId %>'
+            },
+            success: function (data) {
+                if (data.success === false) {
+                    alert('Some error occurred')
+                } else {
+                    $('#sales-wrapper').empty().append(data)
+                    $('#sale-loader').css('display','none');
+                }
+            }
+        });
+    }
+    refreshSaleBlock()
+</script>
